@@ -453,7 +453,6 @@ func FncPsglstPrcessWorker(
 							if valFltnow, mtcnow := valnow.(float64); mtcnow {
 								donevl := valFltnow + 1
 								sycPrgrss.Store("nowfln", donevl)
-								fmt.Println(donevl, "/", valFltmax, "* 100 /", valFltair)
 								fncApndix.Status.Sbrapi = donevl / valFltmax * 100 / valFltair
 							}
 						}

@@ -1,3 +1,4 @@
+"use server";
 import { MdlGlobalStatusPrcess } from "../model/params";
 
 // Hit status sabre api
@@ -33,7 +34,7 @@ export async function ApiGlobalStatusIntrvl(
     const status = await ApiGlobalStatusPrcess();
     const rawval = strVarble == "action" ? status.action : status.sbrapi;
     const nowval = Number(rawval.toFixed(2));
-    const nowstr = nowval == 0 ? "Done" : `Wait ${nowval}%`;
+    const nowstr = nowval == 0 ? "Done" : `${nowval}%`;
     statfnSet(nowstr);
     if (nowstr === "Done") {
       clearInterval(strtiv);

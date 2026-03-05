@@ -1,3 +1,4 @@
+"use server";
 import { MdlPsglstErrlogDtbase } from "../model/params";
 
 export async function ApiPsglstPrcessManual(params: MdlPsglstErrlogDtbase) {
