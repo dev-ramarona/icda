@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+input {
+  @apply focus:outline-none;
+}
+
+input[type]::-webkit-calendar-picker-indicator {
+  @apply hidden;
+}
+
+input[type] {
+  @apply flex justify-start;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+  background-color: #007595;
+  border-top-right-radius: 9999px;
+  border-bottom-right-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:horizontal {
+  background-color: #007595;
+  border-bottom-right-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+@keyframes shkeit {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.shkeit {
+  animation: shkeit 0.4s ease-in-out;
+}
+
+.afull {
+  @apply w-full h-full;
+}
+
+.flexctr {
+  @apply flex justify-center items-center place-content-center;
+}
+
+.flexbtw {
+  @apply flex justify-between items-center place-content-center;
+}
+
+.flexstr {
+  @apply flex justify-start items-center place-content-center;
+}
+
+.flexend {
+  @apply flex justify-end items-center place-content-center;
+}
+
+.flexend {
+  @apply flex justify-end items-center place-content-center;
+}
+
+.ctable {
+  @apply w-full h-full max-h-fit overflow-auto rounded-xl ring-2 ring-gray-300;
+}
+
+table {
+  @apply w-full;
+}
+
+thead {
+  @apply sticky top-0 z-20 text-white;
+}
+
+th {
+  @apply bg-cyan-600 px-2 py-1.5 ring-4 ring-cyan-600 whitespace-nowrap;
+}
+
+td {
+  @apply border-b group-last:border-b-0 border-cyan-600 border-b-gray-200 px-3 py-1.5 whitespace-nowrap;
+}
+
+tbody {
+  @apply text-gray-600;
+}
+
+.btnsbm {
+  @apply bg-cyan-600 hover:bg-cyan-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+}
+
+.btnscs {
+  @apply bg-green-600 hover:bg-green-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+}
+
+.btnwrn {
+  @apply bg-amber-600 hover:bg-amber-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+}
+
+.btnoff {
+  @apply bg-slate-300 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+}
+
+.btncxl {
+  @apply bg-red-600 hover:bg-red-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+}
