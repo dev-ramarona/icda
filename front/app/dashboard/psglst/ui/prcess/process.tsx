@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import { MdlPsglstErrlogDtbase } from "../../model/params";
 import { ApiPsglstPrcessManual } from "../../api/prcess";
-import { mdlGlobalAllusrCookie } from "../../../global/model/params";
+import { mdlGlobalAllusrCookie, MdlGlobalStatusPrcess } from "../../../global/model/params";
 import { FncGlobalQuerysEdlink, FncGlobalParamsHminfr } from "../../../global/function/querys";
-import { ApiGlobalStatusIntrvl, ApiGlobalStatusPrcess } from "../../../global/api/status";
+import { ApiGlobalStatusPrcess } from "../../../global/api/status";
 import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
 import { UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 
 
-export default function UixPsglstPrcessManual({ cookie, update }:
-  { cookie: mdlGlobalAllusrCookie; update: string; }) {
+export default function UixPsglstPrcessManual({ cookie, update, status }:
+  { cookie: mdlGlobalAllusrCookie; update: string; status: MdlGlobalStatusPrcess }) {
 
   // Get status first
   const rplprm = FncGlobalQuerysEdlink();
@@ -27,7 +27,7 @@ export default function UixPsglstPrcessManual({ cookie, update }:
   }
   const nwhour = (Number(new Date().getHours().toString().padStart(2, '0')))
   const [params, paramsSet] = useState<MdlPsglstErrlogDtbase>(dfault)
-  const [statfn, statfnSet] = useState("Done");
+  const [statfn, statfnSet] = useState("Wait");
 
   // Edit parameter
   const onchge = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,59 +40,60 @@ export default function UixPsglstPrcessManual({ cookie, update }:
     });
   }
 
-  // Hit the database and get interval status
+  // Process function
   const prcess = async (params: MdlPsglstErrlogDtbase) => {
-    const status = await ApiGlobalStatusPrcess();
-    const nowParams = { ...params };
-    if (status.sbrapi == 0) {
-      if (params.flnbfl == "") {
-        nowParams.worker = 3;
-        if (params.depart == "") {
-          nowParams.worker = 5;
-          if (params.airlfl == "")
-            nowParams.worker = 8;
+    rplprm(["update_global"], String(Math.random()));
+    statfnSet("Wait");
+    const nowprm = { ...params };
+    if ((cookie.keywrd && (cookie.keywrd).includes("psglst")) || nowprm.worker == 1)
+      if (status.sbrapi == 0) {
+        if (params.flnbfl == "") {
+          nowprm.worker = 3;
+          if (params.depart == "") {
+            nowprm.worker = 5;
+            if (params.airlfl == "")
+              nowprm.worker = 8;
+          }
         }
-      }
 
-      // Cek is admin or not
-      if ((cookie.keywrd && (cookie.keywrd).includes("psglst")) || nowParams.worker == 1) {
-        statfnSet("Wait");
-        rplprm(["update_global"], String(Math.random()));
-        ApiPsglstPrcessManual(nowParams);
-        await ApiGlobalStatusIntrvl(statfnSet, "sbrapi");
-      } else {
-        statfnSet("Only admin can process ALL");
-        return setTimeout(() => statfnSet("Done"), 2000);
+        // Set interval to check status
+        const rsp = ApiPsglstPrcessManual(nowprm);
+        setTimeout(() => {
+          rplprm(["update_global"], String(Math.random()));
+        }, 1000);
+        statfnSet(await rsp);
+        setTimeout(() => statfnSet(""), 2000);
       }
-    } else statfnSet(`Wait ${status.sbrapi}%`);
-  };
+  }
 
   // Monitor process status
   useEffect(() => {
+    if (status.sbrapi == 0) statfnSet("");
     const gtstat = async () => {
-      const status = await ApiGlobalStatusPrcess();
-      statfnSet(status.sbrapi == 0 ? "Done" : `Wait ${status.sbrapi}%`);
       if (status.sbrapi != 0) {
-        await ApiGlobalStatusIntrvl(statfnSet, "sbrapi");
-      } else statfnSet("Done");
+        const intrvl = setInterval(async () => {
+          console.log("action interval");
+          const instat = await ApiGlobalStatusPrcess();
+          if (instat.sbrapi == 0) {
+            statfnSet("");
+            rplprm(["update_global"], String(Math.random()));
+            clearInterval(intrvl);
+          } else statfnSet(`${instat.sbrapi}%`);
+        }, 2000);
+      }
     };
     gtstat();
   }, [update]);
 
-  // refresh page
-  useEffect(() => {
-    if (statfn == "Process Done") setTimeout(() => {
-      rplprm(["update_global"], String(Math.random()));
-    }, 1000);
-  }, [statfn, rplprm])
 
   return (
     <div className="w-full h-24 min-h-fit py-3 flexctr relative">
-      <div className={`${statfn != "Done" ? "w-16 h-10 translate-y-0" : "w-0 h-0 opacity-0 -translate-y-10"} z-10 absolute bg-white ring-2 ring-sky-300 px-5 py-2 rounded-xl flexctr duration-300`}>
+      <div className={`${statfn != "" ? "w-16 h-10 translate-y-0" : "w-0 h-0 opacity-0 -translate-y-10"} 
+      z-10 absolute bg-white ring-2 ring-sky-300 px-5 py-2 rounded-xl flexctr duration-300`}>
         <div>Wait</div>
         <div className="animate-spin"><UixGlobalIconvcRfresh bold={2} color="black" size={1} /></div>
       </div>
-      <div className={`afull flexstr flex-wrap gap-y-3 ${statfn != "Done" ? "animate-pulse select-none" : ""} duration-300`}>
+      <div className={`afull flexstr flex-wrap gap-y-3 ${statfn != "" ? "animate-pulse select-none" : ""} duration-300`}>
         <div className="w-full md:w-28 h-10 flexctr relative">
           <UixGlobalInputxFormdt
             typipt={"text"}
@@ -127,7 +128,7 @@ export default function UixPsglstPrcessManual({ cookie, update }:
           />
         </div>
       </div>
-      <div className={`w-full flexend flex-wrap gap-3 px-3 ${statfn != "Done" ? "animate-pulse select-none pointer-events-none" : ""} duration-300`}>
+      <div className={`w-full flexend flex-wrap gap-3 px-3 ${statfn != "" ? "animate-pulse select-none pointer-events-none" : ""} duration-300`}>
         {hminfr.map((val, idx) => (
           <div className="w-full md:w-40 h-12 flexctr relative" key={idx}>
             <button
@@ -136,7 +137,7 @@ export default function UixPsglstPrcessManual({ cookie, update }:
                 ${statfn.includes("admin") ? "shkeit btncxl" : ""}`}
               onClick={() => prcess({ ...params, datefl: val })}
             >
-              {statfn == "Done" ? `Process Manual ${FncGlobalFormatDatefm(String(val))}` : statfn}
+              {statfn == "" ? `Process Manual ${FncGlobalFormatDatefm(String(val))}` : statfn}
             </button>
           </div>
         ))}

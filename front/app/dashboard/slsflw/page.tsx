@@ -10,6 +10,7 @@ import { MdlSlsflwActlogDtbase, MdlSlsflwGlobalSrcprm } from "./model/params";
 import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
 import UixSlsflwPsgsmrMainpg from "./ui/psgsmr/main";
 import UixSlsflwSmmry1Mainpg from "./ui/smmry1/main";
+import { ApiGlobalStatusPrcess } from "../global/api/status";
 
 
 export default async function Page(props: {
@@ -20,6 +21,7 @@ export default async function Page(props: {
   const actobj = await ApiGlobalActlogDtbase("psglst");
   const actlog: MdlSlsflwActlogDtbase[] = actobj.actlog;
   const actdte: string[] = actobj.datefl;
+  const status = await ApiGlobalStatusPrcess();
   const prmErrlog = FncSlsflwErrlogSrcprm(qryprm);
   const prmPsgdtl = FncSlsflwPsgdtlSrcprm(qryprm, actdte);
   const prmPsgsmr = FncSlsflwPsgsmrSrcprm(qryprm, actdte);
@@ -43,7 +45,7 @@ export default async function Page(props: {
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstErrlogMainpg prmErrlog={prmErrlog} />
+            <UixPsglstErrlogMainpg prmErrlog={prmErrlog} status={status} />
           </Suspense>
         </div>
       </div>

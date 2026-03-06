@@ -9,6 +9,7 @@ import { MdlPsglstActlogDtbase, MdlPsglstGlobalSrcprm } from "./model/params";
 import UixPsglstPrcessMainpg from "./ui/prcess/main";
 import { FncPsglstErrlogSrcprm, FncPsglstPsgdtlSrcprm } from "./function/params";
 import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
+import { ApiGlobalStatusPrcess } from "../global/api/status";
 
 export default async function Page(props: {
   searchParams: Promise<MdlPsglstGlobalSrcprm>;
@@ -18,6 +19,7 @@ export default async function Page(props: {
   const actobj = await ApiGlobalActlogDtbase("psglst");
   const actlog: MdlPsglstActlogDtbase[] = actobj.actlog;
   const actdte: string[] = actobj.datefl;
+  const status = await ApiGlobalStatusPrcess();
   const prmErrlog = FncPsglstErrlogSrcprm(qryprm);
   const prmPsgdtl = FncPsglstPsgdtlSrcprm(qryprm, actdte);
   return (
@@ -40,7 +42,7 @@ export default async function Page(props: {
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstErrlogMainpg prmErrlog={prmErrlog} />
+            <UixPsglstErrlogMainpg prmErrlog={prmErrlog} status={status} />
           </Suspense>
         </div>
       </div>
@@ -62,7 +64,7 @@ export default async function Page(props: {
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstPrcessMainpg cookie={cookie} update={prmPsgdtl.update_global} />
+            <UixPsglstPrcessMainpg cookie={cookie} update={prmPsgdtl.update_global} status={status} />
           </Suspense>
         </div>
       </div>

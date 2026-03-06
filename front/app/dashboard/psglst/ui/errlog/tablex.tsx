@@ -3,64 +3,70 @@ import { MdlPsglstErrlogDtbase } from "../../model/params";
 import { useEffect, useState } from "react";
 import { ApiPsglstPrcessManual } from "../../api/prcess";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { ApiGlobalStatusIntrvl, ApiGlobalStatusPrcess } from "../../../global/api/status";
+import { ApiGlobalStatusPrcess } from "../../../global/api/status";
 import { UixGlobalIconvcIgnore, UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
+import { MdlGlobalStatusPrcess } from "../../../global/model/params";
 
 export default function UixPsglstErrlogTablex({
   errlog,
   update,
+  status,
 }: {
   errlog: MdlPsglstErrlogDtbase[];
   update: string;
+  status: MdlGlobalStatusPrcess
 }) {
 
   // Hit the database and get interval status
   const rplprm = FncGlobalQuerysEdlink();
   const [statfn, statfnSet] = useState("Done");
-  const [onpkey, onpkeySet] = useState("Done");
+  const [onpkey, onpkeySet] = useState("");
 
-  // Hit the database and get interval status
+  // Process function
   const prcess = async (params: MdlPsglstErrlogDtbase) => {
-    const status = await ApiGlobalStatusPrcess();
-    const nowParams = { ...params };
+    rplprm(["update_global"], String(Math.random()));
+    statfnSet("Wait");
+    onpkeySet(params.prmkey);
+    const nowprm = { ...params };
     if (status.sbrapi == 0) {
       if (params.flnbfl == "") {
-        nowParams.worker = 3;
+        nowprm.worker = 3;
         if (params.depart == "") {
-          nowParams.worker = 5;
+          nowprm.worker = 5;
           if (params.airlfl == "")
-            nowParams.worker = 8;
+            nowprm.worker = 8;
         }
       }
 
-      // Cek is admin or not
-      statfnSet("Wait");
-      onpkeySet(params.prmkey);
-      rplprm(["update_global"], String(Math.random()));
-      ApiPsglstPrcessManual(nowParams);
-      await ApiGlobalStatusIntrvl(statfnSet, "sbrapi");
-    } else statfnSet(`Wait ${status.sbrapi}%`);
-  };
+      // Set interval to check status
+      const rsp = ApiPsglstPrcessManual(nowprm);
+      setTimeout(() => {
+        rplprm(["update_global"], String(Math.random()));
+      }, 1000);
+      statfnSet(await rsp);
+      setTimeout(() => { statfnSet(""), onpkeySet(""); }, 2500);
+    }
+  }
 
   // Monitor process status
   useEffect(() => {
+    if (status.sbrapi == 0) statfnSet("");
     const gtstat = async () => {
-      const status = await ApiGlobalStatusPrcess();
-      statfnSet(status.sbrapi == 0 ? "Done" : `Wait ${status.sbrapi}%`);
       if (status.sbrapi != 0) {
-        await ApiGlobalStatusIntrvl(statfnSet, "sbrapi");
-      } else statfnSet("Done");
+        const intrvl = setInterval(async () => {
+          console.log("action interval");
+          const instat = await ApiGlobalStatusPrcess();
+          if (instat.sbrapi == 0) {
+            statfnSet("");
+            rplprm(["update_global"], String(Math.random()));
+            clearInterval(intrvl);
+          } else statfnSet(`${instat.sbrapi}%`);
+        }, 2000);
+      }
     };
     gtstat();
   }, [update]);
-
-  // refresh page
-  useEffect(() => {
-    if (statfn == "Process Done") setTimeout(() => {
-      rplprm(["update_global"], String(Math.random()));
-    }, 1000);
-  }, [statfn, rplprm])
 
   return (
     <>
@@ -81,14 +87,17 @@ export default function UixPsglstErrlogTablex({
           <tbody>
             {errlog.map((log, idx) => (
               <tr key={idx}>
-                <td className="text-center sticky left-0 z-10 drop-shadow-lg bg-white">
+                <td className={`text-center sticky left-0 z-10 drop-shadow-lg 
+                ${onpkey === log.prmkey && statfn === "Success" ? "bg-green-200 shkeit" :
+                    onpkey === log.prmkey && statfn === "Failed" ? "bg-red-200 shkeit" :
+                      onpkey === log.prmkey ? "bg-cyan-200" : "bg-white"} duration-300`}>
                   <div className="afull flexctr gap-x-1.5">
                     <div className="w-1/2 flexctr btnsbm duration-300 cursor-pointer"
                       onClick={() => prcess(log)}>
-                      <div className={`absolute text-gray-300 font-bold text-xs z-10`}>
+                      <div className={`absolute text-gray-300 font-bold text-[0.5rem] z-10`}>
                         {statfn.includes("%") ? statfn : ""}
                       </div>
-                      <div className={`${onpkey == log.prmkey ? "animate-spin" : ""}`}>
+                      <div className={`${statfn != "" ? "animate-spin" : ""}`}>
                         <UixGlobalIconvcRfresh
                           bold={3}
                           color="#fff"
@@ -107,7 +116,11 @@ export default function UixPsglstErrlogTablex({
                   </div>
                 </td>
                 {Object.entries(log).map(([key, val]) => (
-                  <td className="text-center" key={key}>
+                  <td className={`text-center 
+                  ${onpkey === log.prmkey && statfn === "Success" ? "bg-green-200 shkeit" :
+                      onpkey === log.prmkey && statfn === "Failed" ? "bg-red-200 shkeit" :
+                        onpkey === log.prmkey ? "bg-cyan-200" : "bg-white"} 
+                      duration-300`} key={key}>
                     {["datefl", "timeup"].includes(key)
                       ? FncGlobalFormatDatefm(String(val))
                       : val}

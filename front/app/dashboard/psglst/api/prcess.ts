@@ -12,10 +12,10 @@ export async function ApiPsglstPrcessManual(params: MdlPsglstErrlogDtbase) {
         cache: "no-store",
       },
     );
-    if (!res.ok) return "failed";
-    return "success";
+    if (!res.ok) return "Failed";
+    return "Success";
   } catch (error) {
     console.error(error);
-    return "update failed";
+    return "Failed";
   }
 }

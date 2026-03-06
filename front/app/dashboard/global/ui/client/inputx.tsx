@@ -68,6 +68,7 @@ export default function UixGlobalInputxFormdt({
             max={(Array.isArray(length) ? length[length.length - 1] : length)}
             type={typipt}
             id={queryx}
+            name={queryx}
             onChange={(e) => (repprm ? repprm(e) : "")}
             onClick={() =>
               typipt == "date" || typipt == "month" || typipt == "datetime-local" ? pckrdt() : null

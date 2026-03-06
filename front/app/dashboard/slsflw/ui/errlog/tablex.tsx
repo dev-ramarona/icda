@@ -2,65 +2,69 @@
 import { useEffect, useState } from "react";
 import { MdlPsglstErrlogDtbase } from "../../../psglst/model/params";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { ApiGlobalStatusIntrvl, ApiGlobalStatusPrcess } from "../../../global/api/status";
+import { ApiGlobalStatusPrcess } from "../../../global/api/status";
 import { ApiPsglstPrcessManual } from "../../../psglst/api/prcess";
 import { UixGlobalIconvcIgnore, UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
+import { MdlGlobalStatusPrcess } from "../../../global/model/params";
 
 export default function UixPsglstErrlogTablex({
   errlog,
   update,
+  status,
 }: {
   errlog: MdlPsglstErrlogDtbase[];
   update: string;
+  status: MdlGlobalStatusPrcess;
 }) {
 
   // Hit the database and get interval status
   const rplprm = FncGlobalQuerysEdlink();
   const [statfn, statfnSet] = useState("Done");
-  const [onpkey, onpkeySet] = useState("Done");
 
-  // Hit the database and get interval status
+  // Process function
   const prcess = async (params: MdlPsglstErrlogDtbase) => {
-    const status = await ApiGlobalStatusPrcess();
-    const nowParams = { ...params };
+    rplprm(["update_global"], String(Math.random()));
+    statfnSet("Wait");
+    const nowprm = { ...params };
     if (status.sbrapi == 0) {
       if (params.flnbfl == "") {
-        nowParams.worker = 3;
+        nowprm.worker = 3;
         if (params.depart == "") {
-          nowParams.worker = 5;
+          nowprm.worker = 5;
           if (params.airlfl == "")
-            nowParams.worker = 8;
+            nowprm.worker = 8;
         }
       }
 
-      // Cek is admin or not
-      statfnSet("Wait");
-      onpkeySet(params.prmkey);
-      rplprm(["update_global"], String(Math.random()));
-      ApiPsglstPrcessManual(nowParams);
-      await ApiGlobalStatusIntrvl(statfnSet, "sbrapi");
-    } else statfnSet(`Wait ${status.sbrapi}%`);
-  };
+      // Set interval to check status
+      const rsp = ApiPsglstPrcessManual(nowprm);
+      setTimeout(() => {
+        rplprm(["update_global"], String(Math.random()));
+      }, 1000);
+      statfnSet(await rsp);
+      setTimeout(() => statfnSet(""), 2000);
+    }
+  }
 
   // Monitor process status
   useEffect(() => {
+    if (status.sbrapi == 0) statfnSet("");
     const gtstat = async () => {
-      const status = await ApiGlobalStatusPrcess();
-      statfnSet(status.sbrapi == 0 ? "Done" : `Wait ${status.sbrapi}%`);
       if (status.sbrapi != 0) {
-        await ApiGlobalStatusIntrvl(statfnSet, "sbrapi");
-      } else statfnSet("Done");
+        const intrvl = setInterval(async () => {
+          console.log("action interval");
+          const instat = await ApiGlobalStatusPrcess();
+          if (instat.sbrapi == 0) {
+            statfnSet("");
+            rplprm(["update_global"], String(Math.random()));
+            clearInterval(intrvl);
+          } else statfnSet(`${instat.sbrapi}%`);
+        }, 2000);
+      }
     };
     gtstat();
   }, [update]);
-
-  // refresh page
-  useEffect(() => {
-    if (statfn == "Process Done") setTimeout(() => {
-      rplprm(["update_global"], String(Math.random()));
-    }, 1000);
-  }, [statfn, rplprm])
 
   return (
     <>
@@ -88,7 +92,7 @@ export default function UixPsglstErrlogTablex({
                       <div className={`absolute text-gray-300 font-bold text-xs z-10`}>
                         {statfn.includes("%") ? statfn : ""}
                       </div>
-                      <div className={`${onpkey == log.prmkey ? "animate-spin" : ""}`}>
+                      <div className={`${statfn != "" ? "animate-spin" : ""}`}>
                         <UixGlobalIconvcRfresh
                           bold={3}
                           color="#fff"

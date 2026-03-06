@@ -26,20 +26,20 @@ export async function ApiGlobalStatusPrcess() {
 }
 
 // Hit status api with interval time
-export async function ApiGlobalStatusIntrvl(
-  statfnSet: (v: string) => void,
-  strVarble: "action" | "sbrapi",
-) {
-  const strtiv = setInterval(async () => {
-    const status = await ApiGlobalStatusPrcess();
-    const rawval = strVarble == "action" ? status.action : status.sbrapi;
-    const nowval = Number(rawval.toFixed(2));
-    const nowstr = nowval == 0 ? "Done" : `${nowval}%`;
-    statfnSet(nowstr);
-    if (nowstr === "Done") {
-      clearInterval(strtiv);
-      statfnSet("Process Done");
-      setTimeout(() => statfnSet("Done"), 1000);
-    }
-  }, 3000);
-}
+// export async function ApiGlobalStatusIntrvl(
+//   statfnSet: (v: string) => void,
+//   strVarble: "action" | "sbrapi",
+// ) {
+//   const strtiv = setInterval(async () => {
+//     const status = await ApiGlobalStatusPrcess();
+//     const rawval = strVarble == "action" ? status.action : status.sbrapi;
+//     const nowval = Number(rawval.toFixed(2));
+//     const nowstr = nowval == 0 ? "Done" : `${nowval}%`;
+//     statfnSet(nowstr);
+//     if (nowstr === "Done") {
+//       clearInterval(strtiv);
+//       statfnSet("Process Done");
+//       setTimeout(() => statfnSet("Done"), 1000);
+//     }
+//   }, 3000);
+// }

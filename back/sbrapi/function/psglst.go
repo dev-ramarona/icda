@@ -56,7 +56,7 @@ func FncSbrapiPsglstMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 				DisplayCodeRequest: mdlSbrapi.MdlSbrapiPsglstReqdcr{
 					Condition: "OR",
 					DisplayCodes: []string{"CM", "BT", "ET", "OB", "IB",
-						"ON", "SS", "IR", "IFET", "XT", "DOCS"},
+						"ON", "SS", "IR", "IFET", "XT", "DOCS", "XAE"},
 				},
 			},
 		},

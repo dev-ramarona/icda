@@ -1,9 +1,11 @@
+import { MdlGlobalStatusPrcess } from "../../../global/model/params";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
 import { ApiPsglstErrlogDtbase } from "../../../psglst/api/errlog";
 import { MdlPsglstErrlogDtbase, MdlPsglstErrlogSrcprm } from "../../../psglst/model/params";
 import UixPsglstErrlogTablex from "./tablex";
 
-export default async function UixPsglstErrlogMainpg({ prmErrlog }: { prmErrlog: MdlPsglstErrlogSrcprm }) {
+export default async function UixPsglstErrlogMainpg({ prmErrlog, status }:
+  { prmErrlog: MdlPsglstErrlogSrcprm; status: MdlGlobalStatusPrcess }) {
   const rslobj = await ApiPsglstErrlogDtbase({
     ...prmErrlog, erdvsn_errlog:
       (prmErrlog.erdvsn_errlog == "") ? "SLSRPT" : prmErrlog.erdvsn_errlog
@@ -14,7 +16,7 @@ export default async function UixPsglstErrlogMainpg({ prmErrlog }: { prmErrlog: 
     <>
       {errlog.length > 0 ? (
         <>
-          <UixPsglstErrlogTablex errlog={errlog} update={prmErrlog.update_global} />
+          <UixPsglstErrlogTablex errlog={errlog} update={prmErrlog.update_global} status={status} />
           <UixGlobalPagntnMainpg
             pgview={5}
             pgenbr={prmErrlog.pagenw_errlog}
