@@ -72,7 +72,6 @@ export default function UixPsglstPrcessManual({ cookie, update, status }:
     const gtstat = async () => {
       if (status.sbrapi != 0) {
         const intrvl = setInterval(async () => {
-          console.log("action interval");
           const instat = await ApiAllusrStatusPrcess();
           if (instat.sbrapi == 0) {
             statfnSet("");
