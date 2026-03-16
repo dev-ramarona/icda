@@ -749,8 +749,6 @@ func FncPsglstPsgdtlUpdate(c *gin.Context) {
 	// Bind JSON Body input to variable
 	var inputx mdlPsglst.MdlPsglstPsgdtlDtbase
 	var findne mdlPsglst.MdlPsglstPsgdtlDtbase
-	x, _ := json.MarshalIndent(inputx, " ", "")
-	fmt.Println(string(x))
 	if err := c.BindJSON(&inputx); err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})

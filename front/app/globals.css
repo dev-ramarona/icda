@@ -97,7 +97,7 @@ th {
 }
 
 td {
-  @apply border-b group-last:border-b-0 border-cyan-600 border-b-gray-200 px-3 py-1.5 whitespace-nowrap;
+  @apply border-t border-gray-200 px-3 py-1.5 whitespace-nowrap;
 }
 
 tbody {
@@ -106,6 +106,10 @@ tbody {
 
 .btnsbm {
   @apply bg-cyan-600 hover:bg-cyan-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+}
+
+.btnstb {
+  @apply bg-white hover:bg-gray-100 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-gray-600 rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300 ring-2 ring-gray-200;
 }
 
 .btnscs {

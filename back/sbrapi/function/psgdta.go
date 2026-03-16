@@ -112,7 +112,7 @@ func FncSbrapiPsgdtaTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsgdtaRsppdr,
 				intDatevc, _ := strconv.Atoi(strDatevc)
 				psgdta.Datevc = int32(intDatevc)
 				psgdta.Clssvc = partsl[3]
-				psgdta.Cbinvc = clslvl[partsl[3]].Cbinfl
+				psgdta.Cbinvc = clslvl[partsl[3]].Cbncls
 				psgdta.Routvc = partsl[4][:3] + "-" + partsl[4][3:]
 				psgdta.Statvc = partsl[5]
 			}

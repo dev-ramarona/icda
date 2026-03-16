@@ -4,24 +4,24 @@ import UixGlobalLoadngAnmate from "../global/ui/server/loadng";
 import UixPsglstErrlogMainpg from "./ui/errlog/main";
 import { FncSlsflwErrlogSrcprm, FncSlsflwPsgdtlSrcprm, FncSlsflwPsgsmrSrcprm } from "./function/params";
 import UixSlsflwDetailMainpg from "./ui/psgdtl/main";
-import { ApiGlobalCookieGetdta } from "../global/api/cookie";
 import UixSlsflwActlogMainpg from "./ui/actlog/main";
 import { MdlSlsflwActlogDtbase, MdlSlsflwGlobalSrcprm } from "./model/params";
 import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
 import UixSlsflwPsgsmrMainpg from "./ui/psgsmr/main";
 import UixSlsflwSmmry1Mainpg from "./ui/smmry1/main";
-import { ApiGlobalStatusPrcess } from "../global/api/status";
+import { ApiAllusrCookieGetdta } from "../allusr/api/cookie";
+import { ApiAllusrStatusPrcess } from "../allusr/api/status";
 
 
 export default async function Page(props: {
   searchParams: Promise<MdlSlsflwGlobalSrcprm>;
 }) {
-  const cookie = await ApiGlobalCookieGetdta();
+  const cookie = await ApiAllusrCookieGetdta();
   const qryprm = await props.searchParams;
   const actobj = await ApiGlobalActlogDtbase("psglst");
   const actlog: MdlSlsflwActlogDtbase[] = actobj.actlog;
   const actdte: string[] = actobj.datefl;
-  const status = await ApiGlobalStatusPrcess();
+  const status = await ApiAllusrStatusPrcess();
   const prmErrlog = FncSlsflwErrlogSrcprm(qryprm);
   const prmPsgdtl = FncSlsflwPsgdtlSrcprm(qryprm, actdte);
   const prmPsgsmr = FncSlsflwPsgsmrSrcprm(qryprm, actdte);

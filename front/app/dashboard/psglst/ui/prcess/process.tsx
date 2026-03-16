@@ -3,16 +3,16 @@
 import { useEffect, useState } from "react";
 import { MdlPsglstErrlogDtbase } from "../../model/params";
 import { ApiPsglstPrcessManual } from "../../api/prcess";
-import { mdlGlobalAllusrCookie, MdlGlobalStatusPrcess } from "../../../global/model/params";
 import { FncGlobalQuerysEdlink, FncGlobalParamsHminfr } from "../../../global/function/querys";
-import { ApiGlobalStatusPrcess } from "../../../global/api/status";
 import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
 import { UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
+import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";
+import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
 
 
 export default function UixPsglstPrcessManual({ cookie, update, status }:
-  { cookie: mdlGlobalAllusrCookie; update: string; status: MdlGlobalStatusPrcess }) {
+  { cookie: mdlAllusrCookieObjson; update: string; status: MdlAllusrStatusPrcess }) {
 
   // Get status first
   const rplprm = FncGlobalQuerysEdlink();
@@ -73,7 +73,7 @@ export default function UixPsglstPrcessManual({ cookie, update, status }:
       if (status.sbrapi != 0) {
         const intrvl = setInterval(async () => {
           console.log("action interval");
-          const instat = await ApiGlobalStatusPrcess();
+          const instat = await ApiAllusrStatusPrcess();
           if (instat.sbrapi == 0) {
             statfnSet("");
             rplprm(["update_global"], String(Math.random()));

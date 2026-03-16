@@ -1,5 +1,34 @@
 import { mdlGlobalAlluserFilter } from "../model/params";
 
+export function FncGlobalFormatDefault(
+  key: string,
+  val: string,
+): string | number {
+  let now: string | number = "";
+  if (["routvc", "routfl"].includes(key)) {
+    now = FncGlobalFormatRoutfl(val).substring(0, 7);
+  } else if (["airlfl"].includes(key)) {
+    now = val
+      .toUpperCase()
+      .replace(/[^A-Z]/g, "")
+      .substring(0, 2);
+  } else if (["flnbfl"].includes(key)) {
+    now = val.replace(/[^0-9]/g, "").substring(0, 4);
+  } else if (["tktnfl", "tktnvc"].includes(key)) {
+    now = val.replace(/[^0-9]/g, "").substring(0, 13);
+  } else if (["airmls", "ntafvc", "ntaffl"].includes(key)) {
+    now = val.replace(/[^0-9]/g, "");
+  } else if (["cpnbvc"].includes(key)) {
+    now = FncGlobalFormatCpnfmt(val);
+  } else if (["depart"].includes(key)) {
+    now = val
+      .toUpperCase()
+      .replace(/[^A-Z]/g, "")
+      .substring(0, 3);
+  } else now = val;
+  return now;
+}
+
 // Fucntion change format data yymmdd/hhmm to dd-MMM-yyyy hh:mm
 export function FncGlobalFormatDatefm(inputd: string): string {
   if (inputd.length !== 6 && inputd.length !== 10 && inputd.length !== 4)
@@ -43,10 +72,12 @@ export function FncGlobalFormatDateip(inputd: string): string {
 // Function change format routef to 3-3 characters
 export function FncGlobalFormatRoutfl(routef: string) {
   let raw = routef.toUpperCase().replace(/[^A-Z]/g, "");
-  if (raw.length > 6) raw = raw.slice(0, 6);
-  let formatted = raw;
-  if (raw.length > 3) formatted = raw.slice(0, 3) + "-" + raw.slice(3);
-  return formatted;
+  let rsl = "";
+  for (let i = 0; i < raw.length; i += 3) {
+    if (i > 0) rsl += "-";
+    rsl += raw.slice(i, i + 3);
+  }
+  return rsl;
 }
 
 // Function change format routef to 3-3 characters

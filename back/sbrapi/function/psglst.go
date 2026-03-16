@@ -17,7 +17,7 @@ import (
 func FncSbrapiPsglstMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	apndix mdlSbrapi.MdlSbrapiMsghdrApndix,
 	mapcur map[string]mdlApndix.MdlApndixCurrcvDtbase,
-	fllist mdlPsglst.MdlPsglstFllistDtbase,
+	fllist mdlApndix.MdlApndixFllistDtbase,
 	clslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 ) ([]mdlPsglst.MdlPsglstPsgdtlDtbase, error) {
 
@@ -86,7 +86,7 @@ func FncSbrapiPsglstMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 	apndix mdlSbrapi.MdlSbrapiMsghdrApndix,
 	mapcur map[string]mdlApndix.MdlApndixCurrcvDtbase,
-	fllist mdlPsglst.MdlPsglstFllistDtbase,
+	fllist mdlApndix.MdlApndixFllistDtbase,
 	clslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 ) []mdlPsglst.MdlPsglstPsgdtlDtbase {
 	getItnrry := rawxml.ItineraryInfo.Itinerary
@@ -225,7 +225,7 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 					intDatevc, _ := strconv.Atoi(strDatevc)
 					objPsglst.Datevc = int32(intDatevc)
 					objPsglst.Clssvc = partsl[3]
-					objPsglst.Cbinvc = clslvl[partsl[3]].Cbinfl
+					objPsglst.Cbinvc = clslvl[partsl[3]].Cbncls
 					objPsglst.Routvc = partsl[4][:3] + "-" + partsl[4][3:]
 					objPsglst.Statvc = partsl[5]
 				}

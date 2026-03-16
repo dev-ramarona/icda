@@ -1,20 +1,4 @@
-import { MdlGlobalAcpedtDtbase, MdlGlobalActlogDtbase } from "../model/params";
-
-// API accepted edit coloumn
-export async function ApiGlobalAcpedtDtbase(params: string) {
-  let fnlobj: MdlGlobalAcpedtDtbase[] = [];
-  try {
-    const rspnse = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/global/acpedt/${params}`,
-      { method: "GET" },
-    );
-    if (!rspnse.ok) throw new Error("Failed to fetch accepted edit data");
-    fnlobj = await rspnse.json();
-  } catch (error) {
-    console.log(error);
-  }
-  return fnlobj;
-}
+import { MdlGlobalActlogDtbase } from "../model/params";
 
 // API action log database
 export async function ApiGlobalActlogDtbase(params: string) {

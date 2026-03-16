@@ -33,11 +33,16 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	// Handle global
-	r.GET("/global/status", fncApndix.FncApndixStatusPrcess)
-	r.GET("/global/acpedt/:dvsion", fncApndix.FncApndixAcpedtGetall)
+	// Handle apndix
+	r.GET("/apndix/acpedt/:dvsion", fncApndix.FncApndixAcpedtGetall)
+	r.GET("/apndix/applst/getall", fncApndix.FncApndixApplstGetall)
+	r.POST("/apndix/provnc/getall", fncApndix.FncApndixProvncGetall)
+	r.POST("/apndix/provnc/update", fncApndix.FncApndixProvincUpdate)
+	r.POST("/apndix/flhour/getall", fncApndix.FncApndixFlhourGetall)
+	r.POST("/apndix/flhour/update", fncApndix.FncApndixFlhourUpdate)
 
 	// Handle web link API all user
+	r.GET("/allusr/status", fncAllusr.FncAllusrStatusPrcess)
 	r.GET("/allusr/applst", fncAllusr.FncAllusrApplstGetall)
 	r.POST("/allusr/loginx", fncAllusr.FncAllusrLoginxHandle)
 	r.GET("/allusr/tokenx", fncAllusr.FncAllusrTokenxHandle)

@@ -2,7 +2,7 @@ package fncSbrapi
 
 import (
 	fncApndix "back/apndix/function"
-	mdlPsglst "back/psglst/model"
+	mdlApndix "back/apndix/model"
 	mdlSbrapi "back/sbrapi/model"
 	"encoding/xml"
 	"strconv"
@@ -13,7 +13,7 @@ import (
 // Comamand macro Sabre API Sreen
 func FncSbrapiFldtilMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	apndix mdlSbrapi.MdlSbrapiMsghdrApndix,
-	fllist *mdlPsglst.MdlPsglstFllistDtbase) error {
+	fllist *mdlApndix.MdlApndixFllistDtbase) error {
 
 	// Isi struktur data
 	strDatefl := strconv.Itoa(int(apndix.Datefl))
@@ -66,7 +66,7 @@ func FncSbrapiFldtilMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 // Treatment data raw flight list
 func FncSbrapiFldtilTrtmnt(rawxml mdlSbrapi.MdlSbrapiFldtilRspacs,
-	apndix mdlSbrapi.MdlSbrapiMsghdrApndix, fllist *mdlPsglst.MdlPsglstFllistDtbase,
+	apndix mdlSbrapi.MdlSbrapiMsghdrApndix, fllist *mdlApndix.MdlApndixFllistDtbase,
 ) {
 
 	// Get aircfraft config and secok

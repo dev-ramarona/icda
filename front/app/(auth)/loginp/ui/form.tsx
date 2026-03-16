@@ -34,7 +34,7 @@ export default function UixLoginpInputdFormdt() {
             className="w-80 md:w-96 min-w-fit h-80 min-h-fit"
             action={formacSet}
         >
-            <div className="afull flexctr flex-col bg-linear-to-br from-zinc-100 via-white to-cyan-100 rounded-xl ring ring-gray-200">
+            <div className="afull flexctr flex-col bg-linear-to-br from-zinc-100 via-white to-cyan-100 rounded-xl ring-2 ring-gray-200">
                 <div className="w-3/4 py-1.5 flexctr flex-col">
                     <div className="text-gray-700 font-black text-2xl">LOGIN</div>
                     <div className="font-semibold">Data Analyst IC</div>

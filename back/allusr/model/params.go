@@ -38,6 +38,7 @@ type MdlAllusrTokensFormat struct {
 	jwt.RegisteredClaims
 }
 type MdlAllusrApplstDtbase struct {
-	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
-	Detail string `json:"detail,omitempty" bson:"detail,omitempty"`
+	Pagenb int32  `json:"pagenb" bson:"pagenb"`
+	Prmkey string `json:"prmkey" bson:"prmkey"`
+	Detail string `json:"detail" bson:"detail"`
 }

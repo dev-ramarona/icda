@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { ApiGlobalCookieGetdta } from "./api/cookie";
 import { UixGlobalIconvcTolink } from "./ui/server/iconvc";
+import { ApiAllusrCookieGetdta } from "../allusr/api/cookie";
 
 export default async function Page() {
-  const cookie = await ApiGlobalCookieGetdta();
+  const cookie = await ApiAllusrCookieGetdta();
   return (
     <div className="afull flexctr flex-col text-sky-900 fixed top-0">
       <div className="text-3xl">

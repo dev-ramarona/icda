@@ -3,10 +3,8 @@ package fncApndix
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -39,9 +37,4 @@ func FncApndixBulkdbBatchs(mapMgomdl map[string]*[]mongo.WriteModel, blimit int)
 			*mgo = []mongo.WriteModel{}
 		}
 	}
-}
-
-// Get status data process
-func FncApndixStatusPrcess(c *gin.Context) {
-	c.JSON(http.StatusOK, Status)
 }

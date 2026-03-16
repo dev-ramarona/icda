@@ -49,7 +49,7 @@ func FncApndixFlnbflPrcess(sycFlnbfl *sync.Map, objParams mdlSbrapi.MdlSbrapiMsg
 	var nowHstory = string("")
 	if val, ist := sycFlnbfl.Load(prmkey); ist {
 		if get, mtc := val.(mdlApndix.MdlApndixFlnblsDtbase); mtc {
-			nowDatend, nowHstory = FncApndixFormatHstory(get.Routfl,
+			nowDatend, nowHstory = FncApndixFormatHstory(get.Routmx,
 				routfl, get.Hstory, get.Datefl, int32(intDatenw))
 		}
 	}
@@ -59,7 +59,7 @@ func FncApndixFlnbflPrcess(sycFlnbfl *sync.Map, objParams mdlSbrapi.MdlSbrapiMsg
 			Prmkey: prmkey,
 			Airlfl: objParams.Airlfl,
 			Flnbfl: objParams.Flnbfl,
-			Routfl: routfl,
+			Routmx: routfl,
 			Datefl: nowDatend,
 			Hstory: nowHstory}}).SetUpsert(true)}
 }

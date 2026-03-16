@@ -2,11 +2,11 @@
 import { useEffect, useState } from "react";
 import { MdlPsglstErrlogDtbase } from "../../../psglst/model/params";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { ApiGlobalStatusPrcess } from "../../../global/api/status";
 import { ApiPsglstPrcessManual } from "../../../psglst/api/prcess";
 import { UixGlobalIconvcIgnore, UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
-import { MdlGlobalStatusPrcess } from "../../../global/model/params";
+import { MdlAllusrStatusPrcess } from "../../../allusr/model/params";
+import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
 
 export default function UixPsglstErrlogTablex({
   errlog,
@@ -15,7 +15,7 @@ export default function UixPsglstErrlogTablex({
 }: {
   errlog: MdlPsglstErrlogDtbase[];
   update: string;
-  status: MdlGlobalStatusPrcess;
+  status: MdlAllusrStatusPrcess;
 }) {
 
   // Hit the database and get interval status
@@ -54,7 +54,7 @@ export default function UixPsglstErrlogTablex({
       if (status.sbrapi != 0) {
         const intrvl = setInterval(async () => {
           console.log("action interval");
-          const instat = await ApiGlobalStatusPrcess();
+          const instat = await ApiAllusrStatusPrcess();
           if (instat.sbrapi == 0) {
             statfnSet("");
             rplprm(["update_global"], String(Math.random()));

@@ -2,7 +2,7 @@ package fncSbrapi
 
 import (
 	fncApndix "back/apndix/function"
-	mdlPsglst "back/psglst/model"
+	mdlApndix "back/apndix/model"
 	mdlSbrapi "back/sbrapi/model"
 	"encoding/xml"
 	"slices"
@@ -13,13 +13,13 @@ import (
 
 // Comamand macro Sabre API Sreen
 func FncSbrapiFllistMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
-	apndix mdlSbrapi.MdlSbrapiMsghdrApndix) ([]mdlPsglst.MdlPsglstFllistDtbase, error) {
+	apndix mdlSbrapi.MdlSbrapiMsghdrApndix) ([]mdlApndix.MdlApndixFllistDtbase, error) {
 
 	// Isi struktur data
 	strDatefl := strconv.Itoa(int(apndix.Datefl))
 	rawDatefl, _ := time.Parse("060102", strDatefl)
 	ymdDatefl := rawDatefl.Format("2006-01-02")
-	fnlFllist := []mdlPsglst.MdlPsglstFllistDtbase{}
+	fnlFllist := []mdlApndix.MdlApndixFllistDtbase{}
 	bdyFllist := mdlSbrapi.MdlSbrapiFllistReqenv{
 		Xmlns: "http://schemas.xmlsoap.org/soap/envelope/",
 		Header: mdlSbrapi.MdlSbrapiFllistReqhdr{
@@ -69,8 +69,8 @@ func FncSbrapiFllistMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 // Treatment data raw flight list
 func FncSbrapiFllistTrtmnt(rawxml mdlSbrapi.MdlSbrapiFllistRspfls,
-	apndix mdlSbrapi.MdlSbrapiMsghdrApndix) []mdlPsglst.MdlPsglstFllistDtbase {
-	fnlFllist := []mdlPsglst.MdlPsglstFllistDtbase{}
+	apndix mdlSbrapi.MdlSbrapiMsghdrApndix) []mdlApndix.MdlApndixFllistDtbase {
+	fnlFllist := []mdlApndix.MdlApndixFllistDtbase{}
 	nowDepart := rawxml.Origin
 
 	// Looping all flight list
@@ -106,7 +106,7 @@ func FncSbrapiFllistTrtmnt(rawxml mdlSbrapi.MdlSbrapiFllistRspfls,
 
 		// Final output
 		keyFllist := apndix.Airlfl + strFlnbfl + nowDepart + nowDatefl
-		fnlFllist = append(fnlFllist, mdlPsglst.MdlPsglstFllistDtbase{
+		fnlFllist = append(fnlFllist, mdlApndix.MdlApndixFllistDtbase{
 			Prmkey: keyFllist,
 			Airlfl: apndix.Airlfl,
 			Flnbfl: strFlnbfl,

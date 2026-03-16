@@ -24,6 +24,18 @@ export interface MdlAllusrFrntndParams {
     keywrd: string[];
 }
 export interface MdlAllusrApplstParams {
+    pagenb: number;
     prmkey: string;
     detail: string;
+}
+export interface mdlAllusrCookieObjson {
+    stfnme: string;
+    usrnme: string;
+    stfeml: string;
+    access: string[];
+    keywrd: string[];
+}
+export interface MdlAllusrStatusPrcess {
+    sbrapi: number;
+    action: number;
 }

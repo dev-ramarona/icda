@@ -10,7 +10,7 @@ import UixAllusrFormipMainpg from "./ui/create/form";
 export default async function Page(props: {
     searchParams: Promise<MdlAllusrSearchParams>;
 }) {
-    const applst: MdlAllusrApplstParams[] = await ApiAllusrApplstDtbase();
+    const applst: MdlAllusrApplstParams[] = await ApiAllusrApplstDtbase([]);
     const qryprm = await props.searchParams;
     const prmAllusr = FncAllusrSearchParams(qryprm);
     return (

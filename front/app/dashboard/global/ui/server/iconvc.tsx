@@ -411,3 +411,25 @@ export function UixGlobalIconvcDelete({
     </svg>
   );
 }
+
+export function UixGlobalIconvcAddpls({
+  color,
+  size,
+  bold,
+}: {
+  color: string;
+  size: number;
+  bold: number;
+}) {
+  return (
+    <svg
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={bold}
+      className="p-0.5 hover:stroke-slate-300 duration-300"
+      style={{ width: size + "rem", height: size + "rem", stroke: color }}
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+    </svg>
+  );
+}

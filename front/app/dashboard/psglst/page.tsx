@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { ApiGlobalCookieGetdta } from "../global/api/cookie";
 import { UixGlobalIconvcSeting } from "../global/ui/server/iconvc";
 import UixGlobalLoadngAnmate from "../global/ui/server/loadng";
 import UixPsglstActlogMainpg from "./ui/actlog/main";
@@ -9,17 +8,18 @@ import { MdlPsglstActlogDtbase, MdlPsglstGlobalSrcprm } from "./model/params";
 import UixPsglstPrcessMainpg from "./ui/prcess/main";
 import { FncPsglstErrlogSrcprm, FncPsglstPsgdtlSrcprm } from "./function/params";
 import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
-import { ApiGlobalStatusPrcess } from "../global/api/status";
+import { ApiAllusrCookieGetdta } from "../allusr/api/cookie";
+import { ApiAllusrStatusPrcess } from "../allusr/api/status";
 
 export default async function Page(props: {
   searchParams: Promise<MdlPsglstGlobalSrcprm>;
 }) {
-  const cookie = await ApiGlobalCookieGetdta();
+  const cookie = await ApiAllusrCookieGetdta();
   const qryprm = await props.searchParams;
   const actobj = await ApiGlobalActlogDtbase("psglst");
   const actlog: MdlPsglstActlogDtbase[] = actobj.actlog;
   const actdte: string[] = actobj.datefl;
-  const status = await ApiGlobalStatusPrcess();
+  const status = await ApiAllusrStatusPrcess();
   const prmErrlog = FncPsglstErrlogSrcprm(qryprm);
   const prmPsgdtl = FncPsglstPsgdtlSrcprm(qryprm, actdte);
   return (

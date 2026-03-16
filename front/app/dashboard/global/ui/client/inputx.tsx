@@ -61,7 +61,7 @@ export default function UixGlobalInputxFormdt({
             className={`afull bg-white rounded-md p-1.5 peer shadow-md ${params != ""
               ? "text-slate-700"
               : "text-white focus:text-slate-500"
-              } duration-300`}
+              } ring-2 ring-gray-200 duration-300`}
             value={params}
             maxLength={length && typeof length == "number" ? length : undefined}
             min={(Array.isArray(length) ? length[0] : length)}

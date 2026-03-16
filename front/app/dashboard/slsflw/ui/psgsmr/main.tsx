@@ -1,5 +1,6 @@
-import { ApiGlobalAcpedtDtbase } from "../../../global/api/dtbase";
-import { MdlGlobalAcpedtDtbase, mdlGlobalAllusrCookie } from "../../../global/model/params";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { ApiApndixAcpedtDtbase } from "../../../apndix/api/dtbase";
+import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
 import { ApiSlsflwPsgsmrGetall } from "../../api/psgsmr";
 import { MdlSlsflwPsgsmrFrntnd, MdlSlsflwPsgsmrSrcprm } from "../../model/params";
@@ -13,12 +14,12 @@ export default async function UixSlsflwPsgsmrMainpg({
 }: {
   prmPsgsmr: MdlSlsflwPsgsmrSrcprm;
   datefl: string[];
-  cookie: mdlGlobalAllusrCookie;
+  cookie: mdlAllusrCookieObjson;
 }) {
   const psgsmr = await ApiSlsflwPsgsmrGetall(prmPsgsmr);
   const arrdta: MdlSlsflwPsgsmrFrntnd[] = psgsmr.arrdta;
   const totdta: number = psgsmr.totdta;
-  const acpedt: MdlGlobalAcpedtDtbase[] = await ApiGlobalAcpedtDtbase("slsrpt");
+  const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("slsrpt");
   return (
     <>
       <UixSlsflwPsgsmrSearch prmPsgsmr={prmPsgsmr} datefl={datefl} />

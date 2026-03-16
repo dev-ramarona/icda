@@ -2,9 +2,10 @@ import UixSlsflwDetailSearch from "./search";
 import UixSlsflwDetailTablex from "./tablex";
 import { MdlSlsflwPsgdtlFrntnd, MdlSlsflwPsgdtlSrcprm } from "../../model/params";
 import { ApiSlsflwPsgdtlGetall } from "../../api/psgdtl";
-import { ApiGlobalAcpedtDtbase } from "../../../global/api/dtbase";
-import { MdlGlobalAcpedtDtbase, mdlGlobalAllusrCookie } from "../../../global/model/params";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
+import { ApiApndixAcpedtDtbase } from "../../../apndix/api/dtbase";
 
 export default async function UixSlsflwDetailMainpg({
   prmPsgdtl,
@@ -13,7 +14,7 @@ export default async function UixSlsflwDetailMainpg({
 }: {
   prmPsgdtl: MdlSlsflwPsgdtlSrcprm;
   datefl: string[];
-  cookie: mdlGlobalAllusrCookie;
+  cookie: mdlAllusrCookieObjson;
 }) {
   const psgdtl = await ApiSlsflwPsgdtlGetall({
     ...prmPsgdtl, nclear_psgdtl:
@@ -21,7 +22,7 @@ export default async function UixSlsflwDetailMainpg({
   });
   const arrdta: MdlSlsflwPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
-  const acpedt: MdlGlobalAcpedtDtbase[] = await ApiGlobalAcpedtDtbase("slsrpt");
+  const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("slsrpt");
   return (
     <>
       <UixSlsflwDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} />

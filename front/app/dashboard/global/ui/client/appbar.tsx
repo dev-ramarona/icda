@@ -9,15 +9,14 @@ import {
   UixGlobalIconvcTolink,
   UixGlobalIconvcUsrdtl,
 } from "../server/iconvc";
-import { mdlGlobalAllusrCookie } from "../../model/params";
-import { ApiGlobalCookieLogout } from "../../api/cookie";
-import { MdlAllusrApplstParams } from "../../../allusr/model/params";
+import { MdlAllusrApplstParams, mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { ApiAllusrCookieLogout } from "../../../allusr/api/cookie";
 
 export default function UixGlobalAppbarClient({
   cookie,
   applst,
 }: {
-  cookie: mdlGlobalAllusrCookie;
+  cookie: mdlAllusrCookieObjson;
   applst: MdlAllusrApplstParams[];
 }) {
   const pthnme = usePathname();
@@ -115,7 +114,7 @@ export default function UixGlobalAppbarClient({
                 </Link>
               </div>
               <hr className="text-gray-300" />
-              <form className="py-1.5" action={ApiGlobalCookieLogout}>
+              <form className="py-1.5" action={ApiAllusrCookieLogout}>
                 <button className="afull flexstr hover:bg-cyan-100 duration-300 px-1.5 py-1.5 cursor-pointer" type="submit">
                   <div className="pr-1 flexctr">
                     <UixGlobalIconvcLogout bold={2} color="#6a7282" size={1.4} />

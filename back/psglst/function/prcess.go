@@ -106,7 +106,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		}
 
 		// Prepare job queue
-		jobFllist := make(chan mdlPsglst.MdlPsglstFllistDtbase, 1500)
+		jobFllist := make(chan mdlApndix.MdlApndixFllistDtbase, 1500)
 		var swg sync.WaitGroup
 
 		// Launch 10 workers using 10 tokens
@@ -212,7 +212,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 func FncPsglstPrcessWorker(
 	nowObjtkn mdlSbrapi.MdlSbrapiMsghdrParams,
 	swg *sync.WaitGroup,
-	jobFllist <-chan mdlPsglst.MdlPsglstFllistDtbase,
+	jobFllist <-chan mdlApndix.MdlApndixFllistDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 	mapProvnc map[string]string,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,

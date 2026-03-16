@@ -1,15 +1,15 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { mdlGlobalAllusrCookie } from "../model/params";
 import { redirect } from "next/navigation";
+import { mdlAllusrCookieObjson } from "../model/params";
 
 // Handle Cookie
-export async function ApiGlobalCookieGetdta() {
+export async function ApiAllusrCookieGetdta() {
   const fnccok = cookies();
   const tknnme = process.env.NEXT_PUBLIC_TKN_COOKIE || "x";
   const tokenx = (await fnccok).get(tknnme)?.value || "";
-  const Objusr: mdlGlobalAllusrCookie = {
+  const Objusr: mdlAllusrCookieObjson = {
     stfnme: "",
     usrnme: "",
     stfeml: "",
@@ -31,7 +31,7 @@ export async function ApiGlobalCookieGetdta() {
       },
     );
     if (!rspnse.ok) throw new Error("Failed to fetch user data");
-    const fnlobj: mdlGlobalAllusrCookie = await rspnse.json();
+    const fnlobj: mdlAllusrCookieObjson = await rspnse.json();
     return fnlobj;
   } catch (error) {
     console.log(error);
@@ -42,7 +42,7 @@ export async function ApiGlobalCookieGetdta() {
 }
 
 // Logout
-export async function ApiGlobalCookieLogout() {
+export async function ApiAllusrCookieLogout() {
   const cookieStore = await cookies();
   cookieStore.delete(`${process.env.NEXT_PUBLIC_TKN_COOKIE}`);
   redirect("/loginp");

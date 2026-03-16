@@ -3,9 +3,9 @@ package fncAllusr
 import (
 	mdlAllusr "back/allusr/model"
 	fncApndix "back/apndix/function"
-	fncGlobal "back/apndix/function"
 	"context"
 	"fmt"
+	"net/http"
 	"sync"
 	"time"
 
@@ -13,8 +13,14 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/crypto/bcrypt"
 )
+
+// Get status data process
+func FncAllusrStatusPrcess(c *gin.Context) {
+	c.JSON(http.StatusOK, fncApndix.Status)
+}
 
 // Handle Login function
 func FncAllusrLoginxHandle(c *gin.Context) {
@@ -30,7 +36,7 @@ func FncAllusrLoginxHandle(c *gin.Context) {
 	}
 
 	// Select database and collection
-	tablex := fncGlobal.Client.Database(fncGlobal.Dbases).Collection("allusr_usrlst")
+	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("allusr_usrlst")
 	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -108,12 +114,13 @@ func FncAllusrTokenxHandle(c *gin.Context) {
 func FncAllusrApplstGetall(c *gin.Context) {
 
 	// Select database and collection
-	tablex := fncGlobal.Client.Database(fncGlobal.Dbases).Collection("allusr_applst")
+	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("allusr_applst")
 	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	// Get route data
-	datarw, err := tablex.Find(contxt, bson.M{})
+	ptipns := options.Find().SetSort(bson.D{{Key: "pagenb", Value: 1}})
+	datarw, err := tablex.Find(contxt, bson.M{}, ptipns)
 	if err != nil {
 		panic("fail")
 	}
@@ -149,7 +156,7 @@ func FncAllusrRegistHandle(c *gin.Context) {
 	}
 
 	// Ambil collection
-	tablex := fncGlobal.Client.Database(fncGlobal.Dbases).Collection("allusr_usrlst")
+	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("allusr_usrlst")
 	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -227,7 +234,7 @@ func FncAllusrUsrlstGetall(c *gin.Context) {
 	// Select db and context to do
 	var totidx = 0
 	var slcobj interface{}
-	tablex := fncGlobal.Client.Database(fncGlobal.Dbases).Collection("allusr_usrlst")
+	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("allusr_usrlst")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
@@ -337,7 +344,7 @@ func FncAllusrDeleteHandle(c *gin.Context) {
 	usrnme := c.Param("usrnme")
 
 	// Select db and context to do
-	tablex := fncGlobal.Client.Database(fncGlobal.Dbases).Collection("allusr_usrlst")
+	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("allusr_usrlst")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 

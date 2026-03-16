@@ -5,11 +5,12 @@ import {
 } from "../../model/params";
 import { useState } from "react";
 import { ApiPsglstPsgdtlUpdate } from "../../api/psgdtl";
-import { MdlGlobalAcpedtDtbase, mdlGlobalAllusrCookie } from "../../../global/model/params";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { FncGlobalFormatCpnfmt, FncGlobalFormatDatefm, FncGlobalFormatRoutfl } from "../../../global/function/format";
 import { UixGlobalIconvcCancel, UixGlobalIconvcCeklis, UixGlobalIconvcEditdt } from "../../../global/ui/server/iconvc";
 import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 
 export default function UixPsglstDetailTablex({
   detail,
@@ -17,8 +18,8 @@ export default function UixPsglstDetailTablex({
   cookie,
 }: {
   detail: MdlPsglstPsgdtlFrntnd[];
-  acpedt: MdlGlobalAcpedtDtbase[];
-  cookie: mdlGlobalAllusrCookie;
+  acpedt: MdlApndixAcpedtDtbase[];
+  cookie: mdlAllusrCookieObjson;
 }) {
   const [edtobj, edtobjSet] = useState<MdlPsglstPsgdtlFrntnd>();
   const [okeupd, okeupdSet] = useState<string>("");

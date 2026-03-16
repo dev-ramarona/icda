@@ -1,5 +1,6 @@
-import { ApiGlobalAcpedtDtbase } from "../../../global/api/dtbase";
-import { MdlGlobalAcpedtDtbase, mdlGlobalAllusrCookie } from "../../../global/model/params";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { ApiApndixAcpedtDtbase } from "../../../apndix/api/dtbase";
+import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
 import { ApiPsglstPsgdtlGetall } from "../../api/psgdtl";
 import {
@@ -16,7 +17,7 @@ export default async function UixPsglstDetailMainpg({
 }: {
   prmPsgdtl: MdlPsglstPsgdtlSrcprm;
   datefl: string[];
-  cookie: mdlGlobalAllusrCookie;
+  cookie: mdlAllusrCookieObjson;
 }) {
   const psgdtl = await ApiPsglstPsgdtlGetall({
     ...prmPsgdtl, nclear_psgdtl:
@@ -24,7 +25,7 @@ export default async function UixPsglstDetailMainpg({
   });
   const arrdta: MdlPsglstPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
-  const acpedt: MdlGlobalAcpedtDtbase[] = await ApiGlobalAcpedtDtbase("mnfest");
+  const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("mnfest");
   return (
     <>
       <UixPsglstDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} />

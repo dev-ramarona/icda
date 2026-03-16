@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { MdlSlsflwAcpedtDtbase, MdlSlsflwPsgsmrFrntnd } from "../../model/params";
-import { mdlGlobalAllusrCookie } from "../../../global/model/params";
 import { FncGlobalFormatCpnfmt, FncGlobalFormatDatefm, FncGlobalFormatRoutfl } from "../../../global/function/format";
 import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 
 export default function UixSlsflwPsgsmrTablex({
   Psgsmr,
@@ -13,7 +13,7 @@ export default function UixSlsflwPsgsmrTablex({
 }: {
   Psgsmr: MdlSlsflwPsgsmrFrntnd[];
   acpedt: MdlSlsflwAcpedtDtbase[];
-  cookie: mdlGlobalAllusrCookie;
+  cookie: mdlAllusrCookieObjson;
 }) {
   const [edtobj, edtobjSet] = useState<MdlSlsflwPsgsmrFrntnd>();
   const actedt = (e: React.ChangeEvent<HTMLInputElement>) => {

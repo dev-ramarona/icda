@@ -1,4 +1,4 @@
-import { MdlGlobalStatusPrcess } from "../../../global/model/params";
+import { MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
 import { ApiPsglstErrlogDtbase } from "../../api/errlog";
 import { MdlPsglstErrlogDtbase, MdlPsglstErrlogSrcprm } from "../../model/params";
@@ -7,7 +7,7 @@ import UixPsglstErrlogTablex from "./tablex";
 
 
 export default async function UixPsglstErrlogMainpg({ prmErrlog, status }:
-  { prmErrlog: MdlPsglstErrlogSrcprm; status: MdlGlobalStatusPrcess }) {
+  { prmErrlog: MdlPsglstErrlogSrcprm; status: MdlAllusrStatusPrcess }) {
   const rslobj = await ApiPsglstErrlogDtbase({
     ...prmErrlog, erdvsn_errlog:
       (prmErrlog.erdvsn_errlog == "") ? "MNFEST" : prmErrlog.erdvsn_errlog

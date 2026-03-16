@@ -38,35 +38,6 @@ type MdlPsglstFrcalcFrbase struct {
 	Isitit string `json:"isitit,omitempty" bson:"isitit,omitempty"`
 }
 
-type MdlPsglstFllistDtbase struct {
-	Prmkey string  `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
-	Airlfl string  `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
-	Flnbfl string  `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
-	Timeup int64   `json:"timeup,omitempty" bson:"timeup,omitempty"`
-	Timefl int64   `json:"timefl,omitempty" bson:"timefl,omitempty"`
-	Timerv int64   `json:"timerv,omitempty" bson:"timerv,omitempty"`
-	Datefl int32   `json:"datefl,omitempty" bson:"datefl,omitempty"`
-	Mnthfl int32   `json:"mnthfl,omitempty" bson:"mnthfl,omitempty"`
-	Ndayfl string  `json:"ndayfl,omitempty" bson:"ndayfl,omitempty"`
-	Flstat string  `json:"flstat,omitempty" bson:"flstat,omitempty"`
-	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
-	Routac string  `json:"routac,omitempty" bson:"routac,omitempty"`
-	Flsarr string  `json:"flsarr,omitempty" bson:"flsarr,omitempty"`
-	Routmx string  `json:"routmx,omitempty" bson:"routmx,omitempty"`
-	Flhour float64 `json:"flhour,omitempty" bson:"flhour,omitempty"`
-	Flrpdc int32   `json:"flrpdc,omitempty" bson:"flrpdc,omitempty"`
-	Flgate string  `json:"flgate,omitempty" bson:"flgate,omitempty"`
-	Depart string  `json:"depart,omitempty" bson:"depart,omitempty"`
-	Arrivl string  `json:"arrivl,omitempty" bson:"arrivl,omitempty"`
-	Airtyp string  `json:"airtyp,omitempty" bson:"airtyp,omitempty"`
-	Aircnf string  `json:"aircnf,omitempty" bson:"aircnf,omitempty"`
-	Seatcn string  `json:"seatcn,omitempty" bson:"seatcn,omitempty"`
-	Autrzc int32   `json:"autrzc,omitempty" bson:"autrzc,omitempty"`
-	Autrzy int32   `json:"autrzy,omitempty" bson:"autrzy,omitempty"`
-	Bookdc int32   `json:"bookdc,omitempty" bson:"bookdc,omitempty"`
-	Bookdy int32   `json:"bookdy,omitempty" bson:"bookdy,omitempty"`
-}
-
 type MdlPsglstActlogDtbase struct {
 	Dateup int32  `json:"dateup,omitempty" bson:"dateup,omitempty"`
 	Datefl int32  `json:"datefl,omitempty" bson:"datefl,omitempty"`

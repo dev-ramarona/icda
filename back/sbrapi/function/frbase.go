@@ -111,7 +111,7 @@ func FncSbrapiFrbaseTrtmnt(rawxml []mdlSbrapi.MdlSbrapiFrbaseRspfbs,
 		getClslvl, ist := mapClslvl[strings.ToUpper(nowClssfl)]
 		nowDscont := 0.03
 		if ist {
-			nowDscont = getClslvl.Clssdc
+			nowDscont = getClslvl.Dscont
 		}
 		intFrbnta := math.Ceil(float64(intFrmant)*(1-nowDscont+0.11)/1.11/1000) * 1000
 
