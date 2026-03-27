@@ -112,7 +112,7 @@ export default function UixPsglstDetailSearch({
     <UixGlobalWraperSearch
       chnged={chnged}
       downld={{
-        lnk: `${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/downld`,
+        lnk: "../../../public/api/psglst",
         prm: params,
       }}
       resetx={resetx}
