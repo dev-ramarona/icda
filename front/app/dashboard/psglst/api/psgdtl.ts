@@ -1,3 +1,4 @@
+"use server";
 import { MdlPsglstPsgdtlFrntnd, MdlPsglstPsgdtlSrcprm } from "../model/params";
 
 // Function get psglst database
@@ -17,20 +18,18 @@ export async function ApiPsglstPsgdtlGetall(prmPsgdtl: MdlPsglstPsgdtlSrcprm) {
     prmPsgdtl.isittx_psgdtl,
     prmPsgdtl.isitir_psgdtl,
     prmPsgdtl.nclear_psgdtl,
+    prmPsgdtl.format_psgdtl,
     prmPsgdtl.pagenw_psgdtl,
   ]
     .filter(Boolean)
     .join(":");
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/mnfest`,
-      {
-        method: "POST",
-        body: JSON.stringify(prmPsgdtl),
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 30, tags: [tag] },
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/mnfest`, {
+      method: "POST",
+      body: JSON.stringify(prmPsgdtl),
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 30, tags: [tag] },
+    });
     if (!res.ok) throw new Error("Failed fetch psgdtl");
     return await res.json();
   } catch (err) {
@@ -40,9 +39,7 @@ export async function ApiPsglstPsgdtlGetall(prmPsgdtl: MdlPsglstPsgdtlSrcprm) {
 }
 
 // Function get psglst database
-export async function ApiPsglstPsgdtlUpdate(
-  params: MdlPsglstPsgdtlFrntnd,
-): Promise<string> {
+export async function ApiPsglstPsgdtlUpdate(params: MdlPsglstPsgdtlFrntnd): Promise<string> {
   // Validation
   if (params.tktnvc === "") return "tktnvc empty";
   if (params.tktnvc.length !== 13) return "tktnvc invalid";
@@ -54,15 +51,12 @@ export async function ApiPsglstPsgdtlUpdate(
 
   // Call API
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/update`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
-        cache: "no-store",
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/update/mnfest`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+      cache: "no-store",
+    });
     if (!res.ok) {
       throw new Error("Failed update psgdtl");
     }

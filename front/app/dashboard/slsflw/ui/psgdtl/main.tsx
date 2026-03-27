@@ -17,8 +17,8 @@ export default async function UixSlsflwDetailMainpg({
   cookie: mdlAllusrCookieObjson;
 }) {
   const psgdtl = await ApiSlsflwPsgdtlGetall({
-    ...prmPsgdtl, nclear_psgdtl:
-      (prmPsgdtl.nclear_psgdtl == "") ? "SLSRPT" : prmPsgdtl.nclear_psgdtl
+    ...prmPsgdtl,
+    nclear_psgdtl: prmPsgdtl.nclear_psgdtl == "" ? "SLSRPT" : prmPsgdtl.nclear_psgdtl,
   });
   const arrdta: MdlSlsflwPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
@@ -27,9 +27,9 @@ export default async function UixSlsflwDetailMainpg({
     <>
       <UixSlsflwDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} />
       {arrdta.length > 0 ? (
-        <UixSlsflwDetailTablex detail={arrdta} acpedt={acpedt} cookie={cookie} />
+        <UixSlsflwDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} />
       ) : (
-        <div className="w-full h-fit flexctr text-base font-semibold text-sky-800">
+        <div className="flexctr h-fit w-full text-base font-semibold text-sky-800">
           No database Log Action
         </div>
       )}

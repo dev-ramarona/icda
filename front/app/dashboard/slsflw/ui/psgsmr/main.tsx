@@ -19,14 +19,13 @@ export default async function UixSlsflwPsgsmrMainpg({
   const psgsmr = await ApiSlsflwPsgsmrGetall(prmPsgsmr);
   const arrdta: MdlSlsflwPsgsmrFrntnd[] = psgsmr.arrdta;
   const totdta: number = psgsmr.totdta;
-  const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("slsrpt");
   return (
     <>
       <UixSlsflwPsgsmrSearch prmPsgsmr={prmPsgsmr} datefl={datefl} />
       {arrdta.length > 0 ? (
-        <UixSlsflwPsgsmrTablex Psgsmr={arrdta} acpedt={acpedt} cookie={cookie} />
+        <UixSlsflwPsgsmrTablex psgsmr={arrdta} />
       ) : (
-        <div className="w-full h-fit flexctr text-base font-semibold text-sky-800">
+        <div className="flexctr h-fit w-full text-base font-semibold text-sky-800">
           No database Log Action
         </div>
       )}

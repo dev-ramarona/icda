@@ -25,15 +25,19 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	if fncApndix.Status.Sbrapi != 0.0 {
 		return
 	}
-	fncApndix.Status.Sbrapi = 0.01
 
 	// Bind JSON Body input to variable
 	inpErrlog := mdlPsglst.MdlPsglstErrlogDtbase{} //save
 	if err := c.BindJSON(&inpErrlog); err != nil {
 		panic(err)
 	}
-	errErignr := &inpErrlog.Erignr
-	errPrmkey := &inpErrlog.Prmkey
+	errErignr := inpErrlog.Erignr
+	errPrmkey := inpErrlog.Prmkey
+	fncApndix.Status.Sbrapi = 0.01
+	fncApndix.Status.Action = inpErrlog.Prmkey
+	if inpErrlog.Prmkey == "" {
+		inpErrlog.Prmkey = "all"
+	}
 
 	// Declare date format
 	strTimenw := time.Now().Format("0601021504")
@@ -68,8 +72,8 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	// Indicator done data
 	var totWorker = inpErrlog.Worker
 	var mapClslvl = fncApndix.FncApndixClssvlMapobj()
-	var mapProvnc = fncApndix.FncApndixProvncMapobj()
 	var slcHfbalv = fncApndix.FncApndixHfbalvMapobj()
+	var sycProvnc = fncApndix.FncApndixProvncSycmap()
 	var sycFlhour = fncApndix.FncApndixFlhourSycmap()
 	var sycFlnbfl = fncApndix.FncApndixFlnbflSycmap()
 	var sycFrbase = fncApndix.FncApndixFrbaseSycmap()
@@ -100,7 +104,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 			Erpart: "sssion", Ersrce: "sbrapi", Erdvsn: "MNFEST",
 			Dateup: int32(intDatenw), Timeup: int64(intTimenw),
 			Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 5,
-		}, lgcRspssn, sycErrlog, errErignr, errPrmkey)
+		}, lgcRspssn, sycErrlog, &errErignr, &errPrmkey)
 		if lgcRspssn {
 			continue
 		}
@@ -118,11 +122,11 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 					go FncPsglstPrcessWorker(slcRspssn[i],
 						&swg,
 						jobFllist,
-						mapClslvl, mapProvnc, slcHfbalv,
+						mapClslvl, slcHfbalv,
 						sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
-						sycCurrcv, sycPnrcde, sycMilege, sycPrgrss,
+						sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
 						idcFlhour, idcFrbase, idcFrtaxs, idcFlnbfl,
-						strTimenw, errErignr, errPrmkey)
+						strTimenw, &errErignr, &errPrmkey)
 					continue
 				}
 				fmt.Println("Failed Token-", i)
@@ -141,7 +145,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 				Dateup: int32(intDatenw), Timeup: int64(intTimenw),
 				Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 5,
 				Depart: depart,
-			}, err != nil, sycErrlog, errErignr, errPrmkey)
+			}, err != nil, sycErrlog, &errErignr, &errPrmkey)
 			if err != nil {
 				continue
 			}
@@ -198,10 +202,11 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 			}}).
 			SetUpsert(true)}, "psglst_logact")
 	fncApndix.Status.Sbrapi = 0
+	fncApndix.Status.Action = ""
 	if rsupdt != nil {
 		panic("Error Insert/Update to DB:" + rsupdt.Error())
 	}
-	if *errErignr != "" || *errPrmkey != "" {
+	if errErignr != "" || errPrmkey != "" {
 		c.JSON(500, gin.H{"status": "Failed"})
 		return
 	}
@@ -214,10 +219,9 @@ func FncPsglstPrcessWorker(
 	swg *sync.WaitGroup,
 	jobFllist <-chan mdlApndix.MdlApndixFllistDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
-	mapProvnc map[string]string,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
-	sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
-	sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss,
+	sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
+	sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
 	idcFlhour, idcFrbase, idcFrtaxs, idcFlnbfl *sync.Map,
 	strTimenw string, errErignr, errPrmkey *string) {
 
@@ -227,6 +231,7 @@ func FncPsglstPrcessWorker(
 	var mgoFrbase, mgoFrtaxs []mongo.WriteModel
 	var mgoMilege, mgoFlnbfl []mongo.WriteModel
 	var mgoPsgsmr, mgoPsgdtl []mongo.WriteModel
+	var mgoProvnc []mongo.WriteModel
 
 	// Get currency
 	mapCurrcv := map[string]mdlApndix.MdlApndixCurrcvDtbase{}
@@ -283,7 +288,7 @@ func FncPsglstPrcessWorker(
 
 		// Get flight hour
 		keyFlhour := dbsAirlfl + dbsFlnbfl + dbsRoutfl
-		nulFlhour := true
+		nulFlhour, istFlhour := true, true
 		if _, ist := idcFlhour.Load(keyFlhour); !ist {
 			idcFlhour.Store(keyFlhour, true)
 			rspFlhour, err := fncSbrapi.FncSbrapiFlhourMainob(nowObjtkn, sycFlhour, objParams)
@@ -314,11 +319,37 @@ func FncPsglstPrcessWorker(
 		// Get from syc flight hour if empty
 		if nulFlhour {
 			if getFlhour, ist := sycFlhour.Load(keyFlhour); ist {
+				istFlhour = false
 				if mtcFlhour, mtc := getFlhour.(mdlApndix.MdlApndixFlhourDtbase); mtc {
 					fllist.Flhour = mtcFlhour.Flhour
-					nulFlhour = false
+					if mtcFlhour.Flhour != 0 {
+						nulFlhour = false
+					}
 				}
 			}
+		}
+
+		// Push to appendix if null flhour
+		if istFlhour {
+			varFlhour := mdlApndix.MdlApndixFlhourDtbase{
+				Prmkey: keyFlhour,
+				Airlfl: dbsAirlfl,
+				Routfl: dbsRoutfl,
+				Flnbfl: dbsFlnbfl,
+				Flhour: 0,
+				Timefl: fllist.Timefl,
+				Timerv: fllist.Timerv,
+				Timeup: fllist.Timeup,
+				Dateup: objParams.Dateup,
+				Datend: objParams.Dateup,
+				Airtyp: fllist.Airtyp,
+				Airmls: 0,
+				Hstory: "",
+				Updtby: ""}
+			sycFlhour.Store(keyFlhour, varFlhour)
+			mgoFlhour = append(mgoFlhour, mongo.NewUpdateOneModel().
+				SetFilter(bson.M{"prmkey": keyFlhour}).
+				SetUpdate(bson.M{"$set": varFlhour}).SetUpsert(true))
 		}
 
 		// If doesn't get flight hour API
@@ -414,18 +445,20 @@ func FncPsglstPrcessWorker(
 				Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
 				Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
 			}, err != nil, sycErrlog, errErignr, errPrmkey)
-			tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege :=
+			tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc :=
 				FncPsglstPsglstPrcess(rspPsglst, fllist,
 					nowObjtkn, objParams,
 					sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
-					idcFrbase, idcFrtaxs, sycErrlog, slcHfbalv,
-					mapProvnc, mapCurrcv, mapClslvl, *errErignr, *errPrmkey)
+					idcFrbase, idcFrtaxs, sycErrlog, sycProvnc,
+					slcHfbalv,
+					mapCurrcv, mapClslvl, errErignr, errPrmkey)
 			mgoPsgsmr = append(mgoPsgsmr, tmpPsgsmr...)
 			mgoPsgdtl = append(mgoPsgdtl, tmpPsgdtl...)
 			mgoMilege = append(mgoMilege, tmpMilege...)
 			mgoFlhour = append(mgoFlhour, tmpFlhour...)
 			mgoFrbase = append(mgoFrbase, tmpFrbase...)
 			mgoFrtaxs = append(mgoFrtaxs, tmpFrtaxs...)
+			mgoProvnc = append(mgoProvnc, tmpProvnc...)
 			fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
 				"psglst_psgsmr": &mgoPsgsmr,
 				"psglst_psgdtl": &mgoPsgdtl,
@@ -433,6 +466,7 @@ func FncPsglstPrcessWorker(
 				"apndix_flhour": &mgoFlhour,
 				"apndix_frbase": &mgoFrbase,
 				"apndix_frtaxs": &mgoFrtaxs,
+				"apndix_provnc": &mgoProvnc,
 			}, 200)
 		}
 
@@ -472,5 +506,6 @@ func FncPsglstPrcessWorker(
 		"apndix_flhour": &mgoFlhour,
 		"apndix_frbase": &mgoFrbase,
 		"apndix_frtaxs": &mgoFrtaxs,
+		"apndix_provnc": &mgoProvnc,
 	}, 0)
 }

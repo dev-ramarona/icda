@@ -57,31 +57,31 @@ input[type] {
 }
 
 .afull {
-  @apply w-full h-full;
+  @apply h-full w-full;
 }
 
 .flexctr {
-  @apply flex justify-center items-center place-content-center;
+  @apply flex place-content-center items-center justify-center;
 }
 
 .flexbtw {
-  @apply flex justify-between items-center place-content-center;
+  @apply flex place-content-center items-center justify-between;
 }
 
 .flexstr {
-  @apply flex justify-start items-center place-content-center;
+  @apply flex place-content-center items-center justify-start;
 }
 
 .flexend {
-  @apply flex justify-end items-center place-content-center;
+  @apply flex place-content-center items-center justify-end;
 }
 
 .flexend {
-  @apply flex justify-end items-center place-content-center;
+  @apply flex place-content-center items-center justify-end;
 }
 
 .ctable {
-  @apply w-full h-full max-h-fit overflow-auto rounded-xl ring-2 ring-gray-300;
+  @apply h-full max-h-fit w-full overflow-auto rounded-xl ring-2 ring-gray-300;
 }
 
 table {
@@ -93,7 +93,7 @@ thead {
 }
 
 th {
-  @apply bg-cyan-600 px-2 py-1.5 ring-4 ring-cyan-600 whitespace-nowrap;
+  @apply bg-cyan-600 px-2 py-1.5 whitespace-nowrap ring-4 ring-cyan-600;
 }
 
 td {
@@ -105,25 +105,25 @@ tbody {
 }
 
 .btnsbm {
-  @apply bg-cyan-600 hover:bg-cyan-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+  @apply cursor-pointer rounded-lg bg-cyan-600 px-1.5 leading-5 font-semibold text-white shadow-slate-400 duration-300 hover:-translate-y-1/12 hover:bg-cyan-500 hover:shadow-md;
 }
 
 .btnstb {
-  @apply bg-white hover:bg-gray-100 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-gray-600 rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300 ring-2 ring-gray-200;
+  @apply cursor-pointer rounded-lg bg-white px-1.5 leading-5 font-semibold text-gray-600 ring-2 shadow-slate-400 ring-gray-200 duration-300 hover:-translate-y-1/12 hover:bg-gray-100 hover:shadow-md;
 }
 
 .btnscs {
-  @apply bg-green-600 hover:bg-green-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+  @apply cursor-pointer rounded-lg bg-green-600 px-1.5 leading-5 font-semibold text-white shadow-slate-400 duration-300 hover:-translate-y-1/12 hover:bg-green-500 hover:shadow-md;
 }
 
 .btnwrn {
-  @apply bg-amber-600 hover:bg-amber-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+  @apply cursor-pointer rounded-lg bg-orange-600 px-1.5 leading-5 font-semibold text-white shadow-slate-400 duration-300 hover:-translate-y-1/12 hover:bg-orange-500 hover:shadow-md;
 }
 
 .btnoff {
-  @apply bg-slate-300 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+  @apply cursor-pointer rounded-lg bg-slate-300 px-1.5 leading-5 font-semibold text-white shadow-slate-400 duration-300;
 }
 
 .btncxl {
-  @apply bg-red-600 hover:bg-red-500 hover:shadow-md hover:-translate-y-1/12 shadow-slate-400 text-white rounded-lg px-1.5 font-semibold leading-5 cursor-pointer duration-300;
+  @apply cursor-pointer rounded-lg bg-red-600 px-1.5 leading-5 font-semibold text-white shadow-slate-400 duration-300 hover:-translate-y-1/12 hover:bg-red-500 hover:shadow-md;
 }

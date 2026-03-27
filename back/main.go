@@ -37,9 +37,17 @@ func main() {
 	r.GET("/apndix/acpedt/:dvsion", fncApndix.FncApndixAcpedtGetall)
 	r.GET("/apndix/applst/getall", fncApndix.FncApndixApplstGetall)
 	r.POST("/apndix/provnc/getall", fncApndix.FncApndixProvncGetall)
-	r.POST("/apndix/provnc/update", fncApndix.FncApndixProvincUpdate)
+	r.POST("/apndix/provnc/update", fncApndix.FncApndixProvncUpdate)
+	r.POST("/apndix/provnc/downld", fncApndix.FncApndixProvncDownld)
 	r.POST("/apndix/flhour/getall", fncApndix.FncApndixFlhourGetall)
 	r.POST("/apndix/flhour/update", fncApndix.FncApndixFlhourUpdate)
+	r.POST("/apndix/flhour/downld", fncApndix.FncApndixFlhourDownld)
+	r.POST("/apndix/frbase/getall", fncApndix.FncApndixFrbaseGetall)
+	r.POST("/apndix/frbase/update", fncApndix.FncApndixFrbaseUpdate)
+	r.POST("/apndix/frbase/downld", fncApndix.FncApndixFrbaseDownld)
+	r.POST("/apndix/frtaxs/getall", fncApndix.FncApndixFrtaxsGetall)
+	r.POST("/apndix/frtaxs/update", fncApndix.FncApndixFrtaxsUpdate)
+	r.POST("/apndix/frtaxs/downld", fncApndix.FncApndixFrtaxsDownld)
 
 	// Handle web link API all user
 	r.GET("/allusr/status", fncAllusr.FncAllusrStatusPrcess)
@@ -58,7 +66,7 @@ func main() {
 	r.POST("/psglst/psgsmr/getall", fncPsglst.FncPsglstPsgsmrGetall)
 	r.POST("/psglst/errlog/getall", fncPsglst.FncPsglstErrlogGetall)
 	r.GET("/psglst/actlog/getall", fncPsglst.FncPsglstActlogGetall)
-	r.POST("/psglst/psgdtl/update", fncPsglst.FncPsglstPsgdtlUpdate)
+	r.POST("/psglst/psgdtl/update/:dvsion", fncPsglst.FncPsglstPsgdtlUpdate)
 
 	// Run server
 	r.Run("0.0.0.0:" + fncApndix.Ptgolg)

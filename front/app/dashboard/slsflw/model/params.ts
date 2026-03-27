@@ -63,6 +63,7 @@ export interface MdlSlsflwPsgsmrSrcprm {
 export interface MdlSlsflwPsgsmrFrntnd {
   prmkey: string;
   airlfl: string;
+  provnc: string;
   depart: string;
   flnbfl: string;
   routfl: string;
@@ -77,7 +78,8 @@ export interface MdlSlsflwPsgsmrFrntnd {
   tottyq: number;
   totpax: number;
   totfae: number;
-  Totqfr: number;
+  totqfr: number;
+  totrph: number;
 }
 
 // Passangger list detail

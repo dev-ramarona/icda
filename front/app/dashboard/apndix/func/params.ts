@@ -3,14 +3,14 @@ import { MdlApndixSearchQueryx } from "../model/parmas";
 // Treatment function params
 export function FncApndixSearchQueryx(params: MdlApndixSearchQueryx) {
   return {
-    pagedb: params.pagedb || "",
-    datefl: params.datefl || "",
-    airlfl: params.airlfl || "",
-    depart: params.depart || "",
-    flnbfl: params.flnbfl || "",
-    routfl: params.routfl || "",
-    clssfl: params.clssfl || "",
-    pagenw: Number(params.pagenw) || 1,
-    limitp: Number(params.limitp) || 15,
+    pagedb_apndix: params.pagedb_apndix || "",
+    datefl_apndix: params.datefl_apndix || "",
+    airlfl_apndix: params.airlfl_apndix || "",
+    depart_apndix: params.depart_apndix || "",
+    flnbfl_apndix: params.flnbfl_apndix || "",
+    routfl_apndix: params.routfl_apndix || "",
+    clssfl_apndix: params.clssfl_apndix || "",
+    pagenw_apndix: Number(params.pagenw_apndix) || 1,
+    limitp_apndix: Number(params.limitp_apndix) || 15,
   } as MdlApndixSearchQueryx;
 }

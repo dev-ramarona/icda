@@ -5,6 +5,7 @@ import (
 	mdlApndix "back/apndix/model"
 	mdlSbrapi "back/sbrapi/model"
 	"encoding/xml"
+	"fmt"
 	"strconv"
 	"strings"
 	"sync"
@@ -21,6 +22,7 @@ func FncSbrapiFrtaxsMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 ) ([]mongo.WriteModel, error) {
 
 	// Isi struktur data
+	tmpFrbase := 100000000
 	strDatefl := strconv.Itoa(int(apndix.Datefl))
 	rawDatefl, _ := time.Parse("060102", strDatefl)
 	dmyDatefl := rawDatefl.Format("2006-01-02T00:00:00")
@@ -65,10 +67,9 @@ func FncSbrapiFrtaxsMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 						PTC_FareBreakdown: mdlSbrapi.MdlSbrapiFrtaxsReqfbk{
 							PassengerType: mdlSbrapi.MdlSbrapiFrtaxsReqcde{
 								Code: "ADT"},
-							FareBasisCode: clscbn + "OW",
 							PassengerFare: mdlSbrapi.MdlSbrapiFrtaxsReqpsf{
 								BaseFare: mdlSbrapi.MdlSbrapiFrtaxsReqbsf{
-									Amount: "1000"}},
+									Amount: strconv.Itoa(tmpFrbase)}},
 						},
 					},
 				},
@@ -91,20 +92,21 @@ func FncSbrapiFrtaxsMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 	// Return String
 	rawFrtaxs := rspFrtaxs.Body.AirTaxRS.ItineraryInfos.ItineraryInfo.TaxInfo
-	fnlFrtaxs = FncSbrapiFrtaxsTrtmnt(rawFrtaxs, apndix, sycFrtaxs, clscbn)
+	fnlFrtaxs = FncSbrapiFrtaxsTrtmnt(rawFrtaxs, apndix, sycFrtaxs, clscbn, tmpFrbase)
 	return fnlFrtaxs, nil
 }
 
 // Treatment data raw flight list
 func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 	apndix mdlSbrapi.MdlSbrapiMsghdrApndix, sycFrtaxs *sync.Map,
-	clscbn string,
+	clscbn string, tmpFrbase int,
 ) []mongo.WriteModel {
 
 	// Declare first output
 	var taxPrmkey = apndix.Airlfl + apndix.Routfl + clscbn
 	var tmpOthers = []string{}
 	var tmpFrtxid = []int{}
+	var slcFtothr = []bson.D{}
 	var fnlFrtaxs = mdlApndix.MdlApndixFrtaxsDtbase{
 		Prmkey: taxPrmkey,
 		Airlfl: apndix.Airlfl,
@@ -135,8 +137,8 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 				if frtaxs.TaxCode == "ID" {
 					tmpFrtxid = append(tmpFrtxid, valFrtaxs)
 				} else {
-					txtFrtaxs := frtaxs.TaxCode + ":Percentage"
-					tmpOthers = append(tmpOthers, txtFrtaxs)
+					slcFtothr = append(slcFtothr, bson.D{
+						{Key: frtaxs.TaxCode, Value: valFrtaxs}})
 				}
 			}
 		}
@@ -145,7 +147,7 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 	// Last treatment taxes ID
 	var now = fnlFrtaxs
 	if len(tmpFrtxid) > 0 {
-		taxRateid := (float64(tmpFrtxid[0]) / float64(now.Ftfuel+now.Ftaxyr+1000)) * 100
+		taxRateid := (float64(tmpFrtxid[0]) / float64(now.Ftfuel+now.Ftaxyr+int32(tmpFrbase))) * 100
 		strRateid := strconv.Itoa(int(taxRateid))
 		fltRateid, _ := strconv.ParseFloat(strRateid, 32)
 		fnlFrtaxs.Ftppnx = float32(fltRateid / 100)
@@ -153,19 +155,35 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 
 	// Treatment frtax other
 	if len(tmpOthers) > 0 {
-		fnlFrtaxs.Ftothr = strings.Join(tmpOthers, "|")
+		if len(slcFtothr) > 0 {
+			fstKeytax := slcFtothr[0][0].Key
+			fstValtax := slcFtothr[0][0].Value.(int)
+			fstPrcntg := float64(fstValtax) / float64(now.Ftfuel+now.Ftaxyr+int32(tmpFrbase)) * 100
+			fstStrval := fstKeytax + ":" + strconv.Itoa(int(fstPrcntg)) + "%"
+			if len(slcFtothr) == 2 {
+				scdKeytax := slcFtothr[1][0].Key
+				scdValtax := slcFtothr[1][0].Value.(int)
+				scdPrcntg := float64(scdValtax) / float64(now.Ftfuel) * 100
+				scdStrval := scdKeytax + ":" + strconv.Itoa(int(scdPrcntg)) + "%"
+				tmpOthers = append(tmpOthers, scdStrval)
+				fstPrcntg := float64(fstValtax) / float64(tmpFrbase) * 100
+				fstStrval = fstKeytax + ":" + strconv.Itoa(int(fstPrcntg)) + "%"
+			}
+			tmpOthers = append(tmpOthers, fstStrval)
+			fnlFrtaxs.Ftothr = strings.Join(tmpOthers, "|")
+		}
 	}
 
 	// Check now than prev frbase
 	var intDatenw, _ = strconv.Atoi(time.Now().Format("060102"))
 	if val, ist := sycFrtaxs.Load(taxPrmkey); ist {
 		if get, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
-			prvTotint := get.Ftfuel + get.Ftaptx + get.Ftiwjr + get.Ftaxyr + int32(get.Ftppnx)
-			prvTotstr := strconv.Itoa(int(prvTotint))
-			nowTotint := now.Ftfuel + now.Ftaptx + now.Ftiwjr + now.Ftaxyr + int32(now.Ftppnx)
-			nowTotstr := strconv.Itoa(int(nowTotint))
-			fnlFrtaxs.Datend, fnlFrtaxs.Hstory = fncApndix.FncApndixFormatHstory(prvTotstr,
-				nowTotstr, get.Hstory, get.Datend, int32(intDatenw))
+			prvTaxstr := fmt.Sprintf("yq:%v|apt:%v|p4:%v|yr:%v|id:%v",
+				get.Ftfuel, get.Ftaptx, get.Ftiwjr, get.Ftaxyr, get.Ftppnx)
+			nowTaxstr := fmt.Sprintf("yq:%v|apt:%v|p4:%v|yr:%v|id:%v",
+				now.Ftfuel, now.Ftaptx, now.Ftiwjr, now.Ftaxyr, now.Ftppnx)
+			fnlFrtaxs.Datend, fnlFrtaxs.Hstory = fncApndix.FncApndixFormatHstory(prvTaxstr,
+				nowTaxstr, get.Hstory, get.Datend, int32(intDatenw))
 		}
 	}
 

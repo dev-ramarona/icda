@@ -21,13 +21,12 @@ import (
 func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist mdlApndix.MdlApndixFllistDtbase,
 	nowObjtkn mdlSbrapi.MdlSbrapiMsghdrParams, objParams mdlSbrapi.MdlSbrapiMsghdrApndix,
 	sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
-	idcFrbase, idcFrtaxs, sycErrlog *sync.Map,
+	idcFrbase, idcFrtaxs, sycErrlog, sycProvnc *sync.Map,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
-	mapProvnc map[string]string,
 	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase,
-	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase, errErignr, errPrmkey string) (
+	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase, errErignr, errPrmkey *string) (
 	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel,
-	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel) {
+	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel) {
 	sycWgroup, sycClrpsg, sycNulpsg := &sync.WaitGroup{}, &sync.Map{}, &sync.Map{}
 	totPsgdtl := len(rspPsglst)
 	for _, psglst := range rspPsglst {
@@ -112,6 +111,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	mgoFrbase, mgoFrtaxs := []mongo.WriteModel{}, []mongo.WriteModel{}
 	mgoFlhour, mgoMilege := []mongo.WriteModel{}, []mongo.WriteModel{}
 	mgoPsgdtl, mgoPsgsmr := []mongo.WriteModel{}, []mongo.WriteModel{}
+	mgoProvnc := []mongo.WriteModel{}
 	fnlPsglst := []mdlPsglst.MdlPsglstPsgdtlDtbase{}
 	mapPaidbt := map[string]int{}
 	mapQntybt := map[string]int{}
@@ -352,119 +352,108 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			}
 		}
 
-		// Get flown farebase
-		mapRoutfb := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
-		if psglst.Ntafvc == 0 && (psglst.Isitnr == "" || psglst.Frbcde == "HB") {
-			nowRoutvc := psglst.Routvc
-			if psglst.Routvc == "" {
-				nowRoutvc = psglst.Depart + "-" + psglst.Arrivl
-			}
-			if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
-				mapRoutfb["routvc"] = psglst.Airlvc + nowRoutvc
-			} else {
+		// Looping to get farebase vcr and flown
+		for key, val := range func() map[string]string {
+			mapRoutfb := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
+			if psglst.Ntafvc == 0 && (psglst.Isitnr == "" || psglst.Frbcde == "HB") {
+				nowRoutvc := psglst.Routvc
+				if psglst.Routvc == "" {
+					nowRoutvc = psglst.Depart + "-" + psglst.Arrivl
+				}
 				mapRoutfb["routvc"] = psglst.Airlfl + nowRoutvc
+				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
+					mapRoutfb["routvc"] = psglst.Airlvc + nowRoutvc
+				}
 			}
-		}
-		for key, val := range mapRoutfb {
-			for nky, nvl := range map[string]string{
-				"FRBCDE": val + psglst.Frbcde,
-				"CLSSFL": val + psglst.Clssfl} {
-				if len(val) < 7 || (key == "routfl" && nky == "FRBCDE") {
+			return mapRoutfb
+		}() {
+
+			// Get flight hour from API
+			if _, ist := idcFrbase.Load(val); !ist {
+				objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
+					Airlfl: psglst.Airlfl, Depart: val[:3], Arrivl: val[4:], Routfl: val}
+				nowmgo, err := fncSbrapi.FncSbrapiFrbaseMainob(nowObjtkn, objParams, sycFrbase, mapClslvl)
+				if err == nil {
+					mgoFrbase = append(mgoFrbase, nowmgo...)
+					idcFrbase.Store(val, true)
+				}
+			}
+
+			// Looping
+			for nky, nvl := range func() []string {
+				slcKeytax := []string{val + psglst.Frbcde}
+				strKeycls := val + psglst.Clssfl
+				if strings.Contains(psglst.Frbcde, "RT") {
+					strKeycls = val + psglst.Clssfl + "RT"
+				}
+				slcKeytax = append(slcKeytax, strKeycls)
+				return slcKeytax
+			}() {
+				if len(val) != 9 {
 					continue
 				}
 
-				// Reuse func frbase
-				fncFrbase := func() bool {
-					tmpFrbcde := []string{nvl}
-					if nky == "FRBCDE" && strings.Contains(nvl, "RT") && len(nvl) >= 9 {
-						tmpRoutnw := nvl[2:9]
-						newRoutnw := tmpRoutnw[4:] + "-" + tmpRoutnw[:3]
-						tmpFrbcde = append(tmpFrbcde, strings.ReplaceAll(nvl, tmpRoutnw, newRoutnw))
+				// Get farebase from sync
+				istFrbase, ist := sycFrbase.Load(nvl)
+				if mtcFrbase, mtc := istFrbase.(mdlApndix.MdlApndixFrbaseDtbase); ist && mtc {
+					if key == "routfl" {
+						psglst.Ntaffl = mtcFrbase.Frbnta
+					} else {
+						psglst.Ntafvc = float64(mtcFrbase.Frbnta)
 					}
-					for _, nowFrbcde := range tmpFrbcde {
-						istFrbase, ist := sycFrbase.Load(nowFrbcde)
-						if mtcFrbase, mtc := istFrbase.(mdlApndix.MdlApndixFrbaseDtbase); mtc && ist {
-							psglst.Ntaffl = mtcFrbase.Frbnta
-							if key == "routfl" {
-								psglst.Ntaffl = mtcFrbase.Frbnta
-							} else {
-								psglst.Ntafvc = float64(mtcFrbase.Frbnta)
-								psglst.Isittf = nky
-							}
-							return true
-						}
+					psglst.Isittf = "CLSSFL"
+					if nky == 0 {
+						psglst.Isittf = "FRBCDE"
 					}
-					return false
-				}
-
-				// Hit API Sabre if null data
-				if rspfnc := fncFrbase(); rspfnc {
 					break
-				} else {
-					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
-						Airlfl: psglst.Airlfl, Depart: val[:3], Arrivl: val[4:], Routfl: val}
-
-					// Check indicator before hit API
-					if _, ist := idcFrbase.Load(val); !ist {
-						nowmgo, err := fncSbrapi.FncSbrapiFrbaseMainob(nowObjtkn, objParams, sycFrbase, mapClslvl)
-						if err == nil {
-							mgoFrbase = append(mgoFrbase, nowmgo...)
-							idcFrbase.Store(val, true)
-						}
-					}
-
-					// Get flown farebase
-					if rspfnc := fncFrbase(); rspfnc {
-						break
-					}
 				}
 			}
 		}
 
-		// Get all taxes
-		mapRouttx := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl + psglst.Cbinfl}
-		if psglst.Isitnr != "CREW" {
-			mapRouttx["routvc"] = psglst.Airlfl + psglst.Routvc + psglst.Cbinvc
-		}
-		for key, val := range mapRouttx {
-			if len(val) < 7 {
+		// Looping to get faretaxes vcr and flown
+		for key, val := range func() map[string]string {
+			mapRouttx := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
+			if psglst.Isitnr != "CREW" {
+				nowRoutvc := psglst.Routvc
+				if psglst.Routvc == "" {
+					nowRoutvc = psglst.Depart + "-" + psglst.Arrivl
+				}
+				mapRouttx["routvc"] = psglst.Airlfl + nowRoutvc
+				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
+					mapRouttx["routvc"] = psglst.Airlvc + nowRoutvc
+				}
+			}
+			return mapRouttx
+		}() {
+			if len(val) != 9 {
 				continue
 			}
 
-			// Reuse func frtaxs
-			fncFrtaxs := func() bool {
-				istFrtaxs, ist := sycFrtaxs.Load(val)
-				if mtcFrtaxs, mtc := istFrtaxs.(mdlApndix.MdlApndixFrtaxsDtbase); mtc && ist {
-					if key == "routfl" {
-						psglst.Yqtxfl = mtcFrtaxs.Ftfuel
-					} else {
-						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
+			// Get faretaxes from API
+			if _, ist := idcFrtaxs.Load(val); !ist {
+				for _, clscbn := range []string{"Y", "C"} {
+					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
+						Airlfl: psglst.Airlfl, Depart: val[:3], Arrivl: val[4:], Routfl: val}
+					nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, clscbn)
+					if err == nil {
+						mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
+						idcFrtaxs.Store(val, true)
 					}
 				}
-				return ist
 			}
 
-			// Hit API Sabre if null data
-			if rspfnc := fncFrtaxs(); !rspfnc && len(val) == 10 {
-				slcClscbn := []string{"Y", "C"}
-				tmpPrmkey := val[:9]
-				for _, clscbn := range slcClscbn {
-					nowPrmkey := tmpPrmkey + clscbn
-					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{Airlfl: psglst.Airlfl,
-						Depart: val[:3], Arrivl: val[4:], Routfl: val}
-
-					// Check indicator before hit API
-					if _, ist := idcFrtaxs.Load(nowPrmkey); !ist {
-						nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, clscbn)
-						if err == nil {
-							mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
-							idcFrtaxs.Store(nowPrmkey, true)
-						}
-					}
+			// Get Faretaxes from sync
+			nowKeytax := val + psglst.Cbinvc
+			if key == "routfl" {
+				nowKeytax = val + psglst.Cbinfl
+			}
+			istFrtaxs, ist := sycFrtaxs.Load(nowKeytax)
+			if mtcFrtaxs, mtc := istFrtaxs.(mdlApndix.MdlApndixFrtaxsDtbase); ist && mtc {
+				if key == "routfl" {
+					psglst.Yqtxfl = mtcFrtaxs.Ftfuel
+				} else {
+					psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
 				}
-
-				// Get all farebase
-				fncFrtaxs()
 			}
 		}
 
@@ -526,20 +515,36 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		totSmmary.Totrph += (psglst.Ntafvc + psglst.Yqtxvc) / fllist.Flhour
 
 		// Get province
+		cekProvnc := true
 		totSmmary.Routfl = psglst.Routfl
-		getProvnc, ist := mapProvnc[psglst.Routfl]
-		if ist {
-			psglst.Provnc = getProvnc
-			totSmmary.Provnc = getProvnc
+		getProvnc, istProvnc := sycProvnc.Load(psglst.Routfl)
+		if strProvnc, mtcProvnc := getProvnc.(string); istProvnc && mtcProvnc {
+			psglst.Provnc = strProvnc
+			totSmmary.Provnc = strProvnc
+			if strProvnc != "" {
+				cekProvnc = false
+			}
 		}
 
 		// Push to error log
-		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
-			Erpart: "provnc", Ersrce: "dtbase", Erdvsn: "SLSRPT",
-			Dateup: int32(objParams.Dateup), Timeup: int64(objParams.Timeup),
-			Datefl: int32(objParams.Datefl), Airlfl: objParams.Airlfl,
-			Flnbfl: objParams.Flnbfl, Routfl: objParams.Routfl, Worker: 1,
-		}, !ist, sycErrlog, &errErignr, &errPrmkey)
+		if psglst.Isitfl == "F" {
+			FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
+				Erpart: "provnc", Ersrce: "dtbase", Erdvsn: "SLSRPT",
+				Dateup: int32(objParams.Dateup), Timeup: int64(objParams.Timeup),
+				Datefl: int32(objParams.Datefl), Airlfl: objParams.Airlfl,
+				Flnbfl: objParams.Flnbfl, Routfl: objParams.Routfl, Worker: 1,
+			}, cekProvnc, sycErrlog, errErignr, errPrmkey)
+
+			// Push to database provnc blank
+			if !istProvnc {
+				varProvnc := mdlApndix.MdlApndixProvncDtbase{
+					Routfl: objParams.Routfl, Provnc: "", Updtby: ""}
+				sycProvnc.Store(objParams.Routfl, varProvnc)
+				mgoProvnc = append(mgoProvnc, mongo.NewUpdateOneModel().
+					SetFilter(bson.M{"routfl": objParams.Routfl}).
+					SetUpdate(bson.M{"$set": varProvnc}).SetUpsert(true))
+			}
+		}
 
 		// Push final to database
 		mgoPsgdtl = append(mgoPsgdtl, mongo.NewUpdateOneModel().
@@ -556,12 +561,12 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		Datefl: int32(objParams.Datefl), Airlfl: objParams.Airlfl,
 		Flnbfl: objParams.Flnbfl, Routfl: objParams.Routfl, Worker: 1,
 		Paxdif: fmt.Sprintf("%d/%d", totClrpsg, totPsgdtl),
-	}, totClrpsg != totPsgdtl, sycErrlog, &errErignr, &errPrmkey)
+	}, totClrpsg != totPsgdtl, sycErrlog, errErignr, errPrmkey)
 
 	// Return final data
 	mgoPsgsmr = append(mgoPsgsmr, mongo.NewUpdateOneModel().
 		SetFilter(bson.M{"prmkey": totSmmary.Prmkey}).
 		SetUpdate(bson.M{"$set": totSmmary}).
 		SetUpsert(true))
-	return mgoPsgdtl, mgoPsgsmr, mgoFrbase, mgoFrtaxs, mgoFlhour, mgoMilege
+	return mgoPsgdtl, mgoPsgsmr, mgoFrbase, mgoFrtaxs, mgoFlhour, mgoMilege, mgoProvnc
 }

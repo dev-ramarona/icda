@@ -11,9 +11,7 @@ import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
 import { ApiAllusrCookieGetdta } from "../allusr/api/cookie";
 import { ApiAllusrStatusPrcess } from "../allusr/api/status";
 
-export default async function Page(props: {
-  searchParams: Promise<MdlPsglstGlobalSrcprm>;
-}) {
+export default async function Page(props: { searchParams: Promise<MdlPsglstGlobalSrcprm> }) {
   const cookie = await ApiAllusrCookieGetdta();
   const qryprm = await props.searchParams;
   const actobj = await ApiGlobalActlogDtbase("psglst");
@@ -23,10 +21,10 @@ export default async function Page(props: {
   const prmErrlog = FncPsglstErrlogSrcprm(qryprm);
   const prmPsgdtl = FncPsglstPsgdtlSrcprm(qryprm, actdte);
   return (
-    <div className="afull flex justify-start items-start flex-wrap p-1.5 md:p-6">
-      <div className="w-full md:w-40 min-w-1/5 h-60 md:h-80 max-h-fit p-3">
-        <div className="afull max-h-fit rounded-xl py-1.5 px-3 flexstr flex-col ring-2 ring-gray-200">
-          <div className="w-full text-slate-800 font-semibold text-base py-1.5 flexstr">
+    <div className="afull flex flex-wrap items-start justify-start p-1.5 md:p-6">
+      <div className="h-60 max-h-fit w-full min-w-1/5 p-3 md:h-80 md:w-40">
+        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
+          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
             Log Action
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
@@ -35,9 +33,9 @@ export default async function Page(props: {
           </Suspense>
         </div>
       </div>
-      <div className="w-full md:w-60 min-w-4/5 h-120 md:h-80 max-h-fit p-3">
-        <div className="afull max-h-fit rounded-xl py-1.5 px-3 flexstr flex-col ring-2 ring-gray-200">
-          <div className="w-full text-slate-800 font-semibold text-base py-1.5 flexstr">
+      <div className="h-120 max-h-fit w-full min-w-4/5 p-3 md:h-80 md:w-60">
+        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
+          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
             Log error
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
@@ -46,9 +44,9 @@ export default async function Page(props: {
           </Suspense>
         </div>
       </div>
-      <div className="w-full md:w-[20rem] min-w-full h-180 md:h-160 max-h-fit p-3">
-        <div className="afull max-h-fit rounded-xl py-1.5 px-3 flexstr flex-col ring-2 ring-gray-200">
-          <div className="w-full text-slate-800 font-semibold text-base py-1.5 flexstr">
+      <div className="h-180 max-h-fit w-full min-w-full p-3 md:h-160 md:w-[20rem]">
+        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
+          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
             Passangger detail
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
@@ -57,14 +55,18 @@ export default async function Page(props: {
           </Suspense>
         </div>
       </div>
-      <div className="w-full md:w-[20rem] min-w-full h-100 md:h-100 max-h-fit p-3">
-        <div className="afull max-h-fit rounded-xl py-1.5 px-3 flexstr flex-col ring-2 ring-gray-200">
-          <div className="w-full text-slate-800 font-semibold text-base py-1.5 flexstr">
+      <div className="h-100 max-h-fit w-full min-w-full p-3 md:h-100 md:w-[20rem]">
+        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
+          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
             Process manual
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstPrcessMainpg cookie={cookie} update={prmPsgdtl.update_global} status={status} />
+            <UixPsglstPrcessMainpg
+              cookie={cookie}
+              update={prmPsgdtl.update_global}
+              status={status}
+            />
           </Suspense>
         </div>
       </div>

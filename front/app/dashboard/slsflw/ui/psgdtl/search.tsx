@@ -54,15 +54,11 @@ export default function UixSlsflwDetailSearch({
     chngedSet(true);
     const namefl = e.currentTarget.id;
     let valuef = e.currentTarget.value;
-    if (["isittx_psgdtl", "isitfl_psgdtl", "isitir_psgdtl"].includes(namefl))
-      valuef = FncGlobalFormatFilter(valuef,
-        [{ keywrd: "fl", output: "Flown" }, { keywrd: "no", output: "Not flown" }]);
-    else if (namefl == "nclear_psgdtl") valuef = FncGlobalFormatFilter(valuef,
-      [{ keywrd: "", output: "SLSRPT" }, { keywrd: "a", output: "ALL" }]);
-    else if (namefl == "format_psgdtl") valuef = FncGlobalFormatFilter(valuef,
-      [{ keywrd: "d", output: "DFAULT" },
-      { keywrd: "e", output: "EBTFMT" },
-      { keywrd: "t", output: "TKTFMT" }]);
+    if (namefl == "nclear_psgdtl")
+      valuef = FncGlobalFormatFilter(valuef, [
+        { keywrd: "", output: "SLSRPT" },
+        { keywrd: "a", output: "ALL" },
+      ]);
     else if (["flnbfl_psgdtl", "tktnfl_psgdtl"].includes(namefl))
       valuef = valuef.replace(/[^0-9]/g, "");
     else if (namefl == "routfl_psgdtl") valuef = FncGlobalFormatRoutfl(valuef);
@@ -95,28 +91,34 @@ export default function UixSlsflwDetailSearch({
         "format_psgdtl",
         "pagenw_psgdtl",
       ],
-      ""
+      "",
     );
   };
   return (
-    <div className="w-full h-24 min-h-fit py-3 flexctr relative">
-      <div className={`${chnged ? "w-16 h-10 translate-y-0" : "w-0 h-0 opacity-0 -translate-y-10"} z-10 absolute bg-white ring-2 ring-sky-300 px-5 py-2 rounded-xl flexctr duration-300`}>
+    <div className="flexctr relative z-30 h-24 min-h-fit w-full py-3">
+      <div
+        className={`${chnged ? "h-10 w-16 translate-y-0" : "h-0 w-0 -translate-y-10 opacity-0"} flexctr absolute z-10 rounded-xl bg-white px-5 py-2 ring-2 ring-sky-300 duration-300`}
+      >
         <div>Wait</div>
-        <div className="animate-spin"><UixGlobalIconvcRfresh bold={2} color="black" size={1} /></div>
+        <div className="animate-spin">
+          <UixGlobalIconvcRfresh bold={2} color="black" size={1} />
+        </div>
       </div>
-      <div className={`afull flexstr flex-wrap gap-y-3 ${chnged ? "animate-pulse select-none" : ""} duration-300`}>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+      <div
+        className={`afull flexstr flex-wrap gap-y-3 ${chnged ? "animate-pulse select-none" : ""} duration-300`}
+      >
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
-            typipt={"text"}
-            length={undefined}
+            typipt={"select"}
+            length={["SLSRPT", "ALL"]}
             queryx={"nclear_psgdtl"}
             params={params.nclear_psgdtl}
             plchdr="Not Clear"
             repprm={repprm}
-            labelx={'a:"ALL"(All Data)|SPT:"SLSRPT"(Sales Report)|MNF:"MNFEST"(Manifest)'}
+            labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"month"}
             length={undefined}
@@ -127,7 +129,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"date"}
             length={datefl}
@@ -138,7 +140,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={undefined}
@@ -149,7 +151,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={undefined}
@@ -160,7 +162,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={undefined}
@@ -171,7 +173,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={undefined}
@@ -182,7 +184,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={undefined}
@@ -193,7 +195,7 @@ export default function UixSlsflwDetailSearch({
             labelx=""
           />
         </div>
-        <div className="w-1/2 md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-1/2 md:w-28">
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={undefined}
@@ -205,16 +207,20 @@ export default function UixSlsflwDetailSearch({
           />
         </div>
       </div>
-      <div className={`w-1/3 flexend flex-wrap gap-3 px-3 ${chnged ? "animate-pulse select-none" : ""} duration-300`}>
-        <form className="w-full md:w-28 h-10 flexctr relative"
+      <div
+        className={`flexend w-1/3 flex-wrap gap-3 px-3 ${chnged ? "animate-pulse select-none" : ""} duration-300`}
+      >
+        <form
+          className="flexctr relative h-10 w-full md:w-28"
           method="POST"
-          action={`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/downld`}>
+          action={`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/downld`}
+        >
           <input type="hidden" name="data" value={JSON.stringify(params)} />
           <button type="submit" className="afull btnsbm flexctr">
             Download
           </button>
         </form>
-        <div className="w-full md:w-28 h-10 flexctr relative">
+        <div className="flexctr relative h-10 w-full md:w-28">
           <div className="afull btnwrn flexctr" onClick={() => resetx()}>
             Reset
           </div>

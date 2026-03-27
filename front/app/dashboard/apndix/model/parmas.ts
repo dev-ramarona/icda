@@ -6,40 +6,72 @@ export interface MdlApndixAcpedtDtbase {
 }
 
 export interface MdlApndixSearchQueryx {
-  update: string;
-  pagedb: string;
-  datefl: string;
-  airlfl: string;
-  depart: string;
-  flnbfl: string;
-  routfl: string;
-  clssfl: string;
-  pagenw: number;
-  limitp: number;
+  update_apndix: string;
+  pagedb_apndix: string;
+  datefl_apndix: string;
+  airlfl_apndix: string;
+  depart_apndix: string;
+  flnbfl_apndix: string;
+  routfl_apndix: string;
+  clssfl_apndix: string;
+  pagenw_apndix: number;
+  limitp_apndix: number;
 }
 
 // Flhour
-export interface MdlApndixFlhourDtbase {
+export interface MdlApndixFlhourFrntnd {
   prmkey: string;
   airlfl: string;
   routfl: string;
   flnbfl: string;
-  flhour: number;
-  timefl: number;
-  timerv: number;
-  timeup: number;
-  dateup: number;
-  datend: number;
+  flhour: string;
+  timefl: string;
+  timerv: string;
+  timeup: string;
+  dateup: string;
+  datend: string;
   airtyp: string;
-  airmls: number;
+  airmls: string;
   hstory: string;
   updtby: string;
 }
 
 // Provnc
-export interface MdlApndixProvncDtbase {
+export interface MdlApndixProvncFrntnd {
   prmkey: string;
   routfl: string;
   provnc: string;
+  updtby: string;
+}
+
+// Provnc
+export interface MdlApndixFrbaseFrntnd {
+  prmkey: string;
+  scdkey: string;
+  airlfl: string;
+  clssfl: string;
+  routfl: string;
+  frbcde: string;
+  frbnta: string;
+  frbsbr: string;
+  datend: string;
+  hstory: string;
+  updtby: string;
+}
+
+// Frtaxes
+export interface MdlApndixFrtaxsFrntnd {
+  prmkey: string;
+  airlfl: string;
+  cbinfl: string;
+  routfl: string;
+  ftppnx: string;
+  ftaptx: string;
+  ftfuel: string;
+  ftiwjr: string;
+  ftaxyr: string;
+  datend: string;
+  ftothr: string;
+  hstory: string;
   updtby: string;
 }

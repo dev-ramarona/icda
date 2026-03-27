@@ -35,7 +35,7 @@ func FncGlobalMainprLoadnv(filenm string) {
 }
 
 // manual load
-var Status = mdlApndix.MdlApndixStatusPrcess{Sbrapi: 0, Action: 0}
+var Status = mdlApndix.MdlApndixStatusPrcess{Sbrapi: 0, Action: ""}
 var Client *mongo.Client
 var Jwtkey []byte
 var Ipalow []string

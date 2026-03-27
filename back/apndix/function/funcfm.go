@@ -143,6 +143,9 @@ func FncApndixFormatHstory(prvval, nowval any, hstory string,
 
 // Make format date form input front end
 func FncApndixFormatDatein(inputx string) int32 {
+	if val, err := strconv.Atoi(inputx); err == nil && len(inputx) == 6 {
+		return int32(val)
+	}
 	fmtraw, errraw := time.Parse("2006-01-02", inputx)
 	if errraw != nil {
 		return 1
@@ -157,6 +160,9 @@ func FncApndixFormatDatein(inputx string) int32 {
 
 // Make format date time form input front end
 func FncApndixFormatTimein(inputx string) int64 {
+	if val, err := strconv.Atoi(inputx); err == nil && len(inputx) == 10 {
+		return int64(val)
+	}
 	fmtraw, errraw := time.Parse("2006-01-02T15:04", inputx)
 	if errraw != nil {
 		return 1
@@ -167,4 +173,24 @@ func FncApndixFormatTimein(inputx string) int64 {
 		return 1
 	}
 	return int64(fmtval)
+}
+
+// Make format date form input front end
+func FncApndixFormatDateot(inputx int) string {
+	strraw := strconv.Itoa(inputx) //len(inputx) == 6
+	fmtdte, err := time.Parse("060102", strraw)
+	if err != nil {
+		return ""
+	}
+	return fmtdte.Format("2006-01-02")
+}
+
+// Make format date time form input front end
+func FncApndixFormatTimeot(inputx int) string {
+	strraw := strconv.Itoa(inputx) //len(inputx) == 10
+	fmtdte, err := time.Parse("0601021504", strraw)
+	if err != nil {
+		return ""
+	}
+	return fmtdte.Format("2006-01-02T15:04")
 }

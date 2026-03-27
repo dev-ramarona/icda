@@ -5,13 +5,10 @@ import { MdlApndixSearchQueryx } from "../model/parmas";
 export async function ApiApndixApplstDtbase() {
   const fnlObj: string[] = [];
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/applst/getall`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
-    );
+    const response = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/applst/getall`, {
+      method: "GET",
+      credentials: "include",
+    });
     if (!response.ok) throw new Error("Failed to fetch app list");
     const fnlObj: string[] = await response.json();
     return fnlObj;
@@ -23,22 +20,22 @@ export async function ApiApndixApplstDtbase() {
 
 // API accepted edit coloumn
 export async function ApiApndixGetallDtbase(params: MdlApndixSearchQueryx) {
-  // await new Promise((r) => setTimeout(r, 5000));
+  // await new Promise((r) => setTimeout(r, 2000));
   // const tag = [
-  //   params.pagedb,
-  //   params.datefl,
-  //   params.airlfl,
-  //   params.depart,
-  //   params.flnbfl,
-  //   params.routfl,
-  //   params.clssfl,
-  //   params.pagenw,
+  //   params.pagedb_apndix,
+  //   params.datefl_apndix,
+  //   params.airlfl_apndix,
+  //   params.depart_apndix,
+  //   params.flnbfl_apndix,
+  //   params.routfl_apndix,
+  //   params.clssfl_apndix,
+  //   params.pagenw_apndix,
   // ]
   //   .filter(Boolean)
   //   .join(":");
   try {
     const rspnse = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/${params.pagedb}/getall`,
+      `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/${params.pagedb_apndix}/getall`,
       {
         method: "POST",
         body: JSON.stringify(params),
@@ -47,7 +44,11 @@ export async function ApiApndixGetallDtbase(params: MdlApndixSearchQueryx) {
       },
     );
     if (!rspnse.ok) throw new Error("Failed to fetch accepted edit data");
-    return await rspnse.json();
+    const jsdata = await rspnse.json();
+    const arrdta = jsdata.arrdta.map((row: any) =>
+      Object.fromEntries(Object.entries(row).map(([k, v]) => [k, String(v)])),
+    );
+    return { arrdta: arrdta, totdta: jsdata.totdta };
   } catch (error) {
     console.log(error);
   }
@@ -55,23 +56,17 @@ export async function ApiApndixGetallDtbase(params: MdlApndixSearchQueryx) {
 }
 
 // Api update apendix data
-export async function ApiApndixUpdateDtbase(
-  objupd: any,
-  target: string,
-): Promise<string> {
+export async function ApiApndixUpdateDtbase(objupd: any, target: string): Promise<string> {
   // Call API
   console.log(JSON.stringify(objupd));
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/${target}/update`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(objupd),
-        cache: "no-store",
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/${target}/update`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(objupd),
+      cache: "no-store",
+    });
     if (!res.ok) {
       console.log(res);
       throw new Error("Failed update psgdtl");
@@ -88,10 +83,9 @@ export async function ApiApndixUpdateDtbase(
 export async function ApiApndixAcpedtDtbase(params: string) {
   let fnlobj: any[] = [];
   try {
-    const rspnse = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/acpedt/${params}`,
-      { method: "GET" },
-    );
+    const rspnse = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/acpedt/${params}`, {
+      method: "GET",
+    });
     if (!rspnse.ok) throw new Error("Failed to fetch accepted edit data");
     fnlobj = await rspnse.json();
   } catch (error) {

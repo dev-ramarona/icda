@@ -66,7 +66,6 @@ type MdlSbrapiFrtaxsReqafi struct {
 }
 type MdlSbrapiFrtaxsReqfbk struct {
 	PassengerType MdlSbrapiFrtaxsReqcde `xml:"PassengerType"`
-	FareBasisCode string                `xml:"FareBasisCode"`
 	PassengerFare MdlSbrapiFrtaxsReqpsf `xml:"PassengerFare"`
 }
 type MdlSbrapiFrtaxsReqcde struct {

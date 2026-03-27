@@ -1,3 +1,4 @@
+"use server";
 import { MdlSlsflwPsgdtlFrntnd, MdlSlsflwPsgdtlSrcprm } from "../model/params";
 
 // Function get psglst database
@@ -19,15 +20,12 @@ export async function ApiSlsflwPsgdtlGetall(prmPsgdtl: MdlSlsflwPsgdtlSrcprm) {
     .filter(Boolean)
     .join(":");
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/slsflw`,
-      {
-        method: "POST",
-        body: JSON.stringify(prmPsgdtl),
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 30, tags: [tag] },
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/slsflw`, {
+      method: "POST",
+      body: JSON.stringify(prmPsgdtl),
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 30, tags: [tag] },
+    });
     if (!res.ok) throw new Error("Failed fetch psgdtl");
     return await res.json();
   } catch (err) {
@@ -37,24 +35,19 @@ export async function ApiSlsflwPsgdtlGetall(prmPsgdtl: MdlSlsflwPsgdtlSrcprm) {
 }
 
 // Function get psglst database
-export async function ApiSlsflwPsgdtlUpdate(
-  params: MdlSlsflwPsgdtlFrntnd,
-): Promise<string> {
+export async function ApiSlsflwPsgdtlUpdate(params: MdlSlsflwPsgdtlFrntnd): Promise<string> {
   // Validation
   if (params.ntafvc === 0) return "NTA empty";
   if (params.curncy === "") return "curncy empty";
 
   // Call API
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/update`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params),
-        cache: "no-store",
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/update/slsrpt`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+      cache: "no-store",
+    });
     if (!res.ok) {
       throw new Error("Failed update psgdtl");
     }

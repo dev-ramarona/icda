@@ -2,15 +2,15 @@ package mdlApndix
 
 // applist data apndix
 type MdlApdnixParamsInputx struct {
-	Pagedb string `json:"pagedb,omitempty" bson:"pagedb,omitempty"`
-	Datefl string `json:"datefl,omitempty" bson:"datefl,omitempty"`
-	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
-	Depart string `json:"depart,omitempty" bson:"depart,omitempty"`
-	Flnbfl string `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
-	Routfl string `json:"routfl,omitempty" bson:"routfl,omitempty"`
-	Clssfl string `json:"clssfl,omitempty" bson:"clssfl,omitempty"`
-	Pagenw int    `json:"pagenw,omitempty" bson:"pagenw,omitempty"`
-	Limitp int    `json:"limitp,omitempty" bson:"limitp,omitempty"`
+	Pagedb_apndix string `json:"pagedb_apndix,omitempty" bson:"pagedb_apndix,omitempty"`
+	Datefl_apndix string `json:"datefl_apndix,omitempty" bson:"datefl_apndix,omitempty"`
+	Airlfl_apndix string `json:"airlfl_apndix,omitempty" bson:"airlfl_apndix,omitempty"`
+	Depart_apndix string `json:"depart_apndix,omitempty" bson:"depart_apndix,omitempty"`
+	Flnbfl_apndix string `json:"flnbfl_apndix,omitempty" bson:"flnbfl_apndix,omitempty"`
+	Routfl_apndix string `json:"routfl_apndix,omitempty" bson:"routfl_apndix,omitempty"`
+	Clssfl_apndix string `json:"clssfl_apndix,omitempty" bson:"clssfl_apndix,omitempty"`
+	Pagenw_apndix int    `json:"pagenw_apndix,omitempty" bson:"pagenw_apndix,omitempty"`
+	Limitp_apndix int    `json:"limitp_apndix,omitempty" bson:"limitp_apndix,omitempty"`
 }
 
 // applist data apndix
@@ -28,7 +28,7 @@ type MdlApndixAcpedtDtbase struct {
 // Status process api
 type MdlApndixStatusPrcess struct {
 	Sbrapi float64 `json:"sbrapi" bson:"sbrapi"`
-	Action float64 `json:"action" bson:"action"`
+	Action string  `json:"action" bson:"action"`
 }
 
 // Province data
@@ -60,27 +60,11 @@ type MdlApndixFlhourDtbase struct {
 	Timerv int64   `json:"timerv,omitempty" bson:"timerv,omitempty"`
 	Timeup int64   `json:"timeup,omitempty" bson:"timeup,omitempty"`
 	Dateup int32   `json:"dateup,omitempty" bson:"dateup,omitempty"`
-	Datend int32   `json:"datend,omitempty" bson:"datest,omitempty"`
+	Datend int32   `json:"datend,omitempty" bson:"datend,omitempty"`
 	Airtyp string  `json:"airtyp,omitempty" bson:"airtyp,omitempty"`
 	Airmls int32   `json:"airmls,omitempty" bson:"airmls,omitempty"`
 	Hstory string  `json:"hstory,omitempty" bson:"hstory,omitempty"`
 	Updtby string  `json:"updtby,omitempty" bson:"updtby,omitempty"`
-}
-type MdlApndixFlhourInputx struct {
-	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
-	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
-	Routfl string `json:"routfl,omitempty" bson:"routfl,omitempty"`
-	Flnbfl string `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
-	Flhour string `json:"flhour,omitempty" bson:"flhour,omitempty"`
-	Timefl string `json:"timefl,omitempty" bson:"timefl,omitempty"`
-	Timerv string `json:"timerv,omitempty" bson:"timerv,omitempty"`
-	Timeup string `json:"timeup,omitempty" bson:"timeup,omitempty"`
-	Dateup string `json:"dateup,omitempty" bson:"dateup,omitempty"`
-	Datend string `json:"datend,omitempty" bson:"datest,omitempty"`
-	Airtyp string `json:"airtyp,omitempty" bson:"airtyp,omitempty"`
-	Airmls string `json:"airmls,omitempty" bson:"airmls,omitempty"`
-	Hstory string `json:"hstory,omitempty" bson:"hstory,omitempty"`
-	Updtby string `json:"updtby,omitempty" bson:"updtby,omitempty"`
 }
 type MdlApndixFlhourFrntnd struct {
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
@@ -92,7 +76,7 @@ type MdlApndixFlhourFrntnd struct {
 	Timerv int64   `json:"timerv" bson:"timerv"`
 	Timeup int64   `json:"timeup" bson:"timeup"`
 	Dateup int32   `json:"dateup" bson:"dateup"`
-	Datend int32   `json:"datend" bson:"datest"`
+	Datend int32   `json:"datend" bson:"datend"`
 	Airtyp string  `json:"airtyp" bson:"airtyp"`
 	Airmls int32   `json:"airmls" bson:"airmls"`
 	Hstory string  `json:"hstory" bson:"hstory"`
@@ -119,8 +103,22 @@ type MdlApndixFrbaseDtbase struct {
 	Frbcde string `json:"frbcde,omitempty" bson:"frbcde,omitempty"`
 	Frbnta int32  `json:"frbnta,omitempty" bson:"frbnta,omitempty"`
 	Frbsbr int32  `json:"frbsbr,omitempty" bson:"frbsbr,omitempty"`
-	Datend int32  `json:"datend,omitempty" bson:"datest,omitempty"`
+	Datend int32  `json:"datend,omitempty" bson:"datend,omitempty"`
 	Hstory string `json:"hstory,omitempty" bson:"hstory,omitempty"`
+	Updtby string `json:"updtby,omitempty" bson:"updtby,omitempty"`
+}
+type MdlApndixFrbaseFrntnd struct {
+	Prmkey string `json:"prmkey" bson:"prmkey"`
+	Scdkey string `json:"scdkey" bson:"scdkey"`
+	Airlfl string `json:"airlfl" bson:"airlfl"`
+	Clssfl string `json:"clssfl" bson:"clssfl"`
+	Routfl string `json:"routfl" bson:"routfl"`
+	Frbcde string `json:"frbcde" bson:"frbcde"`
+	Frbnta int32  `json:"frbnta" bson:"frbnta"`
+	Frbsbr int32  `json:"frbsbr" bson:"frbsbr"`
+	Datend int32  `json:"datend" bson:"datend"`
+	Hstory string `json:"hstory" bson:"hstory"`
+	Updtby string `json:"updtby" bson:"updtby"`
 }
 
 // Fare taxs data
@@ -129,14 +127,30 @@ type MdlApndixFrtaxsDtbase struct {
 	Airlfl string  `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
 	Cbinfl string  `json:"cbinfl,omitempty" bson:"cbinfl,omitempty"`
 	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
-	Ftppnx float32 `json:"ftppnx,omitempty" bson:"ftppnx,omitempty"`
+	Ftppnx float32 `json:"ftppnx" bson:"ftppnx"`
+	Ftaptx int32   `json:"ftaptx" bson:"ftaptx"`
+	Ftfuel int32   `json:"ftfuel" bson:"ftfuel"`
+	Ftiwjr int32   `json:"ftiwjr" bson:"ftiwjr"`
+	Ftaxyr int32   `json:"ftaxyr" bson:"ftaxyr"`
+	Datend int32   `json:"datend" bson:"datend"`
 	Ftothr string  `json:"ftothr,omitempty" bson:"ftothr,omitempty"`
-	Ftaptx int32   `json:"ftaptx,omitempty" bson:"ftaptx,omitempty"`
-	Ftfuel int32   `json:"ftfuel,omitempty" bson:"ftfuel,omitempty"`
-	Ftiwjr int32   `json:"ftiwjr,omitempty" bson:"ftiwjr,omitempty"`
-	Ftaxyr int32   `json:"ftaxyr,omitempty" bson:"ftaxyr,omitempty"`
-	Datend int32   `json:"datend,omitempty" bson:"datest,omitempty"`
 	Hstory string  `json:"hstory,omitempty" bson:"hstory,omitempty"`
+	Updtby string  `json:"updtby,omitempty" bson:"updtby,omitempty"`
+}
+type MdlApndixFrtaxsFrntnd struct {
+	Prmkey string  `json:"prmkey" bson:"prmkey"`
+	Airlfl string  `json:"airlfl" bson:"airlfl"`
+	Cbinfl string  `json:"cbinfl" bson:"cbinfl"`
+	Routfl string  `json:"routfl" bson:"routfl"`
+	Ftppnx float32 `json:"ftppnx" bson:"ftppnx"`
+	Ftaptx int32   `json:"ftaptx" bson:"ftaptx"`
+	Ftfuel int32   `json:"ftfuel" bson:"ftfuel"`
+	Ftiwjr int32   `json:"ftiwjr" bson:"ftiwjr"`
+	Ftaxyr int32   `json:"ftaxyr" bson:"ftaxyr"`
+	Datend int32   `json:"datend" bson:"datend"`
+	Ftothr string  `json:"ftothr" bson:"ftothr"`
+	Hstory string  `json:"hstory" bson:"hstory"`
+	Updtby string  `json:"updtby" bson:"updtby"`
 }
 
 // Milege data

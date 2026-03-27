@@ -1,12 +1,12 @@
-'use client'
+"use client";
 import { MdlPsglstErrlogDtbase } from "../../model/params";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ApiPsglstPrcessManual } from "../../api/prcess";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { UixGlobalIconvcIgnore, UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
-import { FncGlobalFormatDatefm } from "../../../global/function/format";
 import { MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
+import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
+import UixGlobalTbodyrTablex from "../../../public/ui/tablex/tbodyr";
 
 export default function UixPsglstErrlogTablex({
   errlog,
@@ -15,119 +15,132 @@ export default function UixPsglstErrlogTablex({
 }: {
   errlog: MdlPsglstErrlogDtbase[];
   update: string;
-  status: MdlAllusrStatusPrcess
+  status: MdlAllusrStatusPrcess;
 }) {
+  // Dinamis
+  const rawobj: MdlPsglstErrlogDtbase = {
+    prmkey: status.action,
+    erstat: "",
+    erpart: "",
+    ersrce: "",
+    erdtil: "",
+    erdvsn: "",
+    erignr: "",
+    dateup: 0,
+    timeup: 0,
+    datefl: 0,
+    airlfl: "",
+    depart: "",
+    flnbfl: "",
+    Paxdif: "",
+    flstat: "",
+    flhour: 0,
+    routfl: "",
+    updtby: "",
+    worker: 0,
+  };
 
-  // Hit the database and get interval status
+  // Variable default
+  const [objdta, objdtaSet] = useState(rawobj);
+  const [okeupd, okeupdSet] = useState<string>("");
+  const [cxlupd, cxlupdSet] = useState<string>("");
   const rplprm = FncGlobalQuerysEdlink();
-  const [statfn, statfnSet] = useState("Done");
-  const [onpkey, onpkeySet] = useState("");
 
-  // Process function
-  const prcess = async (params: MdlPsglstErrlogDtbase) => {
-    rplprm(["update_global"], String(Math.random()));
-    statfnSet("Wait");
-    onpkeySet(params.prmkey);
-    const nowprm = { ...params };
+  // Refresh data
+  const cxlref = useRef<NodeJS.Timeout | null>(null);
+  const rfresh = async (objnow: MdlPsglstErrlogDtbase) => {
+    if (cxlref.current) clearTimeout(cxlref.current);
     if (status.sbrapi == 0) {
-      if (params.flnbfl == "") {
-        nowprm.worker = 3;
-        if (params.depart == "") {
-          nowprm.worker = 5;
-          if (params.airlfl == "")
-            nowprm.worker = 8;
+      objdtaSet(objnow);
+      if (objnow.worker == 0) {
+        if (objnow.flnbfl == "") {
+          objnow.worker = 3;
+          if (objnow.depart == "") {
+            objnow.worker = 5;
+            if (objnow.airlfl == "") objnow.worker = 8;
+          }
         }
       }
 
-      // Set interval to check status
-      const rsp = ApiPsglstPrcessManual(nowprm);
+      // Start process data
+      const rsp = ApiPsglstPrcessManual(objnow);
       setTimeout(() => {
         rplprm(["update_global"], String(Math.random()));
       }, 1000);
-      statfnSet(await rsp);
-      setTimeout(() => { statfnSet(""), onpkeySet(""); }, 2500);
+      if ((await rsp) == "Success") {
+        okeupdSet(objnow.prmkey);
+      } else cxlupdSet(objnow.prmkey);
+      setTimeout(() => {
+        (okeupdSet(""), cxlupdSet(""), objdtaSet(rawobj));
+        rplprm(["update_global"], String(Math.random()));
+      }, 2500);
     }
-  }
 
-  // Monitor process status
+    // Reject other proses
+    else {
+      cxlupdSet(objnow.prmkey);
+      cxlref.current = setTimeout(() => {
+        cxlupdSet("");
+      }, 1000);
+    }
+  };
+
+  // Ignore
+  const ignore = (objnow: MdlPsglstErrlogDtbase) => {
+    objnow.erignr = objnow.prmkey;
+    rfresh(objnow);
+  };
+
+  // Montitoring process
+  const itvref = useRef<NodeJS.Timeout | null>(null);
   useEffect(() => {
-    if (status.sbrapi == 0) statfnSet("");
-    const gtstat = async () => {
-      if (status.sbrapi != 0) {
-        const intrvl = setInterval(async () => {
-          const instat = await ApiAllusrStatusPrcess();
-          if (instat.sbrapi == 0) {
-            statfnSet("");
-            rplprm(["update_global"], String(Math.random()));
-            clearInterval(intrvl);
-          } else statfnSet(`${instat.sbrapi}%`);
-        }, 2000);
-      }
-    };
-    gtstat();
+    objdtaSet({ ...rawobj, prmkey: "all" });
+    if (itvref.current) clearInterval(itvref.current);
+    if (status.action != "") objdtaSet({ ...rawobj, prmkey: status.action });
+    if (status.sbrapi != 0) {
+      itvref.current = setInterval(async () => {
+        const statnw = await ApiAllusrStatusPrcess();
+        if (statnw.action == "") objdtaSet({ ...rawobj, prmkey: "all" });
+        if (statnw.sbrapi == 0) {
+          objdtaSet(rawobj);
+          rplprm(["update_global"], String(Math.random()));
+          clearInterval(itvref.current);
+        }
+      }, 5000);
+    } else objdtaSet(rawobj);
   }, [update]);
 
   return (
     <>
       <div className="ctable">
         <table>
-          <thead>
-            <tr>
-              <th className="sticky left-0">Action</th>
-              {errlog && errlog.length > 0
-                ? Object.entries(errlog[0]).map(([key]) => (
-                  <th key={key}>
-                    {key}
-                  </th>
-                ))
-                : ""}
-            </tr>
-          </thead>
-          <tbody>
-            {errlog.map((log, idx) => (
-              <tr key={idx}>
-                <td className={`text-center sticky left-0 z-10 drop-shadow-lg 
-                ${onpkey === log.prmkey && statfn === "Success" ? "bg-green-200 shkeit" :
-                    onpkey === log.prmkey && statfn === "Failed" ? "bg-red-200 shkeit" :
-                      onpkey === log.prmkey ? "bg-cyan-200" : "bg-white"} duration-300`}>
-                  <div className="afull flexctr gap-x-1.5">
-                    <div className="w-1/2 flexctr btnsbm duration-300 cursor-pointer"
-                      onClick={() => prcess(log)}>
-                      <div className={`absolute text-gray-300 font-bold text-[0.5rem] z-10`}>
-                        {statfn.includes("%") ? statfn : ""}
-                      </div>
-                      <div className={`${statfn != "" ? "animate-spin" : ""}`}>
-                        <UixGlobalIconvcRfresh
-                          bold={3}
-                          color="#fff"
-                          size={1.4}
-                        />
-                      </div>
-                    </div>
-                    <div className="w-1/2 flexctr btncxl duration-300 cursor-pointer"
-                      onClick={() => prcess({ ...log, erignr: log.prmkey })}>
-                      <UixGlobalIconvcIgnore
-                        bold={3}
-                        color="#fff"
-                        size={1.4}
-                      />
-                    </div>
-                  </div>
-                </td>
-                {Object.entries(log).map(([key, val]) => (
-                  <td className={`text-center 
-                  ${onpkey === log.prmkey && statfn === "Success" ? "bg-green-200 shkeit" :
-                      onpkey === log.prmkey && statfn === "Failed" ? "bg-red-200 shkeit" :
-                        onpkey === log.prmkey ? "bg-cyan-200" : "bg-white"} 
-                      duration-300`} key={key}>
-                    {["datefl", "timeup"].includes(key)
-                      ? FncGlobalFormatDatefm(String(val))
-                      : val}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          <UixGlobalTheadxTablex firsth="action" mainhd={Object.keys(rawobj)} />
+          <UixGlobalTbodyrTablex
+            arrdta={errlog}
+            objdta={objdta}
+            datefm={[
+              "datefl",
+              "daterv",
+              "datevc",
+              "dateup",
+              "datend",
+              "timefl",
+              "timevc",
+              "timerv",
+              "timeis",
+              "timecr",
+              "timeup",
+              "mnthfl",
+            ]}
+            nmbrfm={["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"]}
+            rfresh={rfresh}
+            ignore={ignore}
+            tolink={null}
+            editdt={null}
+            trashx={null}
+            okeupd={okeupd}
+            cxlupd={cxlupd}
+          />
         </table>
       </div>
     </>

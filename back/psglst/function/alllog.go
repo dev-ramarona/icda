@@ -197,6 +197,12 @@ func FncPsglstErrlogManage(errlog mdlPsglst.MdlPsglstErrlogDtbase,
 			panic("Error Insert/Update to DB:" + rsupdt.Error())
 		}
 	}
+
+	// Push to syncerrlog
+	if !istclr && isterr {
+		sycErrlog.Store(errlog.Prmkey, errlog)
+	}
+
 }
 
 // Get Agent name not complete format slice data from database

@@ -1,14 +1,12 @@
 import {
   MdlSlsflwErrlogDtbase,
+  MdlSlsflwPsgdtlFrntnd,
   MdlSlsflwPsgdtlSrcprm,
   MdlSlsflwPsgsmrSrcprm,
 } from "../model/params";
 
 // Treatment function params
-export function FncSlsflwPsgdtlSrcprm(
-  params: MdlSlsflwPsgdtlSrcprm,
-  actdte: string[],
-) {
+export function FncSlsflwPsgdtlSrcprm(params: MdlSlsflwPsgdtlSrcprm, actdte: string[]) {
   return {
     update_global: params.update_global || "",
     mnthfl_psgdtl: params.mnthfl_psgdtl || "",
@@ -26,10 +24,7 @@ export function FncSlsflwPsgdtlSrcprm(
 }
 
 // Treatment function params
-export function FncSlsflwPsgsmrSrcprm(
-  params: MdlSlsflwPsgsmrSrcprm,
-  actdte: string[],
-) {
+export function FncSlsflwPsgsmrSrcprm(params: MdlSlsflwPsgsmrSrcprm, actdte: string[]) {
   return {
     update_global: params.update_global || "",
     mnthfl_psgsmr: params.update_global || "",
@@ -51,4 +46,105 @@ export function FncSlsflwErrlogSrcprm(params: MdlSlsflwErrlogDtbase) {
     pagenw_errlog: Number(params.pagenw_errlog) || 1,
     limitp_errlog: Number(params.limitp_errlog) || 5,
   } as MdlSlsflwErrlogDtbase;
+}
+
+export function FncSlsflwRawdtaParams() {
+  const fnlobj: MdlSlsflwPsgdtlFrntnd = {
+    mnfest: "",
+    slsrpt: "",
+    noterr: "",
+    source: "",
+    tktnfl: "",
+    tktnvc: "",
+    pnrcde: "",
+    pnritl: "",
+    curncy: "",
+    ntaffl: 0,
+    ntafvc: 0,
+    yqtxfl: 0,
+    yqtxvc: 0,
+    frrate: 0,
+    frbcde: "",
+    qsrcrw: "",
+    qsrcvc: 0,
+    frcalc: "",
+    ndayfl: "",
+    datefl: 0,
+    datevc: 0,
+    daterv: 0,
+    mnthfl: 0,
+    timefl: 0,
+    timerv: 0,
+    timeis: 0,
+    timecr: 0,
+    airlfl: "",
+    airlvc: "",
+    airtyp: "",
+    seatcn: "",
+    flhour: 0,
+    flnbfl: "",
+    flnbvc: "",
+    flgate: "",
+    bookdc: 0,
+    bookdy: 0,
+    depart: "",
+    arrivl: "",
+    routfl: "",
+    routvc: "",
+    routvf: "",
+    routac: "",
+    routmx: "",
+    routfr: "",
+    routfx: "",
+    routsg: "",
+    linenb: 0,
+    ckinnb: 0,
+    gender: "",
+    typepx: "",
+    seatpx: "",
+    groupc: "",
+    totpax: 0,
+    segpnr: "",
+    segtkt: "",
+    psgrid: "",
+    tourcd: "",
+    staloc: "",
+    stanbr: "",
+    wrkloc: "",
+    hmeloc: "",
+    lniata: "",
+    emplid: "",
+    cpnbfl: 0,
+    cpnbvc: 0,
+    clssfl: "",
+    clssvc: "",
+    statvc: "",
+    cbinfl: "",
+    cbinvc: "",
+    agtdie: "",
+    agtdcr: "",
+    codels: "",
+    isitfl: "",
+    isittx: "",
+    isitir: "",
+    isitct: "",
+    isittf: "",
+    isitnr: "",
+    noteup: "",
+    updtby: "",
+    prmkey: "",
+
+    // Ancillary
+    gpcdae: "",
+    sbcdae: "",
+    descae: "",
+    wgbgae: 0,
+    qtbgae: 0,
+    routae: "",
+    fareae: 0,
+    currae: "",
+    emdnae: "",
+  };
+
+  return fnlobj;
 }

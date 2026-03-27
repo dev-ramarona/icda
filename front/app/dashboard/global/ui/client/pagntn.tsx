@@ -1,4 +1,5 @@
 "use client";
+import UixGlobalWaitngAction from "../../../public/ui/action/waitng";
 import { FncGlobalQuerysEdlink } from "../../function/querys";
 import {
   UixGlobalIconvcNextpg,
@@ -32,11 +33,8 @@ export default function UixGlobalPagntnMainpg({
     chngedSet(false);
   }, [pgenbr]);
   return (
-    <div className="w-full h-16 pt-1.5 flexctr">
-      <div className={`${chnged ? "w-16 h-10 translate-y-0" : "w-0 h-0 opacity-0 -translate-y-10"} z-10 absolute bg-white ring-2 ring-sky-300 px-5 py-2 rounded-xl flexctr duration-300`}>
-        <div>Wait</div>
-        <div className="animate-spin"><UixGlobalIconvcRfresh bold={2} color="black" size={1} /></div>
-      </div>
+    <div className="w-full h-16 pt-1.5 flexctr relative">
+      <UixGlobalWaitngAction chnged={chnged} />
       <div className="afull flexbtw">
         <div
           className="w-6 h-6 flexctr cursor-pointer"

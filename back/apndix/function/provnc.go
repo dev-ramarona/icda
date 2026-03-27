@@ -3,9 +3,11 @@ package fncApndix
 import (
 	mdlApndix "back/apndix/model"
 	"context"
+	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -15,10 +17,10 @@ import (
 )
 
 // Get map object
-func FncApndixProvncMapobj() map[string]string {
+func FncApndixProvncSycmap() *sync.Map {
 
 	// Inisialisasi variabel
-	fnldta := map[string]string{}
+	fnldta := &sync.Map{}
 
 	// Select database and collection
 	tablex := Client.Database(Dbases).Collection("apndix_provnc")
@@ -36,7 +38,7 @@ func FncApndixProvncMapobj() map[string]string {
 	for datarw.Next(contxt) {
 		var object mdlApndix.MdlApndixProvncDtbase
 		datarw.Decode(&object)
-		fnldta[object.Routfl] = object.Provnc
+		fnldta.Store(object.Routfl, object.Provnc)
 	}
 
 	// return data
@@ -53,13 +55,6 @@ func FncApndixProvncGetall(c *gin.Context) {
 		panic(err)
 	}
 
-	// Treatment date number
-	intDatefl := 0
-	if inputx.Datefl != "" {
-		strDatefl, _ := time.Parse("2006-01-02", inputx.Datefl)
-		intDatefl, _ = strconv.Atoi(strDatefl.Format("060102"))
-	}
-
 	// Select db and context to do
 	var totidx = 0
 	var slcobj any
@@ -69,40 +64,15 @@ func FncApndixProvncGetall(c *gin.Context) {
 
 	// Pipeline get the data logic match
 	var mtchdt = bson.A{}
-	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
+	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "provnc", Value: 1}}}}
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
-	if inputx.Datefl != "" {
-		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
-		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
-			Value: intDatefl}})
-	}
-	if inputx.Airlfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Airlfl)
-		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl}})
-	}
-	if inputx.Depart != "" {
-		csvFilenm = append(csvFilenm, inputx.Depart)
+	if inputx.Routfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Routfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: bson.D{{Key: "$regex",
-				Value: "^" + inputx.Depart}}}})
-	}
-	if inputx.Flnbfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Flnbfl)
-		mtchdt = append(mtchdt, bson.D{{Key: "flnbfl",
-			Value: inputx.Flnbfl}})
-	}
-	if inputx.Routfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Routfl)
-		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
-			Value: inputx.Routfl}})
-	}
-	if inputx.Clssfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Clssfl)
-		mtchdt = append(mtchdt, bson.D{{Key: "clssfl",
-			Value: inputx.Clssfl}})
+				Value: "^" + inputx.Routfl_apndix}}}})
 	}
 
 	// Final match pipeline
@@ -123,7 +93,6 @@ func FncApndixProvncGetall(c *gin.Context) {
 		}
 
 		// Find user by username in database
-		fmt.Println(nowPillne)
 		rawDtaset, err := tablex.Aggregate(contxt, nowPillne)
 		if err != nil {
 			panic(err)
@@ -151,8 +120,8 @@ func FncApndixProvncGetall(c *gin.Context) {
 		pipeln := mongo.Pipeline{
 			mtchfn,
 			sortdt,
-			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw, 1) - 1) * inputx.Limitp}},
-			bson.D{{Key: "$limit", Value: inputx.Limitp}},
+			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw_apndix, 1) - 1) * inputx.Limitp_apndix}},
+			bson.D{{Key: "$limit", Value: inputx.Limitp_apndix}},
 		}
 
 		// Find user by username in database
@@ -186,7 +155,7 @@ func FncApndixProvncGetall(c *gin.Context) {
 }
 
 // Get Response Update database from input
-func FncApndixProvincUpdate(c *gin.Context) {
+func FncApndixProvncUpdate(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	var inputx mdlApndix.MdlApndixProvncDtbase
@@ -222,4 +191,96 @@ func FncApndixProvincUpdate(c *gin.Context) {
 
 	// Send token to frontend
 	c.JSON(200, "success")
+}
+
+// Download
+func FncApndixProvncDownld(c *gin.Context) {
+
+	// Bind JSON Body input to variable
+	csvFilenm := []string{time.Now().Format("0601021504")}
+	rawipt := c.PostForm("data")
+	if rawipt == "" {
+		c.String(400, "missing data")
+		return
+	}
+	var inputx mdlApndix.MdlApdnixParamsInputx
+	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
+		c.String(400, "invalid data")
+		return
+	}
+
+	// Select db and context to do
+	tablex := Client.Database(Dbases).Collection("apndix_provnc")
+	contxt, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	// Pipeline get the data logic match
+	var mtchdt = bson.A{}
+	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
+
+	// Check if data Route all is isset
+	if inputx.Routfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Routfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
+			Value: bson.D{{Key: "$regex",
+				Value: "^" + inputx.Routfl_apndix}}}})
+	}
+
+	// Final match pipeline
+	var mtchfn bson.D
+	if len(mtchdt) != 0 {
+		mtchfn = bson.D{{Key: "$match", Value: bson.D{{Key: "$and", Value: mtchdt}}}}
+	} else {
+		mtchfn = bson.D{{Key: "$match", Value: bson.D{}}}
+	}
+
+	// Set header untuk file CSV
+	fnlFilenm := strings.Join(csvFilenm, "_")
+	c.Header("Content-Type", "text/csv")
+	c.Header("Content-Disposition", "attachment; filename=apndix_Provnc_"+fnlFilenm+".csv")
+	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
+
+	// Streaming file CSV ke client
+	writer := csv.NewWriter(c.Writer)
+	defer writer.Flush()
+	writer.Write([]string{
+		"routfl",
+		"provnc",
+		"updtby",
+	})
+	writer.Flush()
+
+	// Get All Match Data
+	pipeln := mongo.Pipeline{
+		mtchfn,
+		sortdt,
+	}
+
+	// Find user by username in database
+	rawDtaset, err := tablex.Aggregate(contxt, pipeln)
+	if err != nil {
+		panic(err)
+	}
+	defer rawDtaset.Close(contxt)
+
+	// Store to slice from raw bson
+	mxflus := 5000
+	countr := 0
+	for rawDtaset.Next(contxt) {
+		var slcDtaset mdlApndix.MdlApndixProvncDtbase
+		rawDtaset.Decode(&slcDtaset)
+
+		// Write to CSV
+		writer.Write([]string{
+			slcDtaset.Routfl,
+			slcDtaset.Provnc,
+			slcDtaset.Updtby,
+		})
+
+		// Flush every 1000row
+		countr++
+		if countr%mxflus == 0 {
+			writer.Flush()
+		}
+	}
 }

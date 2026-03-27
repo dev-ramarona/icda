@@ -3,9 +3,11 @@ package fncApndix
 import (
 	mdlApndix "back/apndix/model"
 	"context"
+	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"net/http"
-	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -54,13 +56,6 @@ func FncApndixFlhourGetall(c *gin.Context) {
 		panic(err)
 	}
 
-	// Treatment date number
-	intDatefl := 0
-	if inputx.Datefl != "" {
-		strDatefl, _ := time.Parse("2006-01-02", inputx.Datefl)
-		intDatefl, _ = strconv.Atoi(strDatefl.Format("060102"))
-	}
-
 	// Select db and context to do
 	var totidx = 0
 	var slcobj any
@@ -74,35 +69,21 @@ func FncApndixFlhourGetall(c *gin.Context) {
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
-	if inputx.Datefl != "" {
-		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
-		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
-			Value: intDatefl}})
-	}
-	if inputx.Airlfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Airlfl)
+	if inputx.Airlfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl}})
+			Value: inputx.Airlfl_apndix}})
 	}
-	if inputx.Depart != "" {
-		csvFilenm = append(csvFilenm, inputx.Depart)
-		mtchdt = append(mtchdt, bson.D{{Key: "depart",
-			Value: inputx.Depart}})
-	}
-	if inputx.Flnbfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Flnbfl)
+	if inputx.Flnbfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Flnbfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "flnbfl",
-			Value: inputx.Flnbfl}})
+			Value: inputx.Flnbfl_apndix}})
 	}
-	if inputx.Routfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Routfl)
+	if inputx.Routfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Routfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
-			Value: inputx.Routfl}})
-	}
-	if inputx.Clssfl != "" {
-		csvFilenm = append(csvFilenm, inputx.Clssfl)
-		mtchdt = append(mtchdt, bson.D{{Key: "clssfl",
-			Value: inputx.Clssfl}})
+			Value: bson.D{{Key: "$regex",
+				Value: "^" + inputx.Routfl_apndix}}}})
 	}
 
 	// Final match pipeline
@@ -150,8 +131,8 @@ func FncApndixFlhourGetall(c *gin.Context) {
 		pipeln := mongo.Pipeline{
 			mtchfn,
 			sortdt,
-			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw, 1) - 1) * inputx.Limitp}},
-			bson.D{{Key: "$limit", Value: inputx.Limitp}},
+			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw_apndix, 1) - 1) * inputx.Limitp_apndix}},
+			bson.D{{Key: "$limit", Value: inputx.Limitp_apndix}},
 		}
 
 		// Find user by username in database
@@ -183,7 +164,7 @@ func FncApndixFlhourGetall(c *gin.Context) {
 func FncApndixFlhourUpdate(c *gin.Context) {
 
 	// Bind JSON Body input to variable
-	var inputx mdlApndix.MdlApndixFlhourInputx
+	var inputx mdlApndix.MdlApndixFlhourDtbase
 	if err := c.BindJSON(&inputx); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input" + err.Error()})
 		fmt.Println(err.Error())
@@ -203,27 +184,27 @@ func FncApndixFlhourUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Flnbfl"})
 		return
 	}
-	if inputx.Flhour == "" {
+	if inputx.Flhour == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Flhour"})
 		return
 	}
-	if inputx.Timefl == "" {
+	if inputx.Timefl == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timefl"})
 		return
 	}
-	if inputx.Timerv == "" {
+	if inputx.Timerv == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timerv"})
 		return
 	}
-	if inputx.Timeup == "" {
+	if inputx.Timeup == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timeup"})
 		return
 	}
-	if inputx.Dateup == "" {
+	if inputx.Dateup == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Dateup"})
 		return
 	}
-	if inputx.Datend == "" {
+	if inputx.Datend == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Datend"})
 		return
 	}
@@ -231,42 +212,25 @@ func FncApndixFlhourUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airtyp"})
 		return
 	}
-	if inputx.Airmls == "" {
+	if inputx.Airmls == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airmls"})
+		return
+	}
+	if inputx.Updtby == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Updtby"})
 		return
 	}
 
 	// Final push data
-	prmkey := inputx.Airlfl + inputx.Flnbfl + inputx.Routfl
-	flhour, _ := strconv.ParseFloat(inputx.Flhour, 64)
-	airmls, _ := strconv.Atoi(inputx.Flhour)
-	timefl := FncApndixFormatTimein(inputx.Timefl)
-	timerv := FncApndixFormatTimein(inputx.Timerv)
-	timeup := FncApndixFormatTimein(time.Now().Format("2006-01-02T15:04"))
-	dateup := FncApndixFormatDatein(time.Now().Format("2006-01-02"))
-	datend := FncApndixFormatDatein(time.Now().Format("2006-01-02"))
-	finald := mdlApndix.MdlApndixFlhourDtbase{
-		Prmkey: prmkey,
-		Airlfl: inputx.Airlfl,
-		Routfl: inputx.Routfl,
-		Flnbfl: inputx.Flnbfl,
-		Flhour: flhour,
-		Timefl: timefl,
-		Timerv: timerv,
-		Timeup: timeup,
-		Dateup: dateup,
-		Datend: datend,
-		Airtyp: inputx.Airtyp,
-		Airmls: int32(airmls),
-		Hstory: inputx.Hstory,
-		Updtby: inputx.Updtby,
+	if inputx.Prmkey == "" || inputx.Prmkey == "add" {
+		inputx.Prmkey = inputx.Airlfl + inputx.Flnbfl + inputx.Routfl
 	}
 
 	// Push updated data
 	rsupdt := FncApndixBulkdbSingle([]mongo.WriteModel{
 		mongo.NewUpdateOneModel().
-			SetFilter(bson.M{"prmkey": finald.Prmkey}).
-			SetUpdate(bson.M{"$set": finald}).
+			SetFilter(bson.M{"prmkey": inputx.Prmkey}).
+			SetUpdate(bson.M{"$set": inputx}).
 			SetUpsert(true)}, "apndix_flhour")
 	if rsupdt != nil {
 		panic("Error Insert/Update to DB:" + rsupdt.Error())
@@ -274,4 +238,133 @@ func FncApndixFlhourUpdate(c *gin.Context) {
 
 	// Send token to frontend
 	c.JSON(200, "success")
+}
+
+// Download
+func FncApndixFlhourDownld(c *gin.Context) {
+
+	// Bind JSON Body input to variable
+	csvFilenm := []string{time.Now().Format("0601021504")}
+	rawipt := c.PostForm("data")
+	if rawipt == "" {
+		c.String(400, "missing data")
+		return
+	}
+	var inputx mdlApndix.MdlApdnixParamsInputx
+	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
+		c.String(400, "invalid data")
+		return
+	}
+
+	// Select db and context to do
+	tablex := Client.Database(Dbases).Collection("apndix_flhour")
+	contxt, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+
+	// Pipeline get the data logic match
+	var mtchdt = bson.A{}
+	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
+
+	// Check if data Route all is isset
+	if inputx.Airlfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
+			Value: inputx.Airlfl_apndix}})
+	}
+	if inputx.Flnbfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Flnbfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "flnbfl",
+			Value: inputx.Flnbfl_apndix}})
+	}
+	if inputx.Routfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Routfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
+			Value: bson.D{{Key: "$regex",
+				Value: "^" + inputx.Routfl_apndix}}}})
+	}
+
+	// Final match pipeline
+	var mtchfn bson.D
+	if len(mtchdt) != 0 {
+		mtchfn = bson.D{{Key: "$match", Value: bson.D{{Key: "$and", Value: mtchdt}}}}
+	} else {
+		mtchfn = bson.D{{Key: "$match", Value: bson.D{}}}
+	}
+
+	// Set header untuk file CSV
+	fnlFilenm := strings.Join(csvFilenm, "_")
+	c.Header("Content-Type", "text/csv")
+	c.Header("Content-Disposition", "attachment; filename=apndix_flhour_"+fnlFilenm+".csv")
+	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
+
+	// Streaming file CSV ke client
+	writer := csv.NewWriter(c.Writer)
+	defer writer.Flush()
+	writer.Write([]string{
+		"prmkey",
+		"airlfl",
+		"routfl",
+		"flnbfl",
+		"flhour",
+		"timefl",
+		"timerv",
+		"timeup",
+		"dateup",
+		"datend",
+		"airtyp",
+		"airmls",
+		"hstory",
+		"updtby",
+	})
+	writer.Flush()
+
+	// Get All Match Data
+	pipeln := mongo.Pipeline{
+		mtchfn,
+		sortdt,
+	}
+
+	// Find user by username in database
+	rawDtaset, err := tablex.Aggregate(contxt, pipeln)
+	if err != nil {
+		panic(err)
+	}
+	defer rawDtaset.Close(contxt)
+
+	// Store to slice from raw bson
+	mxflus := 5000
+	countr := 0
+	for rawDtaset.Next(contxt) {
+		var slcDtaset mdlApndix.MdlApndixFlhourDtbase
+		rawDtaset.Decode(&slcDtaset)
+		strDateup := FncApndixFormatDateot(int(slcDtaset.Dateup))
+		strDatend := FncApndixFormatDateot(int(slcDtaset.Datend))
+		strTimefl := FncApndixFormatTimeot(int(slcDtaset.Timefl))
+		strTimerv := FncApndixFormatTimeot(int(slcDtaset.Timerv))
+		strTimeup := FncApndixFormatTimeot(int(slcDtaset.Timeup))
+
+		// Write to CSV
+		writer.Write([]string{
+			slcDtaset.Prmkey,
+			slcDtaset.Airlfl,
+			slcDtaset.Routfl,
+			slcDtaset.Flnbfl,
+			fmt.Sprintf("%v", slcDtaset.Flhour),
+			strTimefl,
+			strTimerv,
+			strTimeup,
+			strDateup,
+			strDatend,
+			slcDtaset.Airtyp,
+			fmt.Sprintf("%v", slcDtaset.Airmls),
+			slcDtaset.Hstory,
+			slcDtaset.Updtby,
+		})
+
+		// Flush every 1000row
+		countr++
+		if countr%mxflus == 0 {
+			writer.Flush()
+		}
+	}
 }

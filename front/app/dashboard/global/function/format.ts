@@ -1,30 +1,24 @@
 import { mdlGlobalAlluserFilter } from "../model/params";
 
-export function FncGlobalFormatDefault(
-  key: string,
-  val: string,
-): string | number {
+export function FncGlobalFormatDefault(key: string, val: string): string | number {
   let now: string | number = "";
-  if (["routvc", "routfl"].includes(key)) {
+  const actkey = key.substring(0, 6);
+  if (["routvc", "routfl"].includes(actkey)) {
     now = FncGlobalFormatRoutfl(val).substring(0, 7);
-  } else if (["airlfl"].includes(key)) {
-    now = val
-      .toUpperCase()
-      .replace(/[^A-Z]/g, "")
-      .substring(0, 2);
-  } else if (["flnbfl"].includes(key)) {
+  } else if (
+    ["airlfl", "airlvc", "depart", "curncy", "clssfl", "frbcde", "statvc"].includes(actkey)
+  ) {
+    const tmp = val.toUpperCase().replace(/[^A-Z]/g, "");
+    if (["clssfl"].includes(actkey)) now = tmp.substring(0, 1);
+    else if (["airlfl", "airlvc"].includes(actkey)) now = tmp.substring(0, 2);
+    else if (["depart", "curncy"].includes(actkey)) now = tmp.substring(0, 3);
+    else now = tmp;
+  } else if (["flnbfl"].includes(actkey)) {
     now = val.replace(/[^0-9]/g, "").substring(0, 4);
-  } else if (["tktnfl", "tktnvc"].includes(key)) {
+  } else if (["tktnfl", "tktnvc"].includes(actkey)) {
     now = val.replace(/[^0-9]/g, "").substring(0, 13);
-  } else if (["airmls", "ntafvc", "ntaffl"].includes(key)) {
+  } else if (["airmls", "ntafvc", "ntaffl", "cpnbvc", "frbnta", "frbsbr"].includes(actkey)) {
     now = val.replace(/[^0-9]/g, "");
-  } else if (["cpnbvc"].includes(key)) {
-    now = FncGlobalFormatCpnfmt(val);
-  } else if (["depart"].includes(key)) {
-    now = val
-      .toUpperCase()
-      .replace(/[^A-Z]/g, "")
-      .substring(0, 3);
   } else now = val;
   return now;
 }
@@ -41,9 +35,7 @@ export function FncGlobalFormatDatefm(inputd: string): string {
   const minute = inputd.length === 10 ? inputd.slice(8, 10) : null;
 
   // Buat Date object
-  const datenw = new Date(
-    `${yearfl}-${monthn}-${daynow}T${hournw ?? "00"}:${minute ?? "00"}`,
-  );
+  const datenw = new Date(`${yearfl}-${monthn}-${daynow}T${hournw ?? "00"}:${minute ?? "00"}`);
   let optons: Intl.DateTimeFormatOptions = {
     day: "2-digit",
     month: "short",
@@ -60,14 +52,41 @@ export function FncGlobalFormatDatefm(inputd: string): string {
   return datetx;
 }
 
-// Fucntion change format data yymmdd/hhmm to dd-MMM-yyyy hh:mm
-export function FncGlobalFormatDateip(inputd: string): string {
-  if (inputd.length !== 6) return "Format harus YYMMDD";
-  const year = parseInt(inputd.slice(0, 2), 10) + 2000; // "25" → 2025
-  const month = inputd.slice(2, 4); // "07"
-  const day = inputd.slice(4, 6); // "30"
-  return `${year}-${month}-${day}`;
+// Function change format input date time to yymmddhhmm
+export function FncGlobalFormatInptdt(v: string) {
+  if (typeof v !== "string") return v;
+
+  // datetime-local: "YYYY-MM-DDTHH:mm"
+  if (v.includes("T")) {
+    const [divide, timept] = v.split("T");
+    const [yearnw, monthw, daynow] = divide.split("-");
+    const [hournw, minute] = timept.split(":");
+    return `${yearnw.slice(-2)}${monthw}${daynow}${hournw}${minute}`;
+  }
+
+  // date: "YYYY-MM-DD"
+  else if (v.includes("-")) {
+    const [yearnw, monthw, daynow] = v.split("-");
+    return `${yearnw.slice(-2)}${monthw}${daynow}`;
+  }
+
+  // time: "HH:mm"
+  else if (v.includes(":")) {
+    const [hournw, minute] = v.split(":");
+    return `${hournw}${minute}`;
+  }
+
+  return v; // fallback kalau format tidak dikenali
 }
+
+// // Fucntion change format data yymmdd/hhmm to dd-MMM-yyyy hh:mm
+// export function FncGlobalFormatDateip(inputd: string): string {
+//   if (inputd.length !== 6) return "Format harus YYMMDD";
+//   const year = parseInt(inputd.slice(0, 2), 10) + 2000; // "25" → 2025
+//   const month = inputd.slice(2, 4); // "07"
+//   const day = inputd.slice(4, 6); // "30"
+//   return `${year}-${month}-${day}`;
+// }
 
 // Function change format routef to 3-3 characters
 export function FncGlobalFormatRoutfl(routef: string) {
@@ -114,10 +133,7 @@ export function FncGlobalFormatSorthl(params: string) {
 }
 
 // Function change format routef to 3-3 characters
-export function FncGlobalFormatFilter(
-  params: string,
-  arrays: mdlGlobalAlluserFilter[],
-) {
+export function FncGlobalFormatFilter(params: string, arrays: mdlGlobalAlluserFilter[]) {
   const raw = params.trim().toUpperCase();
   if (raw === "") return "";
   for (let i = 0; i < arrays.length; i++) {
@@ -140,8 +156,7 @@ export function FncGlobalFormatArrcpn(str: string) {
     const arx = [];
     for (let i = 0; i < tmp.length; i++) {
       const elm = tmp[i];
-      if (Number.isInteger(Number(elm)) && elm.length >= 6)
-        arx.push(FncGlobalFormatDatefm(elm));
+      if (Number.isInteger(Number(elm)) && elm.length >= 6) arx.push(FncGlobalFormatDatefm(elm));
       else arx.push(elm);
     }
     arr.push(arx.join("-"));

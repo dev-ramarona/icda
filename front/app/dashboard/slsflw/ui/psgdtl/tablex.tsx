@@ -1,178 +1,136 @@
 "use client";
 import { MdlSlsflwAcpedtDtbase, MdlSlsflwPsgdtlFrntnd } from "../../model/params";
 import { ApiSlsflwPsgdtlUpdate } from "../../api/psgdtl";
-import { useState } from "react";
-import { mdlGlobalAllusrCookie } from "../../../global/model/params";
+import { useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatCpnfmt, FncGlobalFormatDatefm, FncGlobalFormatRoutfl } from "../../../global/function/format";
-import { UixGlobalIconvcCancel, UixGlobalIconvcCeklis, UixGlobalIconvcEditdt } from "../../../global/ui/server/iconvc";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import { FncGlobalFormatDefault, FncGlobalFormatInptdt } from "../../../global/function/format";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
+import UixGlobalConfrmAction from "../../../public/ui/action/confrm";
+import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
+import { MdlGlobalConfrmAction } from "../../../public/model/params";
+import { FncSlsflwRawdtaParams } from "../../function/params";
 
 export default function UixSlsflwDetailTablex({
-  detail,
+  arrdta,
   acpedt,
   cookie,
 }: {
-  detail: MdlSlsflwPsgdtlFrntnd[];
+  arrdta: MdlSlsflwPsgdtlFrntnd[];
   acpedt: MdlSlsflwAcpedtDtbase[];
-  cookie: mdlGlobalAllusrCookie;
+  cookie: mdlAllusrCookieObjson;
 }) {
-  const [edtobj, edtobjSet] = useState<MdlSlsflwPsgdtlFrntnd>();
+  // Dinamis
+  const exclde = ["prmkey", "hstory", "updtby", "qsrcvc"];
+  const inclde = acpedt.map((item) => item.params);
+  const rawobj: MdlSlsflwPsgdtlFrntnd = FncSlsflwRawdtaParams();
+  let othrfn: Function | undefined;
+  othrfn = (objdta: MdlSlsflwPsgdtlFrntnd) => {
+    Object.entries(objdta).map(([k, v]) => {
+      if (["cpnbvc", "ntafvc", "qsrcvc"].includes(k)) {
+        objdta[k] = Number(v);
+      } else if (["timeis"].includes(k)) {
+        objdta[k] = Number(FncGlobalFormatInptdt(v));
+      }
+    });
+    return objdta;
+  };
+
+  // Variable default
+  const [objdta, objdtaSet] = useState(rawobj);
   const [okeupd, okeupdSet] = useState<string>("");
   const [cxlupd, cxlupdSet] = useState<string>("");
-  const [cxlrsp, cxlrspSet] = useState<string>("");
+  const [confrm, confrmSet] = useState<boolean>(false);
+  const [confdt, confdtSet] = useState<MdlGlobalConfrmAction[]>([]);
+
+  // edit params
   const rplprm = FncGlobalQuerysEdlink();
   const actedt = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.currentTarget.id;
     let val: string | number = e.currentTarget.value;
-    if (key == "routvc") val = FncGlobalFormatRoutfl(val);
-    else if (key == "cpnbvc") val = FncGlobalFormatCpnfmt(val);
-    else if (["tktnbr", "flnbvc"].includes(key))
-      val = val.replace(/[^0-9]/g, "");
-    else if (["ntafvc", "ntaffl", "qsrcvc"].includes(key))
-      val = (val);
-    else val = val.toUpperCase();
-    edtobjSet({
-      ...edtobj,
-      [key]: val,
-    } as MdlSlsflwPsgdtlFrntnd);
+    val = FncGlobalFormatDefault(key, val);
+    objdtaSet({ ...objdta, [key]: val });
+  };
+
+  // Action
+  const refedt = useRef<NodeJS.Timeout | null>(null);
+  const cnfupd = () => {
+    if (refedt.current) clearTimeout(refedt.current);
+    const confst = [];
+    let emptys = false;
+    Object.entries(objdta).map(([k, v]) => {
+      if (!exclde.includes(k)) {
+        confst.push({ paramx: k, valuex: v });
+        if ((v == "" || v == 0) && inclde.includes(k)) {
+          cxlupdSet(objdta.prmkey);
+          emptys = true;
+        }
+      }
+    });
+    if (!emptys) {
+      confrmSet(true);
+      confdtSet(confst);
+    } else refedt.current = setTimeout(() => cxlupdSet(""), 1000);
   };
 
   // Confirm update retail or series
-  const update = async (log: MdlSlsflwPsgdtlFrntnd) => {
-    console.log(log);
-    const rspupd: string = await ApiSlsflwPsgdtlUpdate({
-      ...log,
-      ntafvc: Number(log.ntafvc),
-      ntaffl: Number(log.ntaffl),
-      qsrcvc: Number(log.qsrcvc)
-    });
-    edtobjSet({ ...log, prmkey: "" })
-    if (rspupd == "success") {
-      okeupdSet(log.prmkey);
-    } else {
-      cxlupdSet(log.prmkey);
-      cxlrspSet(rspupd);
-    }
-    setTimeout(() => {
-      okeupdSet("");
-      cxlupdSet("");
-      cxlrspSet("");
-      rplprm(["update_global"], String(Math.random()));
+  const refupd = useRef<NodeJS.Timeout | null>(null);
+  const goupdt = async () => {
+    confrmSet(false);
+    if (refupd.current) clearTimeout(refupd.current);
+    refupd.current = setTimeout(async () => {
+      const copydt = othrfn?.(objdta) ?? objdta;
+      copydt.updtby = cookie.usrnme;
+      const rspupd: string = await ApiSlsflwPsgdtlUpdate(copydt);
+      objdtaSet({ ...copydt, prmkey: "" });
+      if (rspupd == "success") {
+        okeupdSet(copydt.prmkey);
+      } else cxlupdSet(copydt.prmkey);
+      setTimeout(() => {
+        okeupdSet("");
+        cxlupdSet("");
+        rplprm(["update_global"], String(Math.random()));
+      }, 1000);
     }, 1000);
   };
 
   return (
     <>
-      <div className="ctable">
+      <UixGlobalConfrmAction
+        confrm={confrm}
+        confdt={confdt}
+        action={"update"}
+        goupdt={goupdt}
+        confrmSet={confrmSet}
+      />
+      <div className={`ctable`}>
         <table>
-          <thead>
-            <tr>
-              <th className="thhead sticky left-0">Action</th>
-              {detail && detail.length > 0
-                ? Object.entries(detail[0]).map(([key]) => (
-                  <th key={key} className="thhead">
-                    {key}
-                  </th>
-                ))
-                : ""}
-            </tr>
-          </thead>
-          <tbody>
-            {detail.map((log, idx) => (
-              <tr key={idx}>
-                <td
-                  className={`text-center sticky left-0 z-10 shadow-md drop-shadow-lg 
-                    ${edtobj?.prmkey === log.prmkey ? "bg-sky-200" :
-                      okeupd === log.prmkey ? "bg-green-400 shkeit" :
-                        cxlupd === log.prmkey ? "bg-red-400 shkeit" : "bg-white"}`}
-
-                >
-                  <div className="afull flexctr gap-x-1.5 relative">
-                    <div
-                      className={`flexctr btnsbm duration-300 cursor-pointer ${edtobj?.prmkey === log.prmkey
-                        ? "opacity-100"
-                        : "opacity-0 select-none pointer-events-none"
-                        }`}
-                      onClick={() => update(edtobj as MdlSlsflwPsgdtlFrntnd)}
-                    >
-                      <UixGlobalIconvcCeklis
-                        bold={2.5}
-                        color="#53eafd"
-                        size={1.4}
-                      />
-                    </div>
-                    <div
-                      className={`flexctr btnsbm duration-300 cursor-pointer ${edtobj?.prmkey === log.prmkey
-                        ? "opacity-100"
-                        : "opacity-0 select-none pointer-events-none"
-                        }`}
-                      onClick={() => edtobjSet({ ...log, prmkey: "" })}
-                    >
-                      <UixGlobalIconvcCancel
-                        bold={2.5}
-                        color="#fb2c36"
-                        size={1.4}
-                      />
-                    </div>
-                    <div
-                      className={`absolute flexctr btnsbm duration-300 cursor-pointer ${edtobj?.prmkey === log.prmkey
-                        ? "opacity-0 select-none pointer-events-none"
-                        : "opacity-100"
-                        }`}
-                      onClick={() => edtobjSet({ ...log, updtby: cookie.usrnme, prmkey: log.prmkey })}
-                    >
-                      <UixGlobalIconvcEditdt
-                        bold={2.5}
-                        color="white"
-                        size={1.4}
-                      />
-                    </div>
-                  </div>
-                  <div className={`${cxlupd === log.prmkey ? "h-8 flexctr font-semibold text-white" :
-                    "h-0 opacity-0"} duration-300`}>{cxlrsp}</div>
-                </td>
-                {Object.entries(log).map(([key, val]) => (
-                  <td
-                    className={`text-center z-0 h-8 w-fit ${edtobj?.prmkey === log.prmkey ? "bg-sky-200" :
-                      okeupd === log.prmkey ? "bg-green-400 shkeit" :
-                        cxlupd === log.prmkey ? "bg-red-400 shkeit" : "bg-white"}`}
-                    key={key}
-                  >
-                    {edtobj?.prmkey === log.prmkey &&
-                      acpedt.some((item) => item.params === key) ? (
-                      <div className="relative flexctr">
-                        <span className="invisible">
-                          XXXXXXXXXXXXX{String(edtobj[key as keyof typeof edtobj])}
-                        </span>
-                        <div className="h-8 absolute">
-                          <UixGlobalInputxFormdt
-                            typipt={key == "timeis" ? "datetime-local" : key == "datevc" ? "date" : "text"}
-                            length={
-                              acpedt.find((item) => item.params === key)?.length
-                            }
-                            queryx={key.toString()}
-                            params={String(edtobj[key as keyof typeof edtobj])}
-                            plchdr=""
-                            repprm={actedt}
-                            labelx=""
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <div>
-                        {["datefl", "daterv", "datevc", "timefl", "timevc", "timerv", "timeis", "timecr", "mnthfl"].includes(key)
-                          ? FncGlobalFormatDatefm(String(val))
-                          : ["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"].includes(key)
-                            ? <div className="text-right">{val.toLocaleString("en-US")}</div>
-                            : val}
-                      </div>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
+          <UixGlobalTheadxTablex firsth="action" mainhd={Object.keys(rawobj)} />
+          <UixGlobalTbodyxTablex
+            action={actedt}
+            arrdta={arrdta}
+            objdta={objdta}
+            objset={objdtaSet}
+            acpedt={acpedt}
+            datefm={[
+              "datefl",
+              "daterv",
+              "datevc",
+              "dateup",
+              "datend",
+              "timefl",
+              "timevc",
+              "timerv",
+              "timeis",
+              "timecr",
+              "timeup",
+              "mnthfl",
+            ]}
+            nmbrfm={["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"]}
+            cnfupd={cnfupd}
+            okeupd={okeupd}
+            cxlupd={cxlupd}
+          />
         </table>
       </div>
     </>

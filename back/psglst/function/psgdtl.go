@@ -92,13 +92,19 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 			Value: inputx.Tktnfl_psgdtl}})
 	}
 	if inputx.Isitfl_psgdtl != "" {
-		nowIsitfl := "F"
-		if inputx.Isitfl_psgdtl == "Not flown" {
-			nowIsitfl = "N"
-		}
 		csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
 		mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
-			Value: nowIsitfl}})
+			Value: inputx.Isitfl_psgdtl}})
+	}
+	if inputx.Isitir_psgdtl != "" {
+		csvFilenm = append(csvFilenm, inputx.Isitir_psgdtl)
+		mtchdt = append(mtchdt, bson.D{{Key: "isitir",
+			Value: inputx.Isitir_psgdtl}})
+	}
+	if inputx.Isittx_psgdtl != "" {
+		csvFilenm = append(csvFilenm, inputx.Isittx_psgdtl)
+		mtchdt = append(mtchdt, bson.D{{Key: "isittx",
+			Value: inputx.Isittx_psgdtl}})
 	}
 	if inputx.Nclear_psgdtl != "ALL" {
 		var mtchor = bson.A{}
@@ -234,7 +240,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 
 	// Check if data Route all is isset
 	if inputx.Datefl_psgdtl != "" {
-		csvFilenm = append(csvFilenm, inputx.Datefl_psgdtl)
+		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
 		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
 			Value: intDatefl}})
 	}
@@ -274,13 +280,19 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			Value: inputx.Tktnfl_psgdtl}})
 	}
 	if inputx.Isitfl_psgdtl != "" {
-		nowIsitfl := "F"
-		if inputx.Isitfl_psgdtl == "Not flown" {
-			nowIsitfl = "N"
-		}
 		csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
 		mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
-			Value: nowIsitfl}})
+			Value: inputx.Isitfl_psgdtl}})
+	}
+	if inputx.Isitir_psgdtl != "" {
+		csvFilenm = append(csvFilenm, inputx.Isitir_psgdtl)
+		mtchdt = append(mtchdt, bson.D{{Key: "isitir",
+			Value: inputx.Isitir_psgdtl}})
+	}
+	if inputx.Isittx_psgdtl != "" {
+		csvFilenm = append(csvFilenm, inputx.Isittx_psgdtl)
+		mtchdt = append(mtchdt, bson.D{{Key: "isittx",
+			Value: inputx.Isittx_psgdtl}})
 	}
 	if inputx.Nclear_psgdtl != "ALL" {
 		var mtchor = bson.A{}
@@ -290,14 +302,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		if inputx.Nclear_psgdtl == "SLSRPT" || inputx.Nclear_psgdtl == "" {
 			mtchor = append(mtchor, bson.D{{Key: "slsrpt", Value: "NOT CLEAR"}})
 		}
-		if inputx.Nclear_psgdtl == "" {
-			csvFilenm = append(csvFilenm, "ALL_NOT_CLEAR")
-		} else {
-			csvFilenm = append(csvFilenm, inputx.Nclear_psgdtl+"_NOT_CLEAR")
+		if len(mtchor) > 0 {
+			csvFilenm = append(csvFilenm, inputx.Nclear_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "$or", Value: mtchor}})
 		}
-		mtchdt = append(mtchdt, bson.D{{Key: "$or", Value: mtchor}})
-	} else {
-		csvFilenm = append(csvFilenm, "ALL")
 	}
 
 	// Final match pipeline
@@ -318,7 +326,25 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	// Streaming file CSV ke client
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
-	if inputx.Format_psgdtl == "EBTFMT" {
+	switch inputx.Format_psgdtl {
+	case "UPDATE":
+		writer.Write([]string{
+			"Noterr",
+			"Prmkey",
+			"Pnrcde",
+			"Airlfl",
+			"Flnbfl",
+			"Routfl",
+			"Datefl",
+			"Tktnvc_fillhr",
+			"Airlvc_fillhr",
+			"Flnbvc_fillhr",
+			"Routvc_fillhr",
+			"Cpnbvc_fillhr",
+			"Statvc_fillhr",
+			"Timeis_fillhr",
+		})
+	case "EBTFMT":
 		writer.Write([]string{
 			"CEK GROUP",
 			"Isitfl",
@@ -357,154 +383,157 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"",
 			"",
 		})
-	} else {
+
+	default:
 		writer.Write([]string{
-			"mnfest",
-			"slsrpt",
-			"noterr",
-			"source",
-			"tktnfl",
-			"tktnvc",
-			"pnrcde",
-			"pnritl",
-			"curncy",
-			"ntaffl",
-			"ntafvc",
-			"yqtxfl",
-			"yqtxvc",
-			"frrate",
-			"frbcde",
-			"qsrcrw",
-			"qsrcvc",
-			"frcalc",
-			"ndayfl",
-			"datefl",
-			"datevc",
-			"daterv",
-			"mnthfl",
-			"timefl",
-			"timerv",
-			"timeis",
-			"timecr",
-			"airlfl",
-			"airlvc",
-			"airtyp",
-			"seatcn",
-			"flnbfl",
-			"flnbvc",
-			"flgate",
-			"bookdc",
-			"bookdy",
-			"depart",
-			"arrivl",
-			"routfl",
-			"routvc",
-			"routvf",
-			"routac",
-			"routmx",
-			"routfr",
-			"routfx",
-			"routsg",
-			"linenb",
-			"ckinnb",
-			"gender",
-			"typepx",
-			"seatpx",
-			"groupc",
-			"totpax",
-			"segpnr",
-			"segtkt",
-			"psgrid",
-			"tourcd",
-			"staloc",
-			"stanbr",
-			"wrkloc",
-			"hmeloc",
-			"lniata",
-			"emplid",
-			"nmefst",
-			"nmelst",
-			"cpnbfl",
-			"cpnbvc",
-			"clssfl",
-			"clssvc",
-			"statvc",
-			"cbinfl",
-			"cbinvc",
-			"agtdie",
-			"agtdcr",
-			"codels",
-			"isitfl",
-			"isittx",
-			"isitir",
-			"isitct",
-			"isittf",
-			"isitnr",
-			"noteup",
-			"updtby",
-			"prmkey",
+			"Mnfest",
+			"Slsrpt",
+			"Noterr",
+			"Source",
+			"Tktnfl",
+			"Tktnvc",
+			"Pnrcde",
+			"Pnritl",
+			"Curncy",
+			"Ntaffl",
+			"Ntafvc",
+			"Yqtxfl",
+			"Yqtxvc",
+			"Frrate",
+			"Frbcde",
+			"Qsrcrw",
+			"Qsrcvc",
+			"Frcalc",
+			"Ndayfl",
+			"Datefl",
+			"Datevc",
+			"Daterv",
+			"Mnthfl",
+			"Timefl",
+			"Timerv",
+			"Timeis",
+			"Timecr",
+			"Airlfl",
+			"Airlvc",
+			"Airtyp",
+			"Seatcn",
+			"Flhour",
+			"Flnbfl",
+			"Flnbvc",
+			"Flgate",
+			"Bookdc",
+			"Bookdy",
+			"Depart",
+			"Arrivl",
+			"Provnc",
+			"Routfl",
+			"Routvc",
+			"Routvf",
+			"Routac",
+			"Routmx",
+			"Routfr",
+			"Routfx",
+			"Routsg",
+			"Linenb",
+			"Ckinnb",
+			"Gender",
+			"Typepx",
+			"Seatpx",
+			"Groupc",
+			"Totpax",
+			"Segpnr",
+			"Segtkt",
+			"Psgrid",
+			"Tourcd",
+			"Staloc",
+			"Stanbr",
+			"Wrkloc",
+			"Hmeloc",
+			"Lniata",
+			"Emplid",
+			"Nmefst",
+			"Nmelst",
+			"Cpnbfl",
+			"Cpnbvc",
+			"Clssfl",
+			"Clssvc",
+			"Statvc",
+			"Cbinfl",
+			"Cbinvc",
+			"Agtdie",
+			"Agtdcr",
+			"Codels",
+			"Isitfl",
+			"Isittx",
+			"Isitir",
+			"Isitct",
+			"Isittf",
+			"Isitnr",
+			"Noteup",
+			"Updtby",
+			"Prmkey",
 
 			// Ancillary
-			"gpcdae",
-			"sbcdae",
-			"descae",
-			"wgbgae",
-			"qtbgae",
-			"routae",
-			"fareae",
-			"currae",
-			"emdnae",
+			"Gpcdae",
+			"Sbcdae",
+			"Descae",
+			"Wgbgae",
+			"Qtbgae",
+			"Routae",
+			"Fareae",
+			"Currae",
+			"Emdnae",
 
 			// Bagtag
-			"nmbrbt",
-			"qntybt",
-			"wghtbt",
-			"paidbt",
-			"fbavbt",
-			"hfbabt",
-			"qtotbt",
-			"wtotbt",
-			"ptotbt",
-			"ftotbt",
-			"excsbt",
-			"typebt",
-			"coment",
+			"Nmbrbt",
+			"Qntybt",
+			"Wghtbt",
+			"Paidbt",
+			"Fbavbt",
+			"Hfbabt",
+			"Qtotbt",
+			"Wtotbt",
+			"Ptotbt",
+			"Ftotbt",
+			"Excsbt",
+			"Typebt",
+			"Coment",
 
 			// Outbound
-			"airlob",
-			"flnbob",
-			"clssob",
-			"routob",
-			"dateob",
-			"timeob",
+			"Airlob",
+			"Flnbob",
+			"Clssob",
+			"Routob",
+			"Dateob",
+			"Timeob",
 
 			// Inbound
-			"airlib",
-			"flnbib",
-			"clssib",
-			"dstrib",
-			"dateib",
-			"timeib",
+			"Airlib",
+			"Flnbib",
+			"Clssib",
+			"Dstrib",
+			"Dateib",
+			"Timeib",
 
 			// Ireg
-			"codeir",
-			"airlir",
-			"flnbir",
-			"dateir",
+			"Codeir",
+			"Airlir",
+			"Flnbir",
+			"Dateir",
 
 			// Infant
-			"tktnif",
-			"cpnbif",
-			"dateif",
-			"clssif",
-			"routif",
-			"statif",
-			"paxsif",
+			"Tktnif",
+			"Cpnbif",
+			"Dateif",
+			"Clssif",
+			"Routif",
+			"Statif",
+			"Paxsif",
 
 			// Cancel bagtag
-			"airlxt",
-			"dstrxt",
-			"nmbrxt",
+			"Airlxt",
+			"Dstrxt",
+			"Nmbrxt",
 		})
 	}
 	writer.Flush()
@@ -528,23 +557,31 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	for rawDtaset.Next(contxt) {
 		var slcDtaset mdlPsglst.MdlPsglstPsgdtlDtbase
 		rawDtaset.Decode(&slcDtaset)
-		// fmtTimefl, _ := time.Parse("0601021504", strconv.Itoa(int(slcDtaset.Timefl)))
-		// strTimefl := fmtTimefl.Format("02-Jan-2006 15:04")
-		// fmtTimerv, _ := time.Parse("0601021504", strconv.Itoa(int(slcDtaset.Timerv)))
-		// strTimerv := fmtTimerv.Format("02-Jan-2006 15:04")
-		// fmtTimecr, _ := time.Parse("0601021504", strconv.Itoa(int(slcDtaset.Timecr)))
-		// strTimecr := fmtTimecr.Format("02-Jan-2006 15:04")
 		fmtTimeis, _ := time.Parse("0601021504", strconv.Itoa(int(slcDtaset.Timeis)))
 		strTimeis := fmtTimeis.Format("02-Jan-2006 15:04")
 		fmtDatefl, _ := time.Parse("060102", strconv.Itoa(int(slcDtaset.Datefl)))
 		strDatefl := fmtDatefl.Format("02-Jan-2006")
-		// fmtDatevc, _ := time.Parse("060102", strconv.Itoa(int(slcDtaset.Datevc)))
-		// strDatevc := fmtDatevc.Format("02-Jan-2006")
-		// fmtDaterv, _ := time.Parse("060102", strconv.Itoa(int(slcDtaset.Daterv)))
-		// strDaterv := fmtDaterv.Format("02-Jan-2006")
 
 		// Write to CSV
-		if inputx.Format_psgdtl == "EBTFMT" {
+		switch inputx.Format_psgdtl {
+		case "UPDATE":
+			writer.Write([]string{
+				slcDtaset.Noterr,
+				slcDtaset.Prmkey,
+				slcDtaset.Pnrcde,
+				slcDtaset.Airlfl,
+				slcDtaset.Flnbfl,
+				slcDtaset.Routfl,
+				fmt.Sprintf("%v", slcDtaset.Datefl),
+				slcDtaset.Tktnvc,
+				slcDtaset.Airlvc,
+				slcDtaset.Flnbvc,
+				slcDtaset.Routvc,
+				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
+				slcDtaset.Statvc,
+				fmt.Sprintf("%v", slcDtaset.Timeis),
+			})
+		case "EBTFMT":
 			writer.Write([]string{
 				"",
 				slcDtaset.Isitfl,
@@ -583,7 +620,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"",
 				"",
 			})
-		} else {
+		default:
 			writer.Write([]string{
 				slcDtaset.Mnfest,
 				slcDtaset.Slsrpt,
@@ -616,6 +653,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Airlvc,
 				slcDtaset.Airtyp,
 				slcDtaset.Seatcn,
+				fmt.Sprintf("%v", slcDtaset.Flhour),
 				slcDtaset.Flnbfl,
 				slcDtaset.Flnbvc,
 				slcDtaset.Flgate,
@@ -651,8 +689,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Emplid,
 				slcDtaset.Nmefst,
 				slcDtaset.Nmelst,
-				fmt.Sprintf("C%02d", slcDtaset.Cpnbfl),
-				fmt.Sprintf("C%02d", slcDtaset.Cpnbvc),
+				fmt.Sprintf("%v", slcDtaset.Cpnbfl),
+				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
 				slcDtaset.Clssfl,
 				slcDtaset.Clssvc,
 				slcDtaset.Statvc,
@@ -670,8 +708,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Noteup,
 				slcDtaset.Updtby,
 				slcDtaset.Prmkey,
-
-				// Ancillary
 				slcDtaset.Gpcdae,
 				slcDtaset.Sbcdae,
 				slcDtaset.Descae,
@@ -681,8 +717,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Fareae),
 				slcDtaset.Currae,
 				slcDtaset.Emdnae,
-
-				// Bagtag
 				slcDtaset.Nmbrbt,
 				fmt.Sprintf("%v", slcDtaset.Qntybt),
 				fmt.Sprintf("%v", slcDtaset.Wghtbt),
@@ -696,30 +730,22 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Excsbt),
 				slcDtaset.Typebt,
 				slcDtaset.Coment,
-
-				// Outbound
 				slcDtaset.Airlob,
 				slcDtaset.Flnbob,
 				slcDtaset.Clssob,
 				slcDtaset.Routob,
 				fmt.Sprintf("%v", slcDtaset.Dateob),
 				fmt.Sprintf("%v", slcDtaset.Timeob),
-
-				// Inbound
 				slcDtaset.Airlib,
 				slcDtaset.Flnbib,
 				slcDtaset.Clssib,
 				slcDtaset.Dstrib,
 				fmt.Sprintf("%v", slcDtaset.Dateib),
 				fmt.Sprintf("%v", slcDtaset.Timeib),
-
-				// Ireg
 				slcDtaset.Codeir,
 				slcDtaset.Airlir,
 				slcDtaset.Flnbir,
 				fmt.Sprintf("%v", slcDtaset.Dateir),
-
-				// Infant
 				slcDtaset.Tktnif,
 				fmt.Sprintf("%v", slcDtaset.Cpnbif),
 				fmt.Sprintf("%v", slcDtaset.Dateif),
@@ -727,8 +753,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Routif,
 				slcDtaset.Statif,
 				slcDtaset.Paxsif,
-
-				// Cancel bagtag
 				slcDtaset.Airlxt,
 				slcDtaset.Dstrxt,
 				slcDtaset.Nmbrxt,
@@ -747,11 +771,13 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 func FncPsglstPsgdtlUpdate(c *gin.Context) {
 
 	// Bind JSON Body input to variable
+	var dvsion = c.Param("dvsion")
 	var inputx mdlPsglst.MdlPsglstPsgdtlDtbase
 	var findne mdlPsglst.MdlPsglstPsgdtlDtbase
 	if err := c.BindJSON(&inputx); err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})
+		return
 	}
 
 	// Select database and collection
@@ -766,61 +792,92 @@ func FncPsglstPsgdtlUpdate(c *gin.Context) {
 		panic("fail")
 	}
 
-	// Get from input
-	if findne.Mnfest == "NOT CLEAR" && inputx.Tktnvc != "" {
-		findne.Tktnvc = inputx.Tktnvc
-		if findne.Tktnfl == "" {
-			findne.Tktnfl = inputx.Tktnvc
+	// Get from input manifest
+	if dvsion == "mnfest" {
+		if inputx.Tktnvc == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Tktnvc"})
+			return
+		} else if inputx.Tktnvc != "" {
+			findne.Tktnvc = inputx.Tktnvc
+			if findne.Tktnfl == "" {
+				findne.Tktnfl = inputx.Tktnvc
+			}
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "TKT MANUAL")
 		}
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "TKT MANUAL")
-	}
-	if findne.Mnfest == "NOT CLEAR" && inputx.Airlvc != "" {
-		findne.Airlvc = inputx.Airlvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "AIRLINE MANUAL")
-	}
-	if findne.Mnfest == "NOT CLEAR" && inputx.Flnbvc != "" {
-		findne.Flnbvc = inputx.Flnbvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "FLNUMBER MANUAL")
-	}
-	if findne.Mnfest == "NOT CLEAR" && inputx.Cpnbvc != 0 {
-		findne.Cpnbvc = inputx.Cpnbvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "CPN MANUAL")
-	}
-	if findne.Mnfest == "NOT CLEAR" && inputx.Routvc != "" {
-		findne.Routvc = inputx.Routvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "ROUTE MANUAL")
-	}
-	if findne.Mnfest == "NOT CLEAR" && inputx.Statvc != "" {
-		findne.Statvc = inputx.Statvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "STAT MANUAL")
-	}
-	if findne.Mnfest == "NOT CLEAR" && inputx.Timeis != 0 {
-		findne.Statvc = inputx.Statvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "STAT MANUAL")
-	}
-	if findne.Slsrpt == "NOT CLEAR" && inputx.Ntafvc != 0 {
-		findne.Ntafvc = inputx.Ntafvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "NTA MANUAL")
-	}
-	if findne.Slsrpt == "NOT CLEAR" && inputx.Qsrcvc != 0 {
-		findne.Qsrcvc = inputx.Qsrcvc
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "QSRC MANUAL")
-	}
-	if findne.Slsrpt == "NOT CLEAR" && inputx.Curncy != "" {
-		findne.Curncy = inputx.Curncy
-		fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "CURR MANUAL")
-	}
-	if inputx.Updtby != "" {
-		fncApndix.FncApndixUpdateSlcstr(&findne.Updtby, inputx.Updtby)
+		if inputx.Airlvc == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airlvc"})
+			return
+		} else if inputx.Airlvc != "" {
+			findne.Airlvc = inputx.Airlvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "AIRLINE MANUAL")
+		}
+		if inputx.Flnbvc == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Flnbvc"})
+			return
+		} else if inputx.Flnbvc != "" {
+			findne.Flnbvc = inputx.Flnbvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "FLNUMBER MANUAL")
+		}
+		if inputx.Cpnbvc == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Cpnbvc"})
+			return
+		} else if inputx.Cpnbvc != 0 {
+			findne.Cpnbvc = inputx.Cpnbvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "CPN MANUAL")
+		}
+		if inputx.Routvc == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Routvc"})
+			return
+		} else if inputx.Routvc != "" {
+			findne.Routvc = inputx.Routvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "ROUTE MANUAL")
+		}
+		if inputx.Statvc == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Statvc"})
+			return
+		} else if inputx.Statvc != "" {
+			findne.Statvc = inputx.Statvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "STAT MANUAL")
+		}
+		if inputx.Timeis == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timeis"})
+			return
+		} else if inputx.Timeis != 0 {
+			findne.Statvc = inputx.Statvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "STAT MANUAL")
+		}
 	}
 
-	// Cek data to confirm clear
-	if findne.Ntafvc != 0 && findne.Curncy != "" && findne.Ntaffl != 0 {
-		findne.Slsrpt = "CLEAR"
+	// Get from input sales report
+	if dvsion == "slsrpt" {
+		if inputx.Ntafvc == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Ntafvc"})
+			return
+		} else if inputx.Ntafvc != 0 {
+			findne.Ntafvc = inputx.Ntafvc
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "NTA MANUAL")
+		}
+		if inputx.Curncy == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Curncy"})
+			return
+		} else if inputx.Curncy != "" {
+			findne.Curncy = inputx.Curncy
+			fncApndix.FncApndixUpdateSlcstr(&findne.Noteup, "CURR MANUAL")
+		}
 	}
-	if findne.Tktnfl != "" && findne.Tktnvc != "" && findne.Pnrcde != "" &&
-		findne.Timeis != 0 && findne.Routvc != "" {
+
+	// Additional
+	if inputx.Updtby == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Updtby"})
+		return
+	} else if inputx.Updtby != "" {
+		fncApndix.FncApndixUpdateSlcstr(&findne.Updtby, inputx.Updtby)
+	}
+	if dvsion == "mnfest" {
 		findne.Mnfest = "CLEAR"
+	}
+	if dvsion == "slsrpt" {
+		findne.Slsrpt = "CLEAR"
 	}
 
 	// Push updated data
