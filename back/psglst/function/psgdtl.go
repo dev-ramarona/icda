@@ -213,11 +213,14 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	csvFilenm := []string{time.Now().Format("0601021504")}
 	rawipt := c.PostForm("data")
 	if rawipt == "" {
+		fmt.Println(rawipt, "xxxx")
 		c.String(400, "missing data")
 		return
 	}
 	var inputx mdlPsglst.MdlPsglstParamsInputx
 	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
+		fmt.Println(inputx)
+		fmt.Println(err)
 		c.String(400, "invalid data")
 		return
 	}
