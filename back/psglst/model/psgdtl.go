@@ -338,6 +338,10 @@ type MdlPsglstPsgdtlMnferr struct {
 	Noterr string `json:"noterr" bson:"noterr"`
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Pnrcde string `json:"pnrcde" bson:"pnrcde"`
+	Seatpx string `json:"seatpx" bson:"seatpx"`
+	Nmelst string `json:"nmelst" bson:"nmelst"`
+	Nmefst string `json:"nmefst" bson:"nmefst"`
+	Groupc string `json:"groupc" bson:"groupc"`
 	Airlfl string `json:"airlfl" bson:"airlfl"`
 	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
 	Routfl string `json:"routfl" bson:"routfl"`
