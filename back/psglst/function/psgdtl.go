@@ -380,6 +380,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Airlfl",
 			"Flnbfl",
 			"Routfl",
+			"Provnc",
 			"Datefl",
 			"Tktnvc",
 			"Frcalc",

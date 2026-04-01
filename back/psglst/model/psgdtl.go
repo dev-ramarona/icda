@@ -119,6 +119,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Noteup string  `json:"noteup" bson:"noteup,omitempty"`
 	Updtby string  `json:"updtby" bson:"updtby,omitempty"`
 	Prmkey string  `json:"prmkey" bson:"prmkey,omitempty"`
+	Remark string  `json:"remark" bson:"remark,omitempty"`
 
 	// Ancillary
 	Gpcdae string  `json:"gpcdae" bson:"gpcdae,omitempty"`
@@ -353,6 +354,7 @@ type MdlPsglstPsgdtlMnferr struct {
 	Cpnbvc int32  `json:"cpnbvc" bson:"cpnbvc"`
 	Statvc string `json:"statvc" bson:"statvc"`
 	Timeis int64  `json:"timeis" bson:"timeis"`
+	Remark string `json:"remark" bson:"remark"`
 }
 
 type MdlPsglstPsgdtlSlserr struct {
