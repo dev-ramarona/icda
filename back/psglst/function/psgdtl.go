@@ -371,6 +371,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Cpnbvc_target",
 			"Statvc_target",
 			"Timeis_target",
+			"Remark_target",
 		})
 	case "SLSERR":
 		writer.Write([]string{
@@ -648,6 +649,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
 				slcDtaset.Statvc,
 				fmt.Sprintf("%v", slcDtaset.Timeis),
+				slcDtaset.Remark,
 			})
 		case "SLSERR":
 			writer.Write([]string{
