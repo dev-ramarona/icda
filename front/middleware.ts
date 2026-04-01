@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { mdlGlobalAllusrCookie } from "./app/dashboard/global/model/params";
+import { mdlAllusrCookieObjson } from "./app/dashboard/allusr/model/params";
 
 export async function middleware(req: NextRequest) {
   const tknnme = process.env.NEXT_PUBLIC_TKN_COOKIE || "x";
@@ -14,18 +14,15 @@ export async function middleware(req: NextRequest) {
 
   // Try hit API
   try {
-    const rspnse = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/allusr/tokenx`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: tokenx,
-        },
-        credentials: "include",
+    const rspnse = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/allusr/tokenx`, {
+      method: "GET",
+      headers: {
+        Authorization: tokenx,
       },
-    );
+      credentials: "include",
+    });
     if (!rspnse.ok) throw new Error("Failed to register user");
-    const fnlobj: mdlGlobalAllusrCookie = await rspnse.json();
+    const fnlobj: mdlAllusrCookieObjson = await rspnse.json();
     if (pathnm && !fnlobj.access.includes(pathnm))
       return NextResponse.redirect(new URL("/dashboard/global", req.url));
     return NextResponse.next();

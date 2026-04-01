@@ -42,7 +42,7 @@ export default function UixGlobalWraperSearch({
           <form
             className="flexctr relative h-10 w-full md:w-28"
             method="POST"
-            action="/dashboard/public/api/download"
+            action="/dashboard/global/api/download"
           >
             <input
               type="hidden"
@@ -71,7 +71,7 @@ export default function UixGlobalWraperSearch({
             className="flexctr relative h-20 w-full flex-col gap-1.5 rounded-md ring-2 ring-gray-200 md:h-10 md:w-59 md:flex-row"
             method="POST"
             encType="multipart/form-data"
-            action="/dashboard/public/api/upload"
+            action="/dashboard/global/api/upload"
           >
             <input
               type="hidden"
