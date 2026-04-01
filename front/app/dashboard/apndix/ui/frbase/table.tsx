@@ -4,7 +4,11 @@ import { useRef, useState } from "react";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import { MdlApndixAcpedtDtbase, MdlApndixFrbaseFrntnd } from "../../model/parmas";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDfault, FncGlobalFormatInptdt } from "../../../global/function/format";
+import {
+  FncGlobalFormatDfault,
+  FncGlobalFormatInptdt,
+  FncGlobalIntialObject,
+} from "../../../global/function/format";
 import { ApiApndixUpdateDtbase } from "../../api/dtbase";
 import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
 import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
@@ -26,19 +30,7 @@ export default function UixPsglstFrbaseTablex({
   // Dinamis
   const exclde = ["prmkey", "scdkey", "hstory", "updtby"];
   const inclde = acpedt.map((item) => item.params);
-  const rawobj: MdlApndixFrbaseFrntnd = {
-    prmkey: "",
-    scdkey: "",
-    airlfl: "",
-    clssfl: "",
-    routfl: "",
-    frbcde: "",
-    frbnta: "",
-    frbsbr: "",
-    datend: "",
-    hstory: "",
-    updtby: "",
-  };
+  const rawobj: MdlApndixFrbaseFrntnd = FncGlobalIntialObject(arrdta[0]);
   let othrfn: Function | undefined;
   othrfn = (objdta: MdlApndixFrbaseFrntnd) => {
     Object.entries(objdta).map(([k, v]) => {

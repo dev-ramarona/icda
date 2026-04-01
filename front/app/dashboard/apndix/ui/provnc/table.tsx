@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import { MdlApndixAcpedtDtbase, MdlApndixProvncFrntnd } from "../../model/parmas";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDfault } from "../../../global/function/format";
+import { FncGlobalFormatDfault, FncGlobalIntialObject } from "../../../global/function/format";
 import { ApiApndixUpdateDtbase } from "../../api/dtbase";
 import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
 import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
@@ -26,12 +26,7 @@ export default function UixPsglstProvncTablex({
   // Dinamis
   const exclde = ["prmkey", "hstory", "updtby"];
   const inclde = acpedt.map((item) => item.params);
-  const rawobj: MdlApndixProvncFrntnd = {
-    prmkey: "",
-    routfl: "",
-    provnc: "",
-    updtby: "",
-  };
+  const rawobj: MdlApndixProvncFrntnd = FncGlobalIntialObject(arrdta[0]);
 
   // Variable default
   const [objdta, objdtaSet] = useState(rawobj);

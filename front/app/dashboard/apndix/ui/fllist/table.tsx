@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
-import { MdlApndixAcpedtDtbase, MdlApndixFrtaxsFrntnd } from "../../model/parmas";
+import { MdlApndixAcpedtDtbase, MdlApndixFllistFrntnd } from "../../model/parmas";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import {
   FncGlobalFormatDfault,
@@ -16,27 +16,41 @@ import UixGlobalTfootxTablex from "../../../public/ui/tablex/tfootx";
 import UixGlobalConfrmAction from "../../../public/ui/action/confrm";
 import { MdlGlobalConfrmAction } from "../../../public/model/params";
 
-export default function UixPsglstFrtaxsTablex({
+export default function UixPsglstFllistTablex({
   arrdta,
   pagedb,
   acpedt,
   cookie,
 }: {
-  arrdta: MdlApndixFrtaxsFrntnd[];
+  arrdta: MdlApndixFllistFrntnd[];
   pagedb: string;
   acpedt: MdlApndixAcpedtDtbase[];
   cookie: mdlAllusrCookieObjson;
 }) {
   // Dinamis
-  const exclde = ["prmkey", "scdkey", "hstory", "updtby"];
+  const exclde = ["prmkey", "hstory", "updtby"];
   const inclde = acpedt.map((item) => item.params);
-  const rawobj: MdlApndixFrtaxsFrntnd = FncGlobalIntialObject(arrdta[0]);
+  const rawobj: MdlApndixFllistFrntnd = FncGlobalIntialObject(arrdta[0]);
   let othrfn: Function | undefined;
-  othrfn = (objdta: MdlApndixFrtaxsFrntnd) => {
+  othrfn = (objdta: MdlApndixFllistFrntnd) => {
     Object.entries(objdta).map(([k, v]) => {
-      if (["frbnta", "frbsbr"].includes(k)) {
+      if (
+        [
+          "timeup",
+          "timefl",
+          "timerv",
+          "datefl",
+          "mnthfl",
+          "flhour",
+          "flrpdc",
+          "autrzc",
+          "autrzy",
+          "bookdc",
+          "bookdy",
+        ].includes(k)
+      ) {
         objdta[k] = Number(v);
-      } else if (["datend"].includes(k)) {
+      } else if (["datend", "dateup", "timefl", "timerv", "timeup"].includes(k)) {
         objdta[k] = Number(FncGlobalFormatInptdt(v));
       }
     });
@@ -88,7 +102,6 @@ export default function UixPsglstFrtaxsTablex({
     refupd.current = setTimeout(async () => {
       const copydt = othrfn?.(objdta) ?? objdta;
       copydt.updtby = cookie.usrnme;
-      objdta.updtby = cookie.usrnme;
       const rspupd: string = await ApiApndixUpdateDtbase(copydt, pagedb);
       objdtaSet({ ...copydt, prmkey: "" });
       if (rspupd == "success") {

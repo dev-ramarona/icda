@@ -4,7 +4,11 @@ import { useRef, useState } from "react";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import { MdlApndixAcpedtDtbase, MdlApndixFlhourFrntnd } from "../../model/parmas";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDfault, FncGlobalFormatInptdt } from "../../../global/function/format";
+import {
+  FncGlobalFormatDfault,
+  FncGlobalFormatInptdt,
+  FncGlobalIntialObject,
+} from "../../../global/function/format";
 import { ApiApndixUpdateDtbase } from "../../api/dtbase";
 import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
 import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
@@ -26,22 +30,7 @@ export default function UixPsglstFlhourTablex({
   // Dinamis
   const exclde = ["prmkey", "hstory", "updtby"];
   const inclde = acpedt.map((item) => item.params);
-  const rawobj: MdlApndixFlhourFrntnd = {
-    prmkey: "",
-    airlfl: "",
-    routfl: "",
-    flnbfl: "",
-    flhour: "",
-    timefl: "",
-    timerv: "",
-    timeup: "",
-    dateup: "",
-    datend: "",
-    airtyp: "",
-    airmls: "",
-    hstory: "",
-    updtby: "",
-  };
+  const rawobj: MdlApndixFlhourFrntnd = FncGlobalIntialObject(arrdta[0]);
   let othrfn: Function | undefined;
   othrfn = (objdta: MdlApndixFlhourFrntnd) => {
     Object.entries(objdta).map(([k, v]) => {

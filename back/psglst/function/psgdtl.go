@@ -1039,11 +1039,14 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 	// Get default header
 	var slcDefhdr []string
 	var anyDefhdr any
+	var nowColerr = ""
 	switch inputx.Format_psgdtl {
 	case "MNFERR":
 		anyDefhdr = mdlPsglst.MdlPsglstPsgdtlMnferr{}
+		nowColerr = "mnfest"
 	case "SLSERR":
 		anyDefhdr = mdlPsglst.MdlPsglstPsgdtlSlserr{}
+		nowColerr = "slsrpt"
 	default:
 		writer.Write([]string{"Wrong format input parameter"})
 		return
@@ -1120,6 +1123,7 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 
 				// read CSV per col
 				objUpdate := make(map[string]any)
+				objUpdate[nowColerr] = "CLEAR"
 				slcTmprsp := []string{strconv.Itoa(intCountd)}
 				getPrmkey := ""
 				for col, colval := range slcRowdta {

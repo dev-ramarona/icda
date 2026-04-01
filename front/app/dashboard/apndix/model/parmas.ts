@@ -75,3 +75,33 @@ export interface MdlApndixFrtaxsFrntnd {
   hstory: string;
   updtby: string;
 }
+
+// Fllist
+export interface MdlApndixFllistFrntnd {
+  prmkey: string;
+  airlfl: string;
+  flnbfl: string;
+  timeup: number;
+  timefl: number;
+  timerv: number;
+  datefl: number;
+  mnthfl: number;
+  ndayfl: string;
+  flstat: string;
+  routfl: string;
+  routac: string;
+  flsarr: string;
+  routmx: string;
+  flhour: number;
+  flrpdc: number;
+  flgate: string;
+  depart: string;
+  arrivl: string;
+  airtyp: string;
+  aircnf: string;
+  seatcn: string;
+  autrzc: number;
+  autrzy: number;
+  bookdc: number;
+  bookdy: number;
+}
