@@ -46,15 +46,16 @@ export default function UixGlobalInputxFormdt({
             className="peer hidden"
             type={typipt}
             id={queryx}
+            name={queryx}
             accept=".csv"
             multiple
             hidden={labelx == "hidden" ? true : false}
             onChange={(e) => (repprm ? repprm(e) : "")}
           />
           <label
-            className={`afull flexctr cursor-pointer rounded-md p-1.5 ${
+            className={`afull flex cursor-pointer items-center rounded-md bg-white p-3 ring-2 ring-gray-200 ${
               params != ""
-                ? "overflow-hidden whitespace-nowrap text-slate-700"
+                ? "overflow-hidden text-left text-[0.5rem] whitespace-nowrap text-slate-700"
                 : "text-white peer-focus:text-slate-500"
             } duration-300`}
             htmlFor={queryx}
@@ -62,7 +63,7 @@ export default function UixGlobalInputxFormdt({
             {params}
           </label>
           <label
-            className={`absolute left-3 cursor-pointer whitespace-nowrap select-none ${
+            className={`absolute cursor-pointer p-3 whitespace-nowrap select-none ${
               params != ""
                 ? `mb-1 h-1/2 -translate-y-full text-[0.65rem] font-semibold text-slate-600 ${
                     labelx == "hidden" && "opacity-0"
@@ -74,7 +75,7 @@ export default function UixGlobalInputxFormdt({
             htmlFor={queryx}
           >
             <div className="flexctr">
-              <div className={`rounded-md px-1 ${params != "" && "bg-white"}`}>{plchdr}</div>
+              <div className="cursor-pointer rounded-md bg-white">{plchdr}</div>
             </div>
           </label>
         </>
@@ -82,7 +83,7 @@ export default function UixGlobalInputxFormdt({
         // Input type file
         <>
           <div
-            className={`afull flexctr relative rounded-md bg-white ring-gray-200 ${
+            className={`afull flexctr relative cursor-pointer rounded-md bg-white shadow-md ring-gray-200 ${
               onclik ? "ring-0" : "ring-2"
             } duration-300`}
             ref={divref}
@@ -99,7 +100,7 @@ export default function UixGlobalInputxFormdt({
               onClick={() => !onclik && onclikSet(!onclik)}
             >
               <div className="flexctr">
-                <div className="rounded-md bg-white px-1">{plchdr}</div>
+                <div className="cursor-pointer rounded-md bg-white">{plchdr}</div>
               </div>
             </div>
             <div

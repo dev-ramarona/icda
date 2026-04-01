@@ -33,9 +33,11 @@ export default async function Page(props: { searchParams: Promise<MdlApndixSearc
             Passangger detail
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
-          <UixApndixApplstMainpg pagedb={qryprm.pagedb_apndix} />
+          <UixApndixApplstMainpg pagedb={qryprm.pagedb_apndix} cookie={cookie} />
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            {lsmenu[qryprm.pagedb_apndix] ?? (
+            {(cookie.keywrd &&
+              (cookie.keywrd.includes("apndix") || cookie.keywrd.includes(qryprm.pagedb_apndix)) &&
+              lsmenu[qryprm.pagedb_apndix]) ?? (
               <div className="flexctr h-16 w-full text-base font-semibold text-sky-800">
                 Select menu
               </div>

@@ -2,13 +2,16 @@
 import { useEffect, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import UixGlobalWaitngAction from "../../../public/ui/action/waitng";
+import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 
 export default function UixApndixApplstSelect({
   apndix,
   pagedb,
+  cookie,
 }: {
   apndix: string[];
   pagedb: string;
+  cookie: mdlAllusrCookieObjson;
 }) {
   const rplprm = FncGlobalQuerysEdlink();
   const [pageon, pageonSet] = useState("");
@@ -43,7 +46,13 @@ export default function UixApndixApplstSelect({
       <div className="afull flexstr flex-wrap gap-3">
         {apndix.map((val, idx) => (
           <div
-            className={`flexctr w-fit px-3 py-1.5 text-center ${val == pageon ? "btnsbm" : "btnstb"} duration-300`}
+            className={`flexctr w-fit px-3 py-1.5 text-center ${
+              (cookie.keywrd && cookie.keywrd.includes("apndix")) || cookie.keywrd.includes(val)
+                ? val == pageon
+                  ? "btnsbm"
+                  : "btnstb"
+                : "btnoff pointer-events-none select-none"
+            } duration-300`}
             key={idx}
             onClick={() => select(val)}
           >

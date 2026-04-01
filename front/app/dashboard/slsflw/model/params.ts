@@ -10,6 +10,8 @@ export interface MdlSlsflwGlobalSrcprm {
   pnrcde_psgdtl: string;
   tktnfl_psgdtl: string;
   nclear_psgdtl: string;
+  format_psgdtl: string;
+  keywrd_psgdtl: string;
   pagenw_psgdtl: number;
   limitp_psgdtl: number;
   pagenw_errlog: number;
@@ -57,6 +59,7 @@ export interface MdlSlsflwPsgsmrSrcprm {
   flnbfl_psgsmr: string;
   depart_psgsmr: string;
   routfl_psgsmr: string;
+  keywrd_psgsmr: string;
   pagenw_psgsmr: number;
   limitp_psgsmr: number;
 }
@@ -94,6 +97,8 @@ export interface MdlSlsflwPsgdtlSrcprm {
   pnrcde_psgdtl: string;
   tktnfl_psgdtl: string;
   nclear_psgdtl: string;
+  format_psgdtl: string;
+  keywrd_psgdtl: string;
   pagenw_psgdtl: number;
   limitp_psgdtl: number;
 }

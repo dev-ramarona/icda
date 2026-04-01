@@ -1,4 +1,4 @@
-import { MdlSlsflwPsgsmrFrntnd, MdlSlsflwPsgsmrSrcprm } from "../model/params";
+import { MdlSlsflwPsgsmrSrcprm } from "../model/params";
 
 // Function get psglst database
 export async function ApiSlsflwPsgsmrGetall(prmPsgsmr: MdlSlsflwPsgsmrSrcprm) {
@@ -17,15 +17,12 @@ export async function ApiSlsflwPsgsmrGetall(prmPsgsmr: MdlSlsflwPsgsmrSrcprm) {
     .filter(Boolean)
     .join(":");
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgsmr/getall`,
-      {
-        method: "POST",
-        body: JSON.stringify(prmPsgsmr),
-        headers: { "Content-Type": "application/json" },
-        next: { revalidate: 30, tags: [tag] },
-      },
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgsmr/getall`, {
+      method: "POST",
+      body: JSON.stringify(prmPsgsmr),
+      headers: { "Content-Type": "application/json" },
+      next: { revalidate: 30, tags: [tag] },
+    });
     if (!res.ok) throw new Error("Failed fetch psgsmr");
     return await res.json();
   } catch (err) {

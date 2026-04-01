@@ -21,6 +21,6 @@ export async function ApiPsglstErrlogDtbase(prmErrlog: MdlPsglstErrlogSrcprm) {
     return await res.json();
   } catch (err) {
     console.error(err);
-    return { arrdta: [], totdta: 0 };
+    return { arrdta: [{ empty: "empty" }], totdta: 0 };
   }
 }

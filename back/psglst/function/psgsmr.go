@@ -73,6 +73,14 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: inputx.Routfl_psgsmr}})
 	}
+	if inputx.Keywrd_psgsmr != "" && !strings.Contains(inputx.Keywrd_psgsmr, "REG ALL") {
+		var slcKeywrd []string
+		if err := json.Unmarshal([]byte(inputx.Keywrd_psgsmr), &slcKeywrd); err == nil {
+			csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
+			mtchdt = append(mtchdt, bson.D{{Key: "provnc",
+				Value: bson.D{{Key: "$in", Value: slcKeywrd}}}})
+		}
+	}
 
 	// Final match pipeline
 	var mtchfn bson.D

@@ -20,7 +20,7 @@ export async function ApiSlsflwPsgdtlGetall(prmPsgdtl: MdlSlsflwPsgdtlSrcprm) {
     .filter(Boolean)
     .join(":");
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall/slsflw`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/psgdtl/getall`, {
       method: "POST",
       body: JSON.stringify(prmPsgdtl),
       headers: { "Content-Type": "application/json" },
@@ -30,7 +30,7 @@ export async function ApiSlsflwPsgdtlGetall(prmPsgdtl: MdlSlsflwPsgdtlSrcprm) {
     return await res.json();
   } catch (err) {
     console.error(err);
-    return { arrdta: [], totdta: 0 };
+    return { arrdta: [{ empty: "empty" }], totdta: 0 };
   }
 }
 

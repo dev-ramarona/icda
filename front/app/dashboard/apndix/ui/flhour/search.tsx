@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDefault } from "../../../global/function/format";
 import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
 import { MdlApndixSearchQueryx } from "../../model/parmas";
 import UixGlobalWraperSearch from "../../../public/ui/search/wraper";
+import { FncGlobalFormatDfault } from "../../../global/function/format";
 
 export default function UixApndixFlhourSearch({
   qryprm,
@@ -50,7 +50,7 @@ export default function UixApndixFlhourSearch({
   const repprm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const namefl = e.currentTarget.name;
     let valuef: string | number = e.currentTarget.value;
-    valuef = FncGlobalFormatDefault(namefl, valuef);
+    valuef = FncGlobalFormatDfault(namefl, valuef);
     paramsSet({ ...params, [namefl]: valuef });
     if (timerf.current) clearTimeout(timerf.current);
     timerf.current = setTimeout(async () => {
@@ -83,6 +83,10 @@ export default function UixApndixFlhourSearch({
         lnk: `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/flhour/downld`,
         prm: params,
       }}
+      upload={null}
+      fmtdef={false}
+      namefl=""
+      updtfl={null}
       resetx={resetx}
     >
       <div className="flexctr relative h-11 w-1/2 md:w-28">

@@ -23,8 +23,10 @@ export default async function Page(props: { searchParams: Promise<MdlSlsflwGloba
   const actlog: MdlSlsflwActlogDtbase[] = actobj.actlog;
   const actdte: string[] = actobj.datefl;
   const status = await ApiAllusrStatusPrcess();
+  const dfault = "SLSERR";
+  const fmtdef = dfault == qryprm.format_psgdtl || !qryprm.format_psgdtl;
   const prmErrlog = FncSlsflwErrlogSrcprm(qryprm);
-  const prmPsgdtl = FncSlsflwPsgdtlSrcprm(qryprm, actdte);
+  const prmPsgdtl = FncSlsflwPsgdtlSrcprm(qryprm, actdte, dfault);
   const prmPsgsmr = FncSlsflwPsgsmrSrcprm(qryprm, actdte);
   return (
     <div className="afull flex flex-wrap items-start justify-start p-1.5 md:p-6">
@@ -57,7 +59,12 @@ export default async function Page(props: { searchParams: Promise<MdlSlsflwGloba
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixSlsflwDetailMainpg prmPsgdtl={prmPsgdtl} datefl={actdte} cookie={cookie} />
+            <UixSlsflwDetailMainpg
+              prmPsgdtl={prmPsgdtl}
+              datefl={actdte}
+              cookie={cookie}
+              fmtdef={fmtdef}
+            />
           </Suspense>
         </div>
       </div>

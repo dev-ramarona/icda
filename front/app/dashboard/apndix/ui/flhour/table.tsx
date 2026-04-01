@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import { MdlApndixAcpedtDtbase, MdlApndixFlhourFrntnd } from "../../model/parmas";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDefault, FncGlobalFormatInptdt } from "../../../global/function/format";
+import { FncGlobalFormatDfault, FncGlobalFormatInptdt } from "../../../global/function/format";
 import { ApiApndixUpdateDtbase } from "../../api/dtbase";
 import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
 import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
@@ -66,7 +66,7 @@ export default function UixPsglstFlhourTablex({
   const actedt = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.currentTarget.id;
     let val: string | number = e.currentTarget.value;
-    val = FncGlobalFormatDefault(key, val);
+    val = FncGlobalFormatDfault(key, val);
     objdtaSet({ ...objdta, [key]: val });
   };
 

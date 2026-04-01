@@ -1,6 +1,6 @@
 import { mdlGlobalAlluserFilter } from "../model/params";
 
-export function FncGlobalFormatDefault(key: string, val: string): string | number {
+export function FncGlobalFormatDfault(key: string, val: string): string | number {
   let now: string | number = "";
   const actkey = key.substring(0, 6);
   if (["routvc", "routfl"].includes(actkey)) {
@@ -79,6 +79,23 @@ export function FncGlobalFormatInptdt(v: string) {
   return v; // fallback kalau format tidak dikenali
 }
 
+// Function get initial variable blank
+export function FncGlobalIntialObject<o extends Record<string, any>>(obj: o): o {
+  const result: any = {};
+  if (obj) {
+    Object.entries(obj).forEach(([key, val]) => {
+      if (typeof val === "string") result[key] = "";
+      else if (typeof val === "number") result[key] = 0;
+      else if (typeof val === "boolean") result[key] = false;
+      else result[key] = null;
+    });
+    return result;
+  } else {
+    const tmpobj: any = { empty: "" };
+    return tmpobj;
+  }
+}
+
 // // Fucntion change format data yymmdd/hhmm to dd-MMM-yyyy hh:mm
 // export function FncGlobalFormatDateip(inputd: string): string {
 //   if (inputd.length !== 6) return "Format harus YYMMDD";
@@ -122,28 +139,28 @@ export function FncGlobalFormatCpnfmt(cpnnbr: string) {
   return `C${nbr}`;
 }
 
-// Function change format routef to 3-3 characters
-export function FncGlobalFormatSorthl(params: string) {
-  const raw = params.trim().toUpperCase();
-  if (raw === "") return "";
-  if (raw.length < 3 && /^[LOW]/i.test(raw)) return "Lowest";
-  if (raw.length < 3 && /^[HIG]/i.test(raw)) return "Highest";
-  else if (raw.length === 1) return "Highest";
-  return ""; // default aman
-}
+// // Function change format routef to 3-3 characters
+// export function FncGlobalFormatSorthl(params: string) {
+//   const raw = params.trim().toUpperCase();
+//   if (raw === "") return "";
+//   if (raw.length < 3 && /^[LOW]/i.test(raw)) return "Lowest";
+//   if (raw.length < 3 && /^[HIG]/i.test(raw)) return "Highest";
+//   else if (raw.length === 1) return "Highest";
+//   return ""; // default aman
+// }
 
-// Function change format routef to 3-3 characters
-export function FncGlobalFormatFilter(params: string, arrays: mdlGlobalAlluserFilter[]) {
-  const raw = params.trim().toUpperCase();
-  if (raw === "") return "";
-  for (let i = 0; i < arrays.length; i++) {
-    const arr = arrays[i];
-    const reg = new RegExp(`^[${arr.keywrd}]`, "i");
-    if (raw.length <= arr.keywrd.length && reg.test(raw)) return arr.output;
-  }
-  if (raw.length === 1) return arrays[0].output;
-  return ""; // default aman
-}
+// // Function change format routef to 3-3 characters
+// export function FncGlobalFormatFilter(params: string, arrays: mdlGlobalAlluserFilter[]) {
+//   const raw = params.trim().toUpperCase();
+//   if (raw === "") return "";
+//   for (let i = 0; i < arrays.length; i++) {
+//     const arr = arrays[i];
+//     const reg = new RegExp(`^[${arr.keywrd}]`, "i");
+//     if (raw.length <= arr.keywrd.length && reg.test(raw)) return arr.output;
+//   }
+//   if (raw.length === 1) return arrays[0].output;
+//   return ""; // default aman
+// }
 
 // Function format arr split and cancel jeddah
 export function FncGlobalFormatArrcpn(str: string) {

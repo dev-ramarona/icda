@@ -18,8 +18,10 @@ export default async function Page(props: { searchParams: Promise<MdlPsglstGloba
   const actlog: MdlPsglstActlogDtbase[] = actobj.actlog;
   const actdte: string[] = actobj.datefl;
   const status = await ApiAllusrStatusPrcess();
+  const dfault = "MNFERR";
+  const fmtdef = dfault == qryprm.format_psgdtl || !qryprm.format_psgdtl;
   const prmErrlog = FncPsglstErrlogSrcprm(qryprm);
-  const prmPsgdtl = FncPsglstPsgdtlSrcprm(qryprm, actdte);
+  const prmPsgdtl = FncPsglstPsgdtlSrcprm(qryprm, actdte, dfault);
   return (
     <div className="afull flex flex-wrap items-start justify-start p-1.5 md:p-6">
       <div className="h-60 max-h-fit w-full min-w-1/5 p-3 md:h-80 md:w-40">
@@ -51,7 +53,12 @@ export default async function Page(props: { searchParams: Promise<MdlPsglstGloba
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstDetailMainpg prmPsgdtl={prmPsgdtl} datefl={actdte} cookie={cookie} />
+            <UixPsglstDetailMainpg
+              prmPsgdtl={prmPsgdtl}
+              datefl={actdte}
+              cookie={cookie}
+              fmtdef={fmtdef}
+            />
           </Suspense>
         </div>
       </div>

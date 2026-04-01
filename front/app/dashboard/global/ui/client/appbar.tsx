@@ -95,7 +95,15 @@ export default function UixGlobalAppbarClient({
         <div className="afull flexctr flex-col gap-y-1">
           {applst.map((val, idx) => (
             <Link
-              className={`flexctr h-9 w-full gap-1.5 pl-6 text-gray-700 ${lstpth == val.prmkey ? "h-12 bg-cyan-600 font-semibold tracking-wider text-white hover:bg-cyan-700" : "hover:bg-cyan-100"} group duration-300`}
+              className={`flexctr h-9 w-full gap-1.5 pl-6 ${
+                lstpth == val.prmkey
+                  ? "h-12 bg-cyan-600 font-semibold tracking-wider text-white hover:bg-cyan-700"
+                  : "hover:bg-cyan-100"
+              } ${
+                cookie.access && cookie.access.includes(val.prmkey)
+                  ? "text-gray-700"
+                  : "pointer-events-auto text-gray-300 select-none"
+              } group duration-300`}
               href={`/dashboard/${val.prmkey}?update_global=${random}&update=${random}`}
               key={idx}
               onClick={() => onclikSet(!onclik)}

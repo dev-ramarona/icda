@@ -27,7 +27,7 @@ export default function UixGlobalTbodyxTablex({
   acpedt: MdlApndixAcpedtDtbase[];
   datefm: string[];
   nmbrfm: string[];
-  cnfupd: () => void;
+  cnfupd: () => void | null;
   okeupd: string;
   cxlupd: string;
 }) {
@@ -38,50 +38,52 @@ export default function UixGlobalTbodyxTablex({
       {arrdta.map((log, idx) => (
         <tr key={idx}>
           {/* Button action */}
-          <td
-            className={`sticky left-0 z-10 w-20 text-center drop-shadow-md ${
-              cxlupd === log.prmkey
-                ? "shkeit h-12 bg-red-200"
-                : okeupd === log.prmkey
-                  ? "shkeit h-12 bg-green-200"
-                  : objdta?.prmkey === log.prmkey
-                    ? "h-12 bg-sky-200"
-                    : "bg-white"
-            }`}
-          >
-            <div className="afull flexctr relative gap-x-1.5">
-              <div
-                className={`flexctr btnscs cursor-pointer duration-300 ${
-                  objdta?.prmkey === log.prmkey
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0 select-none"
-                }`}
-                onClick={() => cnfupd()}
-              >
-                <UixGlobalIconvcCeklis bold={4} color="#fff" size={1.4} />
+          {cnfupd !== null && (
+            <td
+              className={`sticky left-0 z-10 w-20 text-center drop-shadow-md ${
+                cxlupd === log.prmkey
+                  ? "shkeit h-12 bg-red-200"
+                  : okeupd === log.prmkey
+                    ? "shkeit h-12 bg-green-200"
+                    : objdta?.prmkey === log.prmkey
+                      ? "h-12 bg-sky-200"
+                      : "bg-white"
+              }`}
+            >
+              <div className="afull flexctr relative gap-x-1.5">
+                <div
+                  className={`flexctr btnscs cursor-pointer duration-300 ${
+                    objdta?.prmkey === log.prmkey
+                      ? "opacity-100"
+                      : "pointer-events-none opacity-0 select-none"
+                  }`}
+                  onClick={() => cnfupd()}
+                >
+                  <UixGlobalIconvcCeklis bold={4} color="#fff" size={1.4} />
+                </div>
+                <div
+                  className={`flexctr btnwrn cursor-pointer duration-300 ${
+                    objdta?.prmkey === log.prmkey
+                      ? "opacity-100"
+                      : "pointer-events-none opacity-0 select-none"
+                  }`}
+                  onClick={() => objset({ ...log, prmkey: "" })}
+                >
+                  <UixGlobalIconvcCancel bold={4} color="#fff" size={1.4} />
+                </div>
+                <div
+                  className={`flexctr btnsbm absolute cursor-pointer duration-300 ${
+                    objdta?.prmkey === log.prmkey
+                      ? "pointer-events-none opacity-0 select-none"
+                      : "opacity-100"
+                  }`}
+                  onClick={() => objset({ ...log, prmkey: log.prmkey })}
+                >
+                  <UixGlobalIconvcEditdt bold={2.7} color="white" size={1.4} />
+                </div>
               </div>
-              <div
-                className={`flexctr btnwrn cursor-pointer duration-300 ${
-                  objdta?.prmkey === log.prmkey
-                    ? "opacity-100"
-                    : "pointer-events-none opacity-0 select-none"
-                }`}
-                onClick={() => objset({ ...log, prmkey: "" })}
-              >
-                <UixGlobalIconvcCancel bold={4} color="#fff" size={1.4} />
-              </div>
-              <div
-                className={`flexctr btnsbm absolute cursor-pointer duration-300 ${
-                  objdta?.prmkey === log.prmkey
-                    ? "pointer-events-none opacity-0 select-none"
-                    : "opacity-100"
-                }`}
-                onClick={() => objset({ ...log, prmkey: log.prmkey })}
-              >
-                <UixGlobalIconvcEditdt bold={2.7} color="white" size={1.4} />
-              </div>
-            </div>
-          </td>
+            </td>
+          )}
 
           {/* Format edit or not edit */}
           {typeof log === "object" &&

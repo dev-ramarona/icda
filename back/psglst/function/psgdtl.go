@@ -3,8 +3,11 @@ package fncPsglst
 import (
 	fncApndix "back/apndix/function"
 	mdlPsglst "back/psglst/model"
+	"io"
 	"math"
 	"net/http"
+	"reflect"
+	"slices"
 
 	"context"
 	"encoding/csv"
@@ -24,7 +27,6 @@ import (
 func FncPsglstPsgdtlGetall(c *gin.Context) {
 
 	// Bind JSON Body input to variable
-	strDvsion := c.Param("dvsion")
 	csvFilenm := []string{time.Now().Format("02Jan06/15:04")}
 	var inputx mdlPsglst.MdlPsglstParamsInputx
 	if err := c.BindJSON(&inputx); err != nil {
@@ -106,12 +108,20 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "isittx",
 			Value: inputx.Isittx_psgdtl}})
 	}
+	if inputx.Keywrd_psgdtl != "" && !strings.Contains(inputx.Keywrd_psgdtl, "REG ALL") {
+		var slcKeywrd []string
+		if err := json.Unmarshal([]byte(inputx.Keywrd_psgdtl), &slcKeywrd); err == nil {
+			csvFilenm = append(csvFilenm, inputx.Keywrd_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "provnc",
+				Value: bson.D{{Key: "$in", Value: slcKeywrd}}}})
+		}
+	}
 	if inputx.Nclear_psgdtl != "ALL" {
 		var mtchor = bson.A{}
-		if inputx.Nclear_psgdtl == "MNFEST" || inputx.Nclear_psgdtl == "" {
+		if inputx.Nclear_psgdtl == "MNFERR" || inputx.Nclear_psgdtl == "" {
 			mtchor = append(mtchor, bson.D{{Key: "mnfest", Value: "NOT CLEAR"}})
 		}
-		if inputx.Nclear_psgdtl == "SLSRPT" || inputx.Nclear_psgdtl == "" {
+		if inputx.Nclear_psgdtl == "SLSERR" || inputx.Nclear_psgdtl == "" {
 			mtchor = append(mtchor, bson.D{{Key: "slsrpt", Value: "NOT CLEAR"}})
 		}
 		if len(mtchor) > 0 {
@@ -179,24 +189,48 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 		defer rawDtaset.Close(contxt)
 
 		// Store to slice from raw bson
-		if strDvsion == "mnfest" {
-			var slctmp = []mdlPsglst.MdlPsglstPsgdtlMnfest{}
+		switch inputx.Format_psgdtl {
+		case "MNFERR":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlMnferr{}
 			for rawDtaset.Next(contxt) {
-				slcDtaset := mdlPsglst.MdlPsglstPsgdtlMnfest{}
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlMnferr{}
 				rawDtaset.Decode(&slcDtaset)
 				slctmp = append(slctmp, slcDtaset)
 			}
 			slcobj = slctmp
-		} else {
-			var slctmp = []mdlPsglst.MdlPsglstPsgdtlSlsflw{}
+		case "SLSERR":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlSlserr{}
 			for rawDtaset.Next(contxt) {
-				slcDtaset := mdlPsglst.MdlPsglstPsgdtlSlsflw{}
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlSlserr{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
+		case "EBTFMT":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlEbtfmt{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlEbtfmt{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
+		case "TKTFMT":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlTktfmt{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlTktfmt{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
+		default:
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlDfault{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlDfault{}
 				rawDtaset.Decode(&slcDtaset)
 				slctmp = append(slctmp, slcDtaset)
 			}
 			slcobj = slctmp
 		}
-
 	}()
 
 	// Waiting until all go done
@@ -211,18 +245,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("0601021504")}
-	rawipt := c.PostForm("data")
-	if rawipt == "" {
-		fmt.Println(rawipt, "xxxx")
-		c.String(400, "missing data")
-		return
-	}
 	var inputx mdlPsglst.MdlPsglstParamsInputx
-	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
-		fmt.Println(inputx)
-		fmt.Println(err)
-		c.String(400, "invalid data")
-		return
+	if err := c.BindJSON(&inputx); err != nil {
+		panic(err)
 	}
 
 	// Treatment date number
@@ -299,10 +324,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	}
 	if inputx.Nclear_psgdtl != "ALL" {
 		var mtchor = bson.A{}
-		if inputx.Nclear_psgdtl == "MNFEST" || inputx.Nclear_psgdtl == "" {
+		if inputx.Nclear_psgdtl == "MNFERR" || inputx.Nclear_psgdtl == "" {
 			mtchor = append(mtchor, bson.D{{Key: "mnfest", Value: "NOT CLEAR"}})
 		}
-		if inputx.Nclear_psgdtl == "SLSRPT" || inputx.Nclear_psgdtl == "" {
+		if inputx.Nclear_psgdtl == "SLSERR" || inputx.Nclear_psgdtl == "" {
 			mtchor = append(mtchor, bson.D{{Key: "slsrpt", Value: "NOT CLEAR"}})
 		}
 		if len(mtchor) > 0 {
@@ -330,7 +355,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
 	switch inputx.Format_psgdtl {
-	case "UPDATE":
+	case "MNFERR":
 		writer.Write([]string{
 			"Noterr",
 			"Prmkey",
@@ -339,13 +364,28 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Flnbfl",
 			"Routfl",
 			"Datefl",
-			"Tktnvc_fillhr",
-			"Airlvc_fillhr",
-			"Flnbvc_fillhr",
-			"Routvc_fillhr",
-			"Cpnbvc_fillhr",
-			"Statvc_fillhr",
-			"Timeis_fillhr",
+			"Tktnvc_target",
+			"Airlvc_target",
+			"Flnbvc_target",
+			"Routvc_target",
+			"Cpnbvc_target",
+			"Statvc_target",
+			"Timeis_target",
+		})
+	case "SLSERR":
+		writer.Write([]string{
+			"Noterr",
+			"Prmkey",
+			"Pnrcde",
+			"Airlfl",
+			"Flnbfl",
+			"Routfl",
+			"Datefl",
+			"Tktnvc",
+			"Frcalc",
+			"Curncy_target",
+			"Ntafvc_target",
+			"Qsrcvc_target",
 		})
 	case "EBTFMT":
 		writer.Write([]string{
@@ -386,7 +426,32 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"",
 			"",
 		})
-
+	case "TKTFMT":
+		writer.Write([]string{
+			"Nmefst",
+			"Nmelst",
+			"Airlfl",
+			"Flnbfl",
+			"Datefl",
+			"Depart",
+			"Groupc",
+			"Arrivl",
+			"Seatpx",
+			"Tktnvc",
+			"Cpnbvc",
+			"Datevc",
+			"Clssvc",
+			"Routvc",
+			"Statvc",
+			"Isittx",
+			"OTHER CPN",
+			"OTHER CLS",
+			"OTHER ROUTE",
+			"OTHER STATUS",
+			"Noteup",
+			"Gender",
+			"Routfl",
+			"Isitir"})
 	default:
 		writer.Write([]string{
 			"Mnfest",
@@ -560,14 +625,13 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	for rawDtaset.Next(contxt) {
 		var slcDtaset mdlPsglst.MdlPsglstPsgdtlDtbase
 		rawDtaset.Decode(&slcDtaset)
-		fmtTimeis, _ := time.Parse("0601021504", strconv.Itoa(int(slcDtaset.Timeis)))
-		strTimeis := fmtTimeis.Format("02-Jan-2006 15:04")
-		fmtDatefl, _ := time.Parse("060102", strconv.Itoa(int(slcDtaset.Datefl)))
-		strDatefl := fmtDatefl.Format("02-Jan-2006")
+		strTimeis := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timeis))
+		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
+		strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
 
 		// Write to CSV
 		switch inputx.Format_psgdtl {
-		case "UPDATE":
+		case "MNFERR":
 			writer.Write([]string{
 				slcDtaset.Noterr,
 				slcDtaset.Prmkey,
@@ -583,6 +647,22 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
 				slcDtaset.Statvc,
 				fmt.Sprintf("%v", slcDtaset.Timeis),
+			})
+		case "SLSERR":
+			writer.Write([]string{
+				slcDtaset.Noterr,
+				slcDtaset.Prmkey,
+				slcDtaset.Pnrcde,
+				slcDtaset.Airlfl,
+				slcDtaset.Flnbfl,
+				slcDtaset.Routfl,
+				slcDtaset.Provnc,
+				fmt.Sprintf("%v", slcDtaset.Datefl),
+				slcDtaset.Tktnvc,
+				slcDtaset.Frcalc,
+				slcDtaset.Curncy,
+				fmt.Sprintf("%v", slcDtaset.Ntafvc),
+				fmt.Sprintf("%v", slcDtaset.Qsrcvc),
 			})
 		case "EBTFMT":
 			writer.Write([]string{
@@ -623,6 +703,32 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"",
 				"",
 			})
+		case "TKTFMT":
+			writer.Write([]string{
+				slcDtaset.Nmefst,
+				slcDtaset.Nmelst,
+				slcDtaset.Airlfl,
+				slcDtaset.Flnbfl,
+				strDatefl,
+				slcDtaset.Depart,
+				slcDtaset.Groupc,
+				slcDtaset.Arrivl,
+				slcDtaset.Seatpx,
+				slcDtaset.Tktnfl,
+				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
+				strDatevc,
+				slcDtaset.Clssvc,
+				slcDtaset.Routvc,
+				slcDtaset.Statvc,
+				slcDtaset.Isittx,
+				"",
+				"",
+				"",
+				"",
+				slcDtaset.Noteup,
+				slcDtaset.Gender,
+				slcDtaset.Routfl,
+				slcDtaset.Isitir})
 		default:
 			writer.Write([]string{
 				slcDtaset.Mnfest,
@@ -778,7 +884,6 @@ func FncPsglstPsgdtlUpdate(c *gin.Context) {
 	var inputx mdlPsglst.MdlPsglstPsgdtlDtbase
 	var findne mdlPsglst.MdlPsglstPsgdtlDtbase
 	if err := c.BindJSON(&inputx); err != nil {
-		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input data"})
 		return
 	}
@@ -895,4 +1000,178 @@ func FncPsglstPsgdtlUpdate(c *gin.Context) {
 
 	// Send token to frontend
 	c.JSON(200, "success")
+}
+
+// Get Response Upload database from input
+func FncPsglstPsgdtlUpload(c *gin.Context) {
+
+	// Set header untuk file CSV
+	filenm := "Response_upload_inputx.Format_psgdtl.csv"
+	c.Header("Content-Type", "text/csv")
+	c.Header("Content-Disposition", "attachment; filename="+filenm)
+	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
+	writer := csv.NewWriter(c.Writer)
+	defer writer.Flush()
+
+	// Bind JSON Body input to variable
+	rawipt := c.PostForm("data")
+	if rawipt == "" {
+		writer.Write([]string{"Empty format input parameter"})
+		return
+	}
+	var inputx mdlPsglst.MdlPsglstParamsInputx
+	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
+		writer.Write([]string{"Wrong type data input parameter"})
+		return
+	}
+
+	// Get default header
+	var slcDefhdr []string
+	var anyDefhdr any
+	switch inputx.Format_psgdtl {
+	case "MNFERR":
+		anyDefhdr = mdlPsglst.MdlPsglstPsgdtlMnferr{}
+	case "SLSERR":
+		anyDefhdr = mdlPsglst.MdlPsglstPsgdtlSlserr{}
+	default:
+		writer.Write([]string{"Wrong format input parameter"})
+		return
+	}
+	var slcRawhdr = reflect.TypeOf(anyDefhdr)
+	var mapFmthdr = map[string]reflect.Type{}
+	for i := 0; i < slcRawhdr.NumField(); i++ {
+		tag := slcRawhdr.Field(i).Tag.Get("json")
+		slcDefhdr = append(slcDefhdr, strings.ToLower(tag))
+		mapFmthdr[tag] = slcRawhdr.Field(i).Type
+	}
+
+	// Get multiple form
+	formtp, err := c.MultipartForm()
+	if err != nil {
+		writer.Write([]string{"Empty file input"})
+		return
+	}
+	fnlErrrsp := [][]string{}
+	getFilesx := formtp.File["file"]
+	mgoUpdate := []mongo.WriteModel{}
+	for idx, filenw := range getFilesx {
+
+		// buka file
+		src, err := filenw.Open()
+		if err != nil {
+			writer.Write([]string{"Empty file input"})
+			return
+		}
+		defer src.Close()
+
+		// Compare header
+		csvReader := csv.NewReader(src)
+		slcNowhdr, err := csvReader.Read()
+		for idx, val := range slcNowhdr {
+			slcNowhdr[idx] = strings.ToLower(val[:int(math.Min(float64(6), float64(len(val))))])
+		}
+		slcNowhdr = append(slcNowhdr, "note")
+		fnlErrrsp = append(fnlErrrsp, append([]string{"baris"}, slcNowhdr...))
+		slcTmpnte := []string{}
+		slcTmphdr := []string{"header"}
+		for _, defhdr := range slcDefhdr {
+			mfound := false
+			for _, nowhdr := range slcNowhdr {
+				mfound = strings.Contains(nowhdr, defhdr)
+				if mfound {
+					slcTmphdr = append(slcTmphdr, "-")
+					break
+				}
+			}
+			if !mfound {
+				slcTmpnte = append(slcTmpnte, "False-Empty header "+defhdr)
+			}
+		}
+		if len(slcTmpnte) != 0 {
+			slcTmphdr = append(slcTmphdr, strings.Join(slcTmpnte, "|"))
+		}
+		if strings.Contains(strings.Join(slcTmphdr, "-"), "False") {
+			fnlErrrsp = append(fnlErrrsp, slcTmphdr)
+		}
+
+		// read CSV per row
+		if len(fnlErrrsp) <= idx+1 {
+			intCountd := 1
+			for {
+				slcRowdta, err := csvReader.Read()
+				if err == io.EOF {
+					break
+				}
+				if err != nil {
+					writer.Write([]string{"Empty row csv file input"})
+					return
+				}
+
+				// read CSV per col
+				objUpdate := make(map[string]any)
+				slcTmprsp := []string{strconv.Itoa(intCountd)}
+				getPrmkey := ""
+				for col, colval := range slcRowdta {
+					getDefhdr := slcDefhdr[col]
+					getFmtnow := mapFmthdr[slcDefhdr[col]]
+					slcTmprsp = append(slcTmprsp, "-")
+
+					// Parse and cek format data
+					switch getFmtnow.Kind() {
+					case reflect.String:
+						objUpdate[getDefhdr] = string(colval)
+						if slices.Contains([]string{"tktnvc", "tktnfl"}, getDefhdr) {
+							if strings.Contains(colval, "+") {
+								slcTmprsp[col+1] = "False-format ticket"
+							}
+						}
+					case reflect.Float64:
+						intColval, err := strconv.ParseFloat(colval, 64)
+						if err != nil {
+							slcTmprsp[col+1] = "False-format number only"
+						}
+						objUpdate[getDefhdr] = intColval
+					case reflect.Int32, reflect.Int64, reflect.Int:
+						intColval, err := strconv.Atoi(colval)
+						if err != nil {
+							slcTmprsp[col+1] = "False-format number only"
+						}
+						refColval := reflect.ValueOf(intColval).Convert(getFmtnow)
+						objUpdate[getDefhdr] = refColval.Interface()
+					}
+
+					// Get primary key
+					if getDefhdr == "prmkey" {
+						getPrmkey = colval
+					}
+				}
+				if strings.Contains(strings.Join(slcTmprsp, "-"), "False") {
+					fnlErrrsp = append(fnlErrrsp, slcTmprsp)
+				}
+				intCountd++
+
+				// Push to mongomodel
+				mgoUpdate = append(mgoUpdate, mongo.NewUpdateOneModel().
+					SetFilter(bson.M{"prmkey": getPrmkey}).
+					SetUpdate(bson.M{"$set": objUpdate}).SetUpsert(true))
+				fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+					"psglst_psgdtl": &mgoUpdate,
+				}, 200)
+			}
+
+			// Push last mongomodel
+			fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+				"psglst_psgdtl": &mgoUpdate,
+			}, 0)
+		}
+	}
+
+	// Cek error respon available or not
+	if len(fnlErrrsp) > len(getFilesx) {
+		for _, slcrsp := range fnlErrrsp {
+			writer.Write(slcrsp)
+		}
+	} else {
+		writer.Write([]string{"Success"})
+	}
 }

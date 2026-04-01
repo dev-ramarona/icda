@@ -11,10 +11,12 @@ export default async function UixPsglstDetailMainpg({
   prmPsgdtl,
   datefl,
   cookie,
+  fmtdef,
 }: {
   prmPsgdtl: MdlPsglstPsgdtlSrcprm;
   datefl: string[];
   cookie: mdlAllusrCookieObjson;
+  fmtdef: boolean;
 }) {
   const psgdtl = await ApiPsglstPsgdtlGetall({
     ...prmPsgdtl,
@@ -25,8 +27,8 @@ export default async function UixPsglstDetailMainpg({
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("mnfest");
   return (
     <>
-      <UixPsglstDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} />
-      <UixPsglstDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} />
+      <UixPsglstDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} fmtdef={fmtdef} />
+      <UixPsglstDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} fmtdef={fmtdef} />
       <UixGlobalPagntnMainpg
         pgview={15}
         pgenbr={prmPsgdtl.pagenw_psgdtl}

@@ -3,27 +3,32 @@ import { MdlSlsflwAcpedtDtbase, MdlSlsflwPsgdtlFrntnd } from "../../model/params
 import { ApiSlsflwPsgdtlUpdate } from "../../api/psgdtl";
 import { useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDefault, FncGlobalFormatInptdt } from "../../../global/function/format";
+import {
+  FncGlobalFormatDfault,
+  FncGlobalFormatInptdt,
+  FncGlobalIntialObject,
+} from "../../../global/function/format";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
 import UixGlobalConfrmAction from "../../../public/ui/action/confrm";
 import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
 import { MdlGlobalConfrmAction } from "../../../public/model/params";
-import { FncSlsflwRawdtaParams } from "../../function/params";
 
 export default function UixSlsflwDetailTablex({
   arrdta,
   acpedt,
   cookie,
+  fmtdef,
 }: {
   arrdta: MdlSlsflwPsgdtlFrntnd[];
   acpedt: MdlSlsflwAcpedtDtbase[];
   cookie: mdlAllusrCookieObjson;
+  fmtdef: boolean;
 }) {
   // Dinamis
   const exclde = ["prmkey", "hstory", "updtby", "qsrcvc"];
   const inclde = acpedt.map((item) => item.params);
-  const rawobj: MdlSlsflwPsgdtlFrntnd = FncSlsflwRawdtaParams();
+  const rawobj: MdlSlsflwPsgdtlFrntnd = FncGlobalIntialObject(arrdta[0]);
   let othrfn: Function | undefined;
   othrfn = (objdta: MdlSlsflwPsgdtlFrntnd) => {
     Object.entries(objdta).map(([k, v]) => {
@@ -48,7 +53,7 @@ export default function UixSlsflwDetailTablex({
   const actedt = (e: React.ChangeEvent<HTMLInputElement>) => {
     const key = e.currentTarget.id;
     let val: string | number = e.currentTarget.value;
-    val = FncGlobalFormatDefault(key, val);
+    val = FncGlobalFormatDfault(key, val);
     objdtaSet({ ...objdta, [key]: val });
   };
 
@@ -105,7 +110,7 @@ export default function UixSlsflwDetailTablex({
       />
       <div className={`ctable`}>
         <table>
-          <UixGlobalTheadxTablex firsth="action" mainhd={Object.keys(rawobj)} />
+          <UixGlobalTheadxTablex firsth={fmtdef ? "action" : null} mainhd={Object.keys(rawobj)} />
           <UixGlobalTbodyxTablex
             action={actedt}
             arrdta={arrdta}
@@ -127,7 +132,7 @@ export default function UixSlsflwDetailTablex({
               "mnthfl",
             ]}
             nmbrfm={["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"]}
-            cnfupd={cnfupd}
+            cnfupd={fmtdef ? cnfupd : null}
             okeupd={okeupd}
             cxlupd={cxlupd}
           />

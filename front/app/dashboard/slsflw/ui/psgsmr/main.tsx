@@ -16,14 +16,17 @@ export default async function UixSlsflwPsgsmrMainpg({
   datefl: string[];
   cookie: mdlAllusrCookieObjson;
 }) {
-  const psgsmr = await ApiSlsflwPsgsmrGetall(prmPsgsmr);
+  const psgsmr = await ApiSlsflwPsgsmrGetall({
+    ...prmPsgsmr,
+    keywrd_psgsmr: JSON.stringify(cookie.keywrd.filter((item) => item.includes("REG "))),
+  });
   const arrdta: MdlSlsflwPsgsmrFrntnd[] = psgsmr.arrdta;
   const totdta: number = psgsmr.totdta;
   return (
     <>
       <UixSlsflwPsgsmrSearch prmPsgsmr={prmPsgsmr} datefl={datefl} />
       {arrdta.length > 0 ? (
-        <UixSlsflwPsgsmrTablex psgsmr={arrdta} />
+        <UixSlsflwPsgsmrTablex arrdta={arrdta} />
       ) : (
         <div className="flexctr h-fit w-full text-base font-semibold text-sky-800">
           No database Log Action

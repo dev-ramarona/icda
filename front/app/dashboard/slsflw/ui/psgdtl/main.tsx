@@ -11,23 +11,25 @@ export default async function UixSlsflwDetailMainpg({
   prmPsgdtl,
   datefl,
   cookie,
+  fmtdef,
 }: {
   prmPsgdtl: MdlSlsflwPsgdtlSrcprm;
   datefl: string[];
   cookie: mdlAllusrCookieObjson;
+  fmtdef: boolean;
 }) {
   const psgdtl = await ApiSlsflwPsgdtlGetall({
     ...prmPsgdtl,
-    nclear_psgdtl: prmPsgdtl.nclear_psgdtl == "" ? "SLSRPT" : prmPsgdtl.nclear_psgdtl,
+    keywrd_psgdtl: JSON.stringify(cookie.keywrd.filter((item) => item.includes("REG "))),
   });
   const arrdta: MdlSlsflwPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("slsrpt");
   return (
     <>
-      <UixSlsflwDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} />
+      <UixSlsflwDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} fmtdef={fmtdef} />
       {arrdta.length > 0 ? (
-        <UixSlsflwDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} />
+        <UixSlsflwDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} fmtdef={fmtdef} />
       ) : (
         <div className="flexctr h-fit w-full text-base font-semibold text-sky-800">
           No database Log Action
