@@ -136,14 +136,6 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	sycClrpsg.Range(func(key, val any) bool {
 		if mtcPsglst, mtc := val.(mdlPsglst.MdlPsglstPsgdtlDtbase); mtc {
 
-			// Total group summary bg and ae
-			if mtcPsglst.Groupc != "-" && mtcPsglst.Groupc != "" {
-				mapPaidbt[mtcPsglst.Groupc] += int(mtcPsglst.Paidbt)
-				mapQntybt[mtcPsglst.Groupc] += int(mtcPsglst.Qntybt)
-				mapWghtbt[mtcPsglst.Groupc] += int(mtcPsglst.Wghtbt)
-				mapFbavbt[mtcPsglst.Groupc] += int(mtcPsglst.Hfbabt)
-			}
-
 			// Get segment now
 			if mtcPsglst.Segtkt != "" {
 				prvTimefl, prvRoutfl, slcSegtkt, mtcSegtkt := "", "", []string{}, false
@@ -237,6 +229,14 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				}
 			}
 			fnlPsglst = append(fnlPsglst, mtcPsglst)
+
+			// Total group summary bg and ae
+			if mtcPsglst.Groupc != "-" && mtcPsglst.Groupc != "" {
+				mapPaidbt[mtcPsglst.Groupc] += int(mtcPsglst.Paidbt)
+				mapQntybt[mtcPsglst.Groupc] += int(mtcPsglst.Qntybt)
+				mapWghtbt[mtcPsglst.Groupc] += int(mtcPsglst.Wghtbt)
+				mapFbavbt[mtcPsglst.Groupc] += int(mtcPsglst.Hfbabt)
+			}
 		}
 		return true
 	})
@@ -260,8 +260,14 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		}
 		if val, ist := mapFbavbt[psglst.Groupc]; ist {
 			psglst.Ftotbt = int32(val)
+			if psglst.Psgrid == "061259D90001" {
+				fmt.Println("ada", val)
+			}
 		} else {
 			psglst.Ftotbt = psglst.Fbavbt
+			if psglst.Psgrid == "061259D90001" {
+				fmt.Println("tidak ada", psglst.Fbavbt)
+			}
 		}
 
 		// Manage route

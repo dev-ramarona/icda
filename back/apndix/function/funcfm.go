@@ -176,6 +176,16 @@ func FncApndixFormatTimein(inputx string) int64 {
 }
 
 // Make format date form input front end
+func FncApndixFormatMnthot(inputx int) string {
+	strraw := strconv.Itoa(inputx) //len(inputx) == 6
+	fmtdte, err := time.Parse("0601", strraw)
+	if err != nil {
+		return ""
+	}
+	return fmtdte.Format("2006-01")
+}
+
+// Make format date form input front end
 func FncApndixFormatDateot(inputx int) string {
 	strraw := strconv.Itoa(inputx) //len(inputx) == 6
 	fmtdte, err := time.Parse("060102", strraw)

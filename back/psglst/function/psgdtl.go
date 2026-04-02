@@ -396,17 +396,17 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	case "EBTFMT":
 		writer.Write([]string{
 			"CEK GROUP",
-			"Isitfl",
-			"Isittx",
+			"Prmkey",
+			"Mnthfl",
 			"Airlfl",
 			"Flnbfl",
 			"Datefl",
 			"Depart",
+			"Arrivl",
 			"Nmelst",
 			"Nmefst",
 			"Groupc",
 			"Totpax",
-			"Arrivl",
 			"Seatpx",
 			"Tktnvc",
 			"Cpnbvc",
@@ -418,19 +418,22 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Ptotbt",
 			"Shopay",
 			"Coment",
-			"Comment Staff",
+			"Cmnstf",
 			"Agtdcr",
-			"Name Staff",
-			"Currency",
+			"Descae",
+			"Currae",
 			"Total",
+			"domint",
+			"Timeis",
 			"Pnrcde",
 			"Pnritl",
-			"Timeis",
 			"Agtdie",
-			"",
-			"",
-			"",
-			"",
+			"Isitct",
+			"Airtyp",
+			"folllow",
+			"categr",
+			"Isitfl",
+			"Isittx",
 		})
 	case "TKTFMT":
 		writer.Write([]string{
@@ -457,7 +460,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Noteup",
 			"Gender",
 			"Routfl",
-			"Isitir"})
+			"Isitir",
+		})
 	default:
 		writer.Write([]string{
 			"Mnfest",
@@ -632,6 +636,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		var slcDtaset mdlPsglst.MdlPsglstPsgdtlDtbase
 		rawDtaset.Decode(&slcDtaset)
 		strTimeis := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timeis))
+		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Timeis))
 		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 		strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
 
@@ -678,41 +683,44 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		case "EBTFMT":
 			writer.Write([]string{
 				"",
-				slcDtaset.Isitfl,
-				slcDtaset.Isittx,
+				slcDtaset.Prmkey,
+				strMnthfl,
 				slcDtaset.Airlfl,
 				slcDtaset.Flnbfl,
 				strDatefl,
 				slcDtaset.Depart,
+				slcDtaset.Arrivl,
 				slcDtaset.Nmelst,
 				slcDtaset.Nmefst,
 				slcDtaset.Groupc,
 				fmt.Sprintf("%v", slcDtaset.Totpax),
-				slcDtaset.Arrivl,
 				slcDtaset.Seatpx,
 				slcDtaset.Tktnvc,
-				fmt.Sprintf("C%02d", slcDtaset.Cpnbvc),
+				fmt.Sprintf("C0%v", slcDtaset.Cpnbvc),
 				slcDtaset.Clssvc,
 				fmt.Sprintf("%v", slcDtaset.Qtotbt),
 				fmt.Sprintf("%v", slcDtaset.Wtotbt),
 				fmt.Sprintf("%v", slcDtaset.Ftotbt),
 				fmt.Sprintf("%v", slcDtaset.Ftotbt-slcDtaset.Wtotbt),
 				fmt.Sprintf("%v", slcDtaset.Ptotbt),
-				fmt.Sprintf("%v", slcDtaset.Ptotbt+(slcDtaset.Ftotbt-slcDtaset.Wtotbt)),
-				fmt.Sprintf("%v", slcDtaset.Coment),
-				"",
-				slcDtaset.Agtdcr,
+				fmt.Sprintf("%v", slcDtaset.Ptotbt-(slcDtaset.Ftotbt-slcDtaset.Wtotbt)),
+				slcDtaset.Coment,
 				"",
 				"",
+				slcDtaset.Descae,
+				slcDtaset.Currae,
 				"",
+				"",
+				strTimeis,
 				slcDtaset.Pnrcde,
 				slcDtaset.Pnritl,
-				strTimeis,
-				slcDtaset.Hmeloc + slcDtaset.Agtdcr[int(math.Max(float64(len(slcDtaset.Agtdcr)-3), 0)):],
+				slcDtaset.Agtdie,
+				slcDtaset.Isitct,
+				slcDtaset.Airtyp,
 				"",
 				"",
-				"",
-				"",
+				slcDtaset.Isitfl,
+				slcDtaset.Isittx,
 			})
 		case "TKTFMT":
 			writer.Write([]string{
@@ -725,7 +733,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Groupc,
 				slcDtaset.Arrivl,
 				slcDtaset.Seatpx,
-				slcDtaset.Tktnfl,
+				slcDtaset.Tktnvc,
 				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
 				strDatevc,
 				slcDtaset.Clssvc,

@@ -375,17 +375,16 @@ type MdlPsglstPsgdtlSlserr struct {
 
 type MdlPsglstPsgdtlEbtfmt struct {
 	Prmkey string `json:"prmkey" bson:"prmkey"`
-	Isitfl string `json:"isitfl" bson:"isitfl"`
-	Isittx string `json:"isittx" bson:"isittx"`
+	Mnthfl int32  `json:"mnthfl" bson:"mnthfl"`
 	Airlfl string `json:"airlfl" bson:"airlfl"`
 	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
 	Datefl int32  `json:"datefl" bson:"datefl"`
 	Depart string `json:"depart" bson:"depart"`
+	Arrivl string `json:"arrivl" bson:"arrivl"`
 	Nmelst string `json:"nmelst" bson:"nmelst"`
 	Nmefst string `json:"nmefst" bson:"nmefst"`
 	Groupc string `json:"groupc" bson:"groupc"`
 	Totpax int32  `json:"totpax" bson:"totpax"`
-	Arrivl string `json:"arrivl" bson:"arrivl"`
 	Seatpx string `json:"seatpx" bson:"seatpx"`
 	Tktnvc string `json:"tktnvc" bson:"tktnvc"`
 	Cpnbvc int32  `json:"cpnbvc" bson:"cpnbvc"`
@@ -393,13 +392,26 @@ type MdlPsglstPsgdtlEbtfmt struct {
 	Qtotbt int32  `json:"qtotbt" bson:"qtotbt"`
 	Wtotbt int32  `json:"wtotbt" bson:"wtotbt"`
 	Ftotbt int32  `json:"ftotbt" bson:"ftotbt"`
-	Ptotbt int32  `json:"ptotbt" bson:"ptotbt"`
+	// Totexc int32  `json:"totexc" bson:"totexc"`
+	Ptotbt int32 `json:"ptotbt" bson:"ptotbt"`
+	// Shopay int32  `json:"shopay" bson:"shopay"`
 	Coment string `json:"coment" bson:"coment"`
+	// Cmnstf string `json:"cmnstf" bson:"cmnstf"`
 	Agtdcr string `json:"agtdcr" bson:"agtdcr"`
+	Descae string `json:"descae" bson:"descae"`
+	Currae string `json:"currae" bson:"currae"`
+	// Total string `json:"total" bson:"total"`
+	// domint string `json:"domint" bson:"domint"`
+	Timeis int64  `json:"timeis" bson:"timeis"`
 	Pnrcde string `json:"pnrcde" bson:"pnrcde"`
 	Pnritl string `json:"pnritl" bson:"pnritl"`
-	Timeis int64  `json:"timeis" bson:"timeis"`
 	Agtdie string `json:"agtdie" bson:"agtdie"`
+	Isitct string `json:"Isitct" bson:"Isitct"`
+	Airtyp string `json:"airtyp" bson:"airtyp"`
+	// folllow string `json:"folllow" bson:"folllow"`
+	// categr string `json:"categr" bson:"categr"`
+	Isitfl string `json:"isitfl" bson:"isitfl"`
+	Isittx string `json:"isittx" bson:"isittx"`
 }
 
 type MdlPsglstPsgdtlTktfmt struct {
