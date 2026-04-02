@@ -125,10 +125,17 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 					mktAirlfl, mktFlnbfl, mktClssfl,
 					optAirlfl, optFlnbfl, optClssfl)
 				lstArrivl = rawArrivl
-				if idx <= 1 || len(slcRoutsg) == 0 ||
-					slcRoutsg[len(slcRoutsg)-1] != rawDepart {
+				if len(slcRoutsg) == 0 ||
+					(idx >= 1 && slcRoutsg[len(slcRoutsg)-1] != rawDepart) {
 					slcSegpnr = append(slcSegpnr, fmtSegpnr)
 					slcRoutsg = append(slcRoutsg, rawDepart)
+					if psglst.Psgrid == "4073A8A90101" {
+						fmt.Println("true", rawDepart)
+					}
+				} else {
+					if psglst.Psgrid == "4073A8A90101" {
+						fmt.Println("false", rawDepart)
+					}
 				}
 			}
 			slcRoutsg = append(slcRoutsg, lstArrivl)

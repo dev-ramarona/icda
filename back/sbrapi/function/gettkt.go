@@ -179,7 +179,6 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		psglst.Frbcde = getFlsgmn.FareBasis
 		psglst.Statvc = getFlsgmn.CurrentStatus
 		psglst.Datevc = fncApndix.FncApndixFormatDatein(getFlsgmn.StartDateTime)
-		fmt.Println(psglst.Psgrid)
 		regmnb := regexp.MustCompile(`\d+`)
 		if strfba := getFlsgmn.BagAllowance; strfba != "" {
 			if rslmmb := regmnb.FindAllString(strfba, -1); len(rslmmb) > 0 {
