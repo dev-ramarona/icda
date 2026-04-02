@@ -90,7 +90,7 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 	}
 	if inputx.Tktnfl_psgdtl != "" {
 		csvFilenm = append(csvFilenm, inputx.Tktnfl_psgdtl)
-		mtchdt = append(mtchdt, bson.D{{Key: "tktnfl",
+		mtchdt = append(mtchdt, bson.D{{Key: "tktnvc",
 			Value: inputx.Tktnfl_psgdtl}})
 	}
 	if inputx.Isitfl_psgdtl != "" {

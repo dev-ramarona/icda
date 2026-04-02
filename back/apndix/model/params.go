@@ -157,6 +157,13 @@ type MdlApndixFrtaxsFrntnd struct {
 type MdlApndixMilegeDtbase struct {
 	Routfl string `json:"routfl,omitempty" bson:"routfl,omitempty"`
 	Milege int64  `json:"milege,omitempty" bson:"milege,omitempty"`
+	Updtby string `json:"updtby,omitempty" bson:"updtby,omitempty"`
+}
+type MdlApndixMilegeFrntnd struct {
+	Prmkey string `json:"prmkey" bson:"prmkey"`
+	Routfl string `json:"routfl" bson:"routfl"`
+	Milege int64  `json:"milege" bson:"milege"`
+	Updtby string `json:"updtby" bson:"updtby"`
 }
 
 // Class level data
@@ -213,4 +220,32 @@ type MdlApndixFllistDtbase struct {
 	Autrzy int32   `json:"autrzy,omitempty" bson:"autrzy,omitempty"`
 	Bookdc int32   `json:"bookdc,omitempty" bson:"bookdc,omitempty"`
 	Bookdy int32   `json:"bookdy,omitempty" bson:"bookdy,omitempty"`
+}
+type MdlApndixFllistFrntnd struct {
+	Prmkey string  `json:"prmkey" bson:"prmkey"`
+	Airlfl string  `json:"airlfl" bson:"airlfl"`
+	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
+	Timeup int64   `json:"timeup" bson:"timeup"`
+	Timefl int64   `json:"timefl" bson:"timefl"`
+	Timerv int64   `json:"timerv" bson:"timerv"`
+	Datefl int32   `json:"datefl" bson:"datefl"`
+	Mnthfl int32   `json:"mnthfl" bson:"mnthfl"`
+	Ndayfl string  `json:"ndayfl" bson:"ndayfl"`
+	Flstat string  `json:"flstat" bson:"flstat"`
+	Routfl string  `json:"routfl" bson:"routfl"`
+	Routac string  `json:"routac" bson:"routac"`
+	Flsarr string  `json:"flsarr" bson:"flsarr"`
+	Routmx string  `json:"routmx" bson:"routmx"`
+	Flhour float64 `json:"flhour" bson:"flhour"`
+	Flrpdc int32   `json:"flrpdc" bson:"flrpdc"`
+	Flgate string  `json:"flgate" bson:"flgate"`
+	Depart string  `json:"depart" bson:"depart"`
+	Arrivl string  `json:"arrivl" bson:"arrivl"`
+	Airtyp string  `json:"airtyp" bson:"airtyp"`
+	Aircnf string  `json:"aircnf" bson:"aircnf"`
+	Seatcn string  `json:"seatcn" bson:"seatcn"`
+	Autrzc int32   `json:"autrzc" bson:"autrzc"`
+	Autrzy int32   `json:"autrzy" bson:"autrzy"`
+	Bookdc int32   `json:"bookdc" bson:"bookdc"`
+	Bookdy int32   `json:"bookdy" bson:"bookdy"`
 }

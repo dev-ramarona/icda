@@ -1,10 +1,10 @@
 import { MdlApndixSearchQueryx } from "../model/parmas";
 
 // Treatment function params
-export function FncApndixSearchQueryx(params: MdlApndixSearchQueryx) {
+export function FncApndixSearchQueryx(params: MdlApndixSearchQueryx, actdte: string[]) {
   return {
     pagedb_apndix: params.pagedb_apndix || "",
-    datefl_apndix: params.datefl_apndix || "",
+    datefl_apndix: params.datefl_apndix || actdte[actdte.length - 1],
     airlfl_apndix: params.airlfl_apndix || "",
     depart_apndix: params.depart_apndix || "",
     flnbfl_apndix: params.flnbfl_apndix || "",

@@ -143,10 +143,13 @@ func FncApndixFormatHstory(prvval, nowval any, hstory string,
 
 // Make format date form input front end
 func FncApndixFormatDatein(inputx string) int32 {
-	if val, err := strconv.Atoi(inputx); err == nil && len(inputx) == 6 {
+	if val, err := strconv.Atoi(inputx); err == nil || len(inputx) == 6 {
 		return int32(val)
 	}
-	fmtraw, errraw := time.Parse("2006-01-02", inputx)
+	if len(inputx) < 10 {
+		return 1
+	}
+	fmtraw, errraw := time.Parse("2006-01-02", inputx[:10])
 	if errraw != nil {
 		return 1
 	}
@@ -160,10 +163,13 @@ func FncApndixFormatDatein(inputx string) int32 {
 
 // Make format date time form input front end
 func FncApndixFormatTimein(inputx string) int64 {
-	if val, err := strconv.Atoi(inputx); err == nil && len(inputx) == 10 {
+	if val, err := strconv.Atoi(inputx); err == nil || len(inputx) == 10 {
 		return int64(val)
 	}
-	fmtraw, errraw := time.Parse("2006-01-02T15:04", inputx)
+	if len(inputx) < 16 {
+		return 1
+	}
+	fmtraw, errraw := time.Parse("2006-01-02T15:04", inputx[:16])
 	if errraw != nil {
 		return 1
 	}

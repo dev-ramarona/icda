@@ -48,6 +48,11 @@ func main() {
 	r.POST("/apndix/frtaxs/getall", fncApndix.FncApndixFrtaxsGetall)
 	r.POST("/apndix/frtaxs/update", fncApndix.FncApndixFrtaxsUpdate)
 	r.POST("/apndix/frtaxs/downld", fncApndix.FncApndixFrtaxsDownld)
+	r.POST("/apndix/milege/getall", fncApndix.FncApndixMilegeGetall)
+	r.POST("/apndix/milege/update", fncApndix.FncApndixMilegeUpdate)
+	r.POST("/apndix/milege/downld", fncApndix.FncApndixMilegeDownld)
+	r.POST("/apndix/fllist/getall", fncApndix.FncApndixFllistGetall)
+	r.POST("/apndix/fllist/downld", fncApndix.FncApndixFllistDownld)
 
 	// Handle web link API all user
 	r.GET("/allusr/status", fncAllusr.FncAllusrStatusPrcess)

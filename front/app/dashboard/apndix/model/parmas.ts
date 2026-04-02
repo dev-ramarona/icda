@@ -105,3 +105,11 @@ export interface MdlApndixFllistFrntnd {
   bookdc: number;
   bookdy: number;
 }
+
+// Miles age
+export interface MdlApndixMilegeFrntnd {
+  prmkey: string;
+  routfl: string;
+  milege: number;
+  updtby: string;
+}

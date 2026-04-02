@@ -10,17 +10,26 @@ import { ApiApndixAcpedtDtbase } from "./api/dtbase";
 import UixApndixProvncMainpg from "./ui/provnc/main";
 import UixApndixFrbaseMainpg from "./ui/frbase/main";
 import UixApndixFrtaxsMainpg from "./ui/frtaxs/main";
+import UixApndixFllistMainpg from "./ui/fllist/main";
+import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
+import UixApndixMilegeMainpg from "./ui/milege/main";
 
 export default async function Page(props: { searchParams: Promise<MdlApndixSearchQueryx> }) {
   const cookie = await ApiAllusrCookieGetdta();
   const rawprm = await props.searchParams;
-  const qryprm = FncApndixSearchQueryx(rawprm);
+  const actobj = await ApiGlobalActlogDtbase("psglst");
+  const actdte: string[] = actobj.datefl;
+  const qryprm = FncApndixSearchQueryx(rawprm, actdte);
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase(qryprm.pagedb_apndix);
   const lsmenu: Record<string, JSX.Element> = {
     flhour: <UixApndixFlhourMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} />,
     provnc: <UixApndixProvncMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} />,
     frbase: <UixApndixFrbaseMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} />,
     frtaxs: <UixApndixFrtaxsMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} />,
+    milege: <UixApndixMilegeMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} />,
+    fllist: (
+      <UixApndixFllistMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} actdte={actdte} />
+    ),
     // frbase: <FrbaseTable />,
     // frtaxs: <FrtaxsTable />,
   };

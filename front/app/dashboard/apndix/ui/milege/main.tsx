@@ -1,33 +1,30 @@
 import { ApiApndixGetallDtbase } from "../../api/dtbase";
 import {
   MdlApndixAcpedtDtbase,
-  MdlApndixFllistFrntnd,
+  MdlApndixMilegeFrntnd,
   MdlApndixSearchQueryx,
 } from "../../model/parmas";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
-import UixPsglstFllistTablex from "./table";
-import UixApndixFllistSearch from "./search";
-import { ApiGlobalActlogDtbase } from "../../../global/api/dtbase";
+import UixPsglstMilegeTablex from "./table";
+import UixApndixMilegeSearch from "./search";
 
-export default async function UixApndixFllistMainpg({
+export default async function UixApndixMilegeMainpg({
   qryprm,
   cookie,
   acpedt,
-  actdte,
 }: {
   qryprm: MdlApndixSearchQueryx;
   cookie: mdlAllusrCookieObjson;
   acpedt: MdlApndixAcpedtDtbase[];
-  actdte: string[];
 }) {
   const rslobj = await ApiApndixGetallDtbase(qryprm);
-  const arrdta: MdlApndixFllistFrntnd[] = rslobj.arrdta;
+  const arrdta: MdlApndixMilegeFrntnd[] = rslobj.arrdta;
   const totdta: number = rslobj.totdta;
   return (
     <>
-      <UixApndixFllistSearch qryprm={qryprm} datefl={actdte} />
-      <UixPsglstFllistTablex
+      <UixApndixMilegeSearch qryprm={qryprm} />
+      <UixPsglstMilegeTablex
         acpedt={acpedt}
         arrdta={arrdta}
         pagedb={qryprm.pagedb_apndix}
