@@ -231,7 +231,7 @@ func FncPsglstPrcessWorker(
 	var mgoFrbase, mgoFrtaxs []mongo.WriteModel
 	var mgoMilege, mgoFlnbfl []mongo.WriteModel
 	var mgoPsgsmr, mgoPsgdtl []mongo.WriteModel
-	var mgoProvnc []mongo.WriteModel
+	var mgoProvnc, mgoCurrcv []mongo.WriteModel
 
 	// Get currency
 	mapCurrcv := map[string]mdlApndix.MdlApndixCurrcvDtbase{}
@@ -244,6 +244,14 @@ func FncPsglstPrcessWorker(
 		if err == nil {
 			mapCurrcv = getCurrcv
 			sycCurrcv.Store("currcv", getCurrcv)
+			for key, val := range getCurrcv {
+				intTimenw, _ := strconv.Atoi(strTimenw[0:6])
+				val.Datend = int32(intTimenw)
+				mgoCurrcv = append(mgoCurrcv, mongo.NewUpdateOneModel().
+					SetFilter(bson.M{"crcode": key}).
+					SetUpdate(bson.M{"$set": val}).
+					SetUpsert(true))
+			}
 		}
 	}
 
@@ -494,6 +502,7 @@ func FncPsglstPrcessWorker(
 
 	// Push if ist data
 	fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+		"apndix_currcv": &mgoCurrcv,
 		"apndix_fllist": &mgoFllist,
 		"apndix_flnbls": &mgoFlnbfl,
 		"psglst_psgsmr": &mgoPsgsmr,

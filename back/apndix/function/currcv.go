@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/csv"
 	"fmt"
-	"net/http"
 	"strings"
 	"sync"
 	"time"
@@ -15,38 +14,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Get flighthour sycmap
-func FncApndixFlhourSycmap() *sync.Map {
-
-	// Inisialisasi variabel
-	fnldta := &sync.Map{}
-
-	// Select database and collection
-	tablex := Client.Database(Dbases).Collection("apndix_flhour")
-	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	// Get route data
-	datarw, err := tablex.Find(contxt, bson.M{})
-	if err != nil {
-		panic(err)
-	}
-	defer datarw.Close(contxt)
-
-	// Append to slice
-	for datarw.Next(contxt) {
-		var object mdlApndix.MdlApndixFlhourDtbase
-		datarw.Decode(&object)
-		fnldta.Store(object.Prmkey, object)
-		fnldta.Store(object.Routfl, object)
-	}
-
-	// return data
-	return fnldta
-}
-
 // Get object slice
-func FncApndixFlhourGetall(c *gin.Context) {
+func FncApndixCurrcvGetall(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("02Jan06/15:04")}
@@ -58,7 +27,7 @@ func FncApndixFlhourGetall(c *gin.Context) {
 	// Select db and context to do
 	var totidx = 0
 	var slcobj any
-	tablex := Client.Database(Dbases).Collection("apndix_flhour")
+	tablex := Client.Database(Dbases).Collection("apndix_currcv")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
@@ -143,10 +112,11 @@ func FncApndixFlhourGetall(c *gin.Context) {
 		defer rawDtaset.Close(contxt)
 
 		// Store to slice from raw bson
-		var slctmp = []mdlApndix.MdlApndixFlhourFrntnd{}
+		var slctmp = []mdlApndix.MdlApndixCurrcvFrntnd{}
 		for rawDtaset.Next(contxt) {
-			slcDtaset := mdlApndix.MdlApndixFlhourFrntnd{}
+			slcDtaset := mdlApndix.MdlApndixCurrcvFrntnd{}
 			rawDtaset.Decode(&slcDtaset)
+			slcDtaset.Prmkey = slcDtaset.Crcode
 			slctmp = append(slctmp, slcDtaset)
 		}
 		slcobj = slctmp
@@ -159,88 +129,8 @@ func FncApndixFlhourGetall(c *gin.Context) {
 	c.JSON(200, gin.H{"totdta": totidx, "arrdta": slcobj})
 }
 
-// Get Response Update database from input
-func FncApndixFlhourUpdate(c *gin.Context) {
-
-	// Bind JSON Body input to variable
-	var inputx mdlApndix.MdlApndixFlhourDtbase
-	if err := c.BindJSON(&inputx); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input" + err.Error()})
-		fmt.Println(err.Error())
-		return
-	}
-
-	// Get from input
-	if inputx.Airlfl == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airlfl"})
-		return
-	}
-	if inputx.Routfl == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Routfl"})
-		return
-	}
-	if inputx.Flnbfl == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Flnbfl"})
-		return
-	}
-	if inputx.Flhour == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Flhour"})
-		return
-	}
-	if inputx.Timefl == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timefl"})
-		return
-	}
-	if inputx.Timerv == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timerv"})
-		return
-	}
-	if inputx.Timeup == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Timeup"})
-		return
-	}
-	if inputx.Dateup == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Dateup"})
-		return
-	}
-	if inputx.Datend == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Datend"})
-		return
-	}
-	if inputx.Airtyp == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airtyp"})
-		return
-	}
-	if inputx.Airmls == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airmls"})
-		return
-	}
-	if inputx.Updtby == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Updtby"})
-		return
-	}
-
-	// Final push data
-	if inputx.Prmkey == "" || inputx.Prmkey == "add" {
-		inputx.Prmkey = inputx.Airlfl + inputx.Flnbfl + inputx.Routfl
-	}
-
-	// Push updated data
-	rsupdt := FncApndixBulkdbSingle([]mongo.WriteModel{
-		mongo.NewUpdateOneModel().
-			SetFilter(bson.M{"prmkey": inputx.Prmkey}).
-			SetUpdate(bson.M{"$set": inputx}).
-			SetUpsert(true)}, "apndix_flhour")
-	if rsupdt != nil {
-		panic("Error Insert/Update to DB:" + rsupdt.Error())
-	}
-
-	// Send token to frontend
-	c.JSON(200, "success")
-}
-
 // Download
-func FncApndixFlhourDownld(c *gin.Context) {
+func FncApndixCurrcvDownld(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("0601021504")}
@@ -250,7 +140,7 @@ func FncApndixFlhourDownld(c *gin.Context) {
 	}
 
 	// Select db and context to do
-	tablex := Client.Database(Dbases).Collection("apndix_flhour")
+	tablex := Client.Database(Dbases).Collection("apndix_currcv")
 	contxt, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -287,27 +177,18 @@ func FncApndixFlhourDownld(c *gin.Context) {
 	// Set header untuk file CSV
 	fnlFilenm := strings.Join(csvFilenm, "_")
 	c.Header("Content-Type", "text/csv")
-	c.Header("Content-Disposition", "attachment; filename=apndix_flhour_"+fnlFilenm+".csv")
+	c.Header("Content-Disposition", "attachment; filename=apndix_currcv_"+fnlFilenm+".csv")
 	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
 
 	// Streaming file CSV ke client
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
 	writer.Write([]string{
-		"prmkey",
-		"airlfl",
-		"routfl",
-		"flnbfl",
-		"flhour",
-		"timefl",
-		"timerv",
-		"timeup",
-		"dateup",
+		"crctry",
+		"crcode",
+		"crname",
+		"crrate",
 		"datend",
-		"airtyp",
-		"airmls",
-		"hstory",
-		"updtby",
 	})
 	writer.Flush()
 
@@ -328,30 +209,17 @@ func FncApndixFlhourDownld(c *gin.Context) {
 	mxflus := 5000
 	countr := 0
 	for rawDtaset.Next(contxt) {
-		var slcDtaset mdlApndix.MdlApndixFlhourDtbase
+		var slcDtaset mdlApndix.MdlApndixCurrcvDtbase
 		rawDtaset.Decode(&slcDtaset)
-		strDateup := FncApndixFormatDateot(int(slcDtaset.Dateup))
 		strDatend := FncApndixFormatDateot(int(slcDtaset.Datend))
-		strTimefl := FncApndixFormatTimeot(int(slcDtaset.Timefl))
-		strTimerv := FncApndixFormatTimeot(int(slcDtaset.Timerv))
-		strTimeup := FncApndixFormatTimeot(int(slcDtaset.Timeup))
 
 		// Write to CSV
 		writer.Write([]string{
-			slcDtaset.Prmkey,
-			slcDtaset.Airlfl,
-			slcDtaset.Routfl,
-			slcDtaset.Flnbfl,
-			fmt.Sprintf("%v", slcDtaset.Flhour),
-			strTimefl,
-			strTimerv,
-			strTimeup,
-			strDateup,
+			slcDtaset.Crctry,
+			slcDtaset.Crcode,
+			slcDtaset.Crname,
+			fmt.Sprintf("%v", slcDtaset.Crrate),
 			strDatend,
-			slcDtaset.Airtyp,
-			fmt.Sprintf("%v", slcDtaset.Airmls),
-			slcDtaset.Hstory,
-			slcDtaset.Updtby,
 		})
 
 		// Flush every 1000row

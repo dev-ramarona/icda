@@ -4,7 +4,6 @@ import (
 	mdlApndix "back/apndix/model"
 	"context"
 	"encoding/csv"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -226,15 +225,9 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("0601021504")}
-	rawipt := c.PostForm("data")
-	if rawipt == "" {
-		c.String(400, "missing data")
-		return
-	}
 	var inputx mdlApndix.MdlApdnixParamsInputx
-	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
-		c.String(400, "invalid data")
-		return
+	if err := c.BindJSON(&inputx); err != nil {
+		panic(err)
 	}
 
 	// Select db and context to do

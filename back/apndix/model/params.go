@@ -50,7 +50,7 @@ type MdlApndixDstrctDtbase struct {
 }
 
 // District data
-type MdlApndixFljoinUpdate struct {
+type MdlApndixFljoinDtbase struct {
 	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
 	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
 	Flnbfl string `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
@@ -60,6 +60,17 @@ type MdlApndixFljoinUpdate struct {
 	Statjn string `json:"statjn,omitempty" bson:"statjn,omitempty"`
 	Totpax int32  `json:"totpax,omitempty" bson:"totpax,omitempty"`
 	Datefl int32  `json:"datefl,omitempty" bson:"datefl,omitempty"`
+}
+type MdlApndixFljoinFrntnd struct {
+	Prmkey string `json:"prmkey" bson:"prmkey"`
+	Airlfl string `json:"airlfl" bson:"airlfl"`
+	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
+	Flnbjn string `json:"flnbjn" bson:"flnbjn"`
+	Depart string `json:"depart" bson:"depart"`
+	Arrivl string `json:"arrivl" bson:"arrivl"`
+	Statjn string `json:"statjn" bson:"statjn"`
+	Totpax int32  `json:"totpax" bson:"totpax"`
+	Datefl int32  `json:"datefl" bson:"datefl"`
 }
 
 // Flight hour data
@@ -203,6 +214,15 @@ type MdlApndixCurrcvDtbase struct {
 	Crcode string  `json:"crcode,omitempty" bson:"crcode,omitempty"`
 	Crname string  `json:"crname,omitempty" bson:"crname,omitempty"`
 	Crrate float64 `json:"crrate,omitempty" bson:"crrate,omitempty"`
+	Datend int32   `json:"datend,omitempty" bson:"datend,omitempty"`
+}
+type MdlApndixCurrcvFrntnd struct {
+	Prmkey string  `json:"prmkey" bson:"prmkey"`
+	Crctry string  `json:"crctry" bson:"crctry"`
+	Crcode string  `json:"crcode" bson:"crcode"`
+	Crname string  `json:"crname" bson:"crname"`
+	Crrate float64 `json:"crrate" bson:"crrate"`
+	Datend int32   `json:"datend" bson:"datend"`
 }
 
 // Flight list database

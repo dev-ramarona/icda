@@ -80,7 +80,7 @@ export default function UixApndixFllistSearch({
     <UixGlobalWraperSearch
       chnged={chnged}
       downld={{
-        lnk: `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/fllist/downld`,
+        lnk: `/apndix/fllist/downld`,
         prm: params,
       }}
       upload={null}

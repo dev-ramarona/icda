@@ -42,10 +42,10 @@ type MdlSbrapiCurrcvRspbdy struct {
 	DisplayCurrencyRS MdlSbrapiCurrcvRspdsp `xml:"http://webservices.sabre.com/sabreXML/2011/10 DisplayCurrencyRS"`
 }
 type MdlSbrapiCurrcvRspdsp struct {
-	Name    string                  `xml:"Name,attr"`
 	Country []MdlSbrapiCurrcvRspctr `xml:"Country"`
 }
 type MdlSbrapiCurrcvRspctr struct {
+	Name          string  `xml:"Name,attr"`
 	CurrencyCode  string  `xml:"CurrencyCode"`
 	CurrencyName  string  `xml:"CurrencyName"`
 	DecimalPlaces int32   `xml:"DecimalPlaces"`

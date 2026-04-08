@@ -75,7 +75,7 @@ export default function UixApndixFrbaseSearch({ qryprm }: { qryprm: MdlApndixSea
     <UixGlobalWraperSearch
       chnged={chnged}
       downld={{
-        lnk: `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/frbase/downld`,
+        lnk: `/apndix/frbase/downld`,
         prm: params,
       }}
       upload={null}

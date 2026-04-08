@@ -113,3 +113,26 @@ export interface MdlApndixMilegeFrntnd {
   milege: number;
   updtby: string;
 }
+
+// Flight join
+export interface MdlApndixFljoinFrntnd {
+  prmkey: string;
+  airlfl: string;
+  flnbfl: string;
+  flnbjn: string;
+  depart: string;
+  arrivl: string;
+  statjn: string;
+  totpax: number;
+  datefl: number;
+}
+
+// Currency
+export interface MdlApndixCurrcvFrntnd {
+  prmkey: string;
+  crctry: string;
+  crcode: string;
+  crname: string;
+  crrate: number;
+  datend: number;
+}

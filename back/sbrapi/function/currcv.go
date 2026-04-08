@@ -62,7 +62,7 @@ func FncSbrapiCurrcvTrtmnt(rawxml mdlSbrapi.MdlSbrapiCurrcvRspdsp,
 	// Looping all flight list
 	for _, currcv := range rawxml.Country {
 		fnlCurrcv[currcv.CurrencyCode] = mdlApndix.MdlApndixCurrcvDtbase{
-			Crctry: rawxml.Name,
+			Crctry: currcv.Name,
 			Crcode: currcv.CurrencyCode,
 			Crname: currcv.CurrencyName,
 			Crrate: currcv.Rate,

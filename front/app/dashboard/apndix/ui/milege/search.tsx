@@ -75,7 +75,7 @@ export default function UixApndixMilegeSearch({ qryprm }: { qryprm: MdlApndixSea
     <UixGlobalWraperSearch
       chnged={chnged}
       downld={{
-        lnk: `${process.env.NEXT_PUBLIC_URL_SERVER}/apndix/milege/downld`,
+        lnk: `/apndix/milege/downld`,
         prm: params,
       }}
       upload={null}

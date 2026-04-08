@@ -1,12 +1,18 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import { FncGlobalFormatDfault } from "../../../global/function/format";
 import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
 import { MdlApndixSearchQueryx } from "../../model/parmas";
 import UixGlobalWraperSearch from "../../../public/ui/search/wraper";
+import { FncGlobalFormatDfault } from "../../../global/function/format";
 
-export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSearchQueryx }) {
+export default function UixApndixFljoinSearch({
+  qryprm,
+  datefl,
+}: {
+  qryprm: MdlApndixSearchQueryx;
+  datefl: string[];
+}) {
   const [params, paramsSet] = useState<MdlApndixSearchQueryx>({
     update_apndix: qryprm.update_apndix || "",
     pagedb_apndix: qryprm.pagedb_apndix || "",
@@ -42,7 +48,7 @@ export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSea
   const timerf = useRef<NodeJS.Timeout | null>(null);
   const rplprm = FncGlobalQuerysEdlink();
   const repprm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const namefl = e.currentTarget.id;
+    const namefl = e.currentTarget.name;
     let valuef: string | number = e.currentTarget.value;
     valuef = FncGlobalFormatDfault(namefl, valuef);
     paramsSet({ ...params, [namefl]: valuef });
@@ -70,12 +76,11 @@ export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSea
       [String(Math.random()), "", "", "", "", "", "", ""],
     );
   };
-
   return (
     <UixGlobalWraperSearch
       chnged={chnged}
       downld={{
-        lnk: `/apndix/provnc/downld`,
+        lnk: `/apndix/fljoin/downld`,
         prm: params,
       }}
       upload={null}
@@ -86,8 +91,41 @@ export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSea
     >
       <div className="flexctr relative h-11 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
+          typipt={"date"}
+          length={datefl}
+          queryx={"datefl_apndix"}
+          params={params.datefl_apndix}
+          plchdr="Date"
+          repprm={repprm}
+          labelx=""
+        />
+      </div>
+      <div className="flexctr relative h-11 w-1/2 md:w-28">
+        <UixGlobalInputxFormdt
           typipt={"text"}
-          length={null}
+          length={undefined}
+          queryx={"airlfl_apndix"}
+          params={params.airlfl_apndix}
+          plchdr="Airline"
+          repprm={repprm}
+          labelx=""
+        />
+      </div>
+      <div className="flexctr relative h-11 w-1/2 md:w-28">
+        <UixGlobalInputxFormdt
+          typipt={"text"}
+          length={undefined}
+          queryx={"flnbfl_apndix"}
+          params={params.flnbfl_apndix}
+          plchdr="Flight number"
+          repprm={repprm}
+          labelx=""
+        />
+      </div>
+      <div className="flexctr relative h-11 w-1/2 md:w-28">
+        <UixGlobalInputxFormdt
+          typipt={"text"}
+          length={undefined}
           queryx={"routfl_apndix"}
           params={params.routfl_apndix}
           plchdr="Route"
