@@ -46,7 +46,7 @@ export default function UixGlobalInputxFormdt({
             className="peer hidden"
             type={typipt}
             id={queryx}
-            name={queryx}
+            name="file"
             accept=".csv"
             multiple
             hidden={labelx == "hidden" ? true : false}
@@ -65,17 +65,13 @@ export default function UixGlobalInputxFormdt({
           <label
             className={`absolute cursor-pointer p-3 whitespace-nowrap select-none ${
               params != ""
-                ? `mb-1 h-1/2 -translate-y-full text-[0.65rem] font-semibold text-slate-600 ${
-                    labelx == "hidden" && "opacity-0"
-                  }`
-                : `text-slate-400 peer-focus:mb-1 peer-focus:h-1/2 peer-focus:-translate-y-full ${
-                    labelx == "hidden" && "peer-focus:opacity-0"
-                  }`
+                ? `mb-1 h-1/2 -translate-y-full text-[0.65rem] font-semibold text-slate-600`
+                : `text-slate-400 peer-focus:mb-1 peer-focus:h-1/2 peer-focus:-translate-y-full`
             } group/fst duration-300`}
             htmlFor={queryx}
           >
             <div className="flexctr">
-              <div className="cursor-pointer rounded-md bg-white">{plchdr}</div>
+              <div className="cursor-pointer rounded-md bg-white px-1">{plchdr}</div>
             </div>
           </label>
         </>
@@ -100,7 +96,7 @@ export default function UixGlobalInputxFormdt({
               onClick={() => !onclik && onclikSet(!onclik)}
             >
               <div className="flexctr">
-                <div className="cursor-pointer rounded-md bg-white">{plchdr}</div>
+                <div className="cursor-pointer rounded-md bg-white px-1">{plchdr}</div>
               </div>
             </div>
             <div

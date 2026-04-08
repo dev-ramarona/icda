@@ -110,7 +110,7 @@ export default function UixPsglstDetailSearch({
   return (
     <UixGlobalWraperSearch
       chnged={chnged}
-      fmtdef={fmtdef}
+      lblupl={fmtdef ? "Upload error" : ""}
       downld={{
         lnk: `/psglst/psgdtl/downld`,
         prm: params,

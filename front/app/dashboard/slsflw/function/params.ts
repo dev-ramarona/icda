@@ -36,8 +36,10 @@ export function FncSlsflwPsgsmrSrcprm(params: MdlSlsflwPsgsmrSrcprm, actdte: str
     datefl_psgsmr: params.datefl_psgsmr || actdte[actdte.length - 1],
     airlfl_psgsmr: params.airlfl_psgsmr || "",
     flnbfl_psgsmr: params.flnbfl_psgsmr || "",
+    isitjn_psgsmr: params.isitjn_psgsmr || "",
     depart_psgsmr: params.depart_psgsmr || "",
     routfl_psgsmr: params.routfl_psgsmr || "",
+    keywrd_psgsmr: params.keywrd_psgsmr || "",
     pagenw_psgsmr: Number(params.pagenw_psgsmr) || 1,
     limitp_psgsmr: Number(params.limitp_psgsmr) || 15,
   } as MdlSlsflwPsgsmrSrcprm;

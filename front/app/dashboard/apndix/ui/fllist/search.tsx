@@ -55,7 +55,7 @@ export default function UixApndixFllistSearch({
     if (timerf.current) clearTimeout(timerf.current);
     timerf.current = setTimeout(async () => {
       chngedSet(true);
-      rplprm([namefl, "pagenw_psgdtl"], [valuef as string, ""]);
+      rplprm([namefl, "pagenw_apndix"], [valuef as string, ""]);
     }, 1000);
   };
 
@@ -84,7 +84,7 @@ export default function UixApndixFllistSearch({
         prm: params,
       }}
       upload={null}
-      fmtdef={false}
+      lblupl=""
       namefl=""
       updtfl={null}
       resetx={resetx}

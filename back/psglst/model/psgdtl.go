@@ -22,9 +22,11 @@ type MdlPsglstParamsInputx struct {
 	Erdvsn_errlog string `json:"erdvsn_errlog,omitempty" bson:"erdvsn_errlog,omitempty"`
 	Mnthfl_psgsmr string `json:"mnthfl_psgsmr,omitempty" bson:"mnthfl_psgsmr,omitempty"`
 	Datefl_psgsmr string `json:"datefl_psgsmr,omitempty" bson:"datefl_psgsmr,omitempty"`
+	Isitjn_psgsmr string `json:"isitjn_psgsmr,omitempty" bson:"isitjn_psgsmr,omitempty"`
 	Airlfl_psgsmr string `json:"airlfl_psgsmr,omitempty" bson:"airlfl_psgsmr,omitempty"`
 	Provnc_psgsmr string `json:"provnc_psgsmr,omitempty" bson:"provnc_psgsmr,omitempty"`
 	Flnbfl_psgsmr string `json:"flnbfl_psgsmr,omitempty" bson:"flnbfl_psgsmr,omitempty"`
+	Isitfl_psgsmr string `json:"isitfl_psgsmr,omitempty" bson:"isitfl_psgsmr,omitempty"`
 	Depart_psgsmr string `json:"depart_psgsmr,omitempty" bson:"depart_psgsmr,omitempty"`
 	Routfl_psgsmr string `json:"routfl_psgsmr,omitempty" bson:"routfl_psgsmr,omitempty"`
 	Keywrd_psgsmr string `json:"keywrd_psgsmr,omitempty" bson:"keywrd_psgsmr,omitempty"`
@@ -66,6 +68,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Seatcn string  `json:"seatcn" bson:"seatcn,omitempty"`
 	Flhour float64 `json:"flhour" bson:"flhour,omitempty"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl,omitempty"`
+	Flnbjn string  `json:"flnbjn" bson:"flnbjn,omitempty"`
 	Flnbvc string  `json:"flnbvc" bson:"flnbvc,omitempty"`
 	Flgate string  `json:"flgate" bson:"flgate,omitempty"`
 	Bookdc int32   `json:"bookdc" bson:"bookdc,omitempty"`
@@ -218,6 +221,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Seatcn string  `json:"seatcn" bson:"seatcn"`
 	Flhour float64 `json:"flhour" bson:"flhour"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
+	Flnbjn string  `json:"flnbjn" bson:"flnbjn"`
 	Flnbvc string  `json:"flnbvc" bson:"flnbvc"`
 	Flgate string  `json:"flgate" bson:"flgate"`
 	Bookdc int32   `json:"bookdc" bson:"bookdc"`
@@ -271,6 +275,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Noteup string  `json:"noteup" bson:"noteup"`
 	Updtby string  `json:"updtby" bson:"updtby"`
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
+	Remark string  `json:"remark" bson:"remark"`
 
 	// Ancillary
 	Gpcdae string  `json:"gpcdae" bson:"gpcdae"`

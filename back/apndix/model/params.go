@@ -49,6 +49,19 @@ type MdlApndixDstrctDtbase struct {
 	Depart string `json:"depart,omitempty" bson:"depart,omitempty"`
 }
 
+// District data
+type MdlApndixFljoinUpdate struct {
+	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
+	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
+	Flnbfl string `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
+	Flnbjn string `json:"flnbjn,omitempty" bson:"flnbjn,omitempty"`
+	Depart string `json:"depart,omitempty" bson:"depart,omitempty"`
+	Arrivl string `json:"arrivl,omitempty" bson:"arrivl,omitempty"`
+	Statjn string `json:"statjn,omitempty" bson:"statjn,omitempty"`
+	Totpax int32  `json:"totpax,omitempty" bson:"totpax,omitempty"`
+	Datefl int32  `json:"datefl,omitempty" bson:"datefl,omitempty"`
+}
+
 // Flight hour data
 type MdlApndixFlhourDtbase struct {
 	Prmkey string  `json:"prmkey,omitempty" bson:"prmkey,omitempty"`

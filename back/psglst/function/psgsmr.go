@@ -99,6 +99,46 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 			bson.D{{Key: "$count", Value: "totalCount"}},
 		}
 
+		// // Grouping flight join
+		// if inputx.Isitjn_psgsmr != "" {
+		// 	nowPillne = append(nowPillne,
+		// 		bson.D{
+		// 			{Key: "$group", Value: bson.D{
+		// 				{Key: "_id", Value: bson.D{
+		// 					{Key: "flnbjn", Value: "$flnbjn"},
+		// 					{Key: "datefl", Value: "$datefl"},
+		// 					{Key: "depart", Value: "$depart"},
+		// 				}},
+		// 				{Key: "data", Value: bson.D{
+		// 					{Key: "$first", Value: "$$ROOT"},
+		// 				}},
+		// 				{Key: "totpax", Value: bson.D{{Key: "$sum", Value: "$totpax"}}},
+		// 				{Key: "totnta", Value: bson.D{{Key: "$sum", Value: "$totnta"}}},
+		// 				{Key: "tottyq", Value: bson.D{{Key: "$sum", Value: "$tottyq"}}},
+		// 			}},
+		// 		},
+		// 		bson.D{
+		// 			{Key: "$replaceRoot", Value: bson.D{
+		// 				{Key: "newRoot", Value: bson.D{
+		// 					{Key: "$mergeObjects", Value: bson.A{
+		// 						"$data",
+		// 						bson.D{
+		// 							{Key: "totpax", Value: "$totpax"},
+		// 							{Key: "totnta", Value: "$totnta"},
+		// 							{Key: "tottyq", Value: "$tottyq"},
+		// 						},
+		// 					}},
+		// 				},
+		// 				}},
+		// 			}},
+		// 		bson.D{
+		// 			{Key: "$addFields", Value: bson.D{
+		// 				{Key: "flnbfl", Value: "$flnbjn"},
+		// 			}},
+		// 		},
+		// 	)
+		// }
+
 		// Find user by username in database
 		rawDtaset, err := tablex.Aggregate(contxt, nowPillne)
 		if err != nil {

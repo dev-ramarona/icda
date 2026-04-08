@@ -1,6 +1,4 @@
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
-import { ApiApndixAcpedtDtbase } from "../../../apndix/api/dtbase";
-import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
 import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
 import { ApiSlsflwPsgsmrGetall } from "../../api/psgsmr";
 import { MdlSlsflwPsgsmrFrntnd, MdlSlsflwPsgsmrSrcprm } from "../../model/params";

@@ -426,49 +426,45 @@ func FncPsglstPrcessWorker(
 			Depart: dbsDepart, Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Flstat: fllist.Flstat,
 		}, fllist.Flstat != "PDC" && fllist.Flstat != "CANCEL", sycErrlog, errErignr, errPrmkey)
 
-		// Handle PDC flight
-		if fllist.Flstat == "PDC" {
-
-			// Push final flightnumber
-			var prmkey = dbsAirlfl + dbsFlnbfl
-			if _, ist := idcFlnbfl.Load(prmkey); !ist {
-				tmpFlnbfl := fncApndix.FncApndixFlnbflPrcess(sycFlnbfl, objParams, prmkey, fllist.Routmx)
-				mgoFlnbfl = append(mgoFlnbfl, tmpFlnbfl...)
-				idcFlnbfl.Store(prmkey, true)
-			}
-
-			// Get passangger list
-			rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, fllist, mapClslvl)
-			FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
-				Erpart: "psglst", Ersrce: "dtbase", Erdvsn: "MNFEST",
-				Dateup: int32(intDatenw), Timeup: int64(intTimenw),
-				Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
-				Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
-			}, err != nil, sycErrlog, errErignr, errPrmkey)
-			tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc :=
-				FncPsglstPsglstPrcess(rspPsglst, fllist,
-					nowObjtkn, objParams,
-					sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
-					idcFrbase, idcFrtaxs, sycErrlog, sycProvnc,
-					slcHfbalv,
-					mapCurrcv, mapClslvl, errErignr, errPrmkey)
-			mgoPsgsmr = append(mgoPsgsmr, tmpPsgsmr...)
-			mgoPsgdtl = append(mgoPsgdtl, tmpPsgdtl...)
-			mgoMilege = append(mgoMilege, tmpMilege...)
-			mgoFlhour = append(mgoFlhour, tmpFlhour...)
-			mgoFrbase = append(mgoFrbase, tmpFrbase...)
-			mgoFrtaxs = append(mgoFrtaxs, tmpFrtaxs...)
-			mgoProvnc = append(mgoProvnc, tmpProvnc...)
-			fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-				"psglst_psgsmr": &mgoPsgsmr,
-				"psglst_psgdtl": &mgoPsgdtl,
-				"apndix_milege": &mgoMilege,
-				"apndix_flhour": &mgoFlhour,
-				"apndix_frbase": &mgoFrbase,
-				"apndix_frtaxs": &mgoFrtaxs,
-				"apndix_provnc": &mgoProvnc,
-			}, 200)
+		// Push final flightnumber
+		var prmkey = dbsAirlfl + dbsFlnbfl
+		if _, ist := idcFlnbfl.Load(prmkey); !ist {
+			tmpFlnbfl := fncApndix.FncApndixFlnbflPrcess(sycFlnbfl, objParams, prmkey, fllist.Routmx)
+			mgoFlnbfl = append(mgoFlnbfl, tmpFlnbfl...)
+			idcFlnbfl.Store(prmkey, true)
 		}
+
+		// Get passangger list
+		rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, fllist, mapClslvl)
+		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
+			Erpart: "psglst", Ersrce: "dtbase", Erdvsn: "MNFEST",
+			Dateup: int32(intDatenw), Timeup: int64(intTimenw),
+			Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
+			Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
+		}, err != nil, sycErrlog, errErignr, errPrmkey)
+		tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc :=
+			FncPsglstPsglstPrcess(rspPsglst, fllist,
+				nowObjtkn, objParams,
+				sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
+				idcFrbase, idcFrtaxs, sycErrlog, sycProvnc,
+				slcHfbalv,
+				mapCurrcv, mapClslvl, errErignr, errPrmkey)
+		mgoPsgsmr = append(mgoPsgsmr, tmpPsgsmr...)
+		mgoPsgdtl = append(mgoPsgdtl, tmpPsgdtl...)
+		mgoMilege = append(mgoMilege, tmpMilege...)
+		mgoFlhour = append(mgoFlhour, tmpFlhour...)
+		mgoFrbase = append(mgoFrbase, tmpFrbase...)
+		mgoFrtaxs = append(mgoFrtaxs, tmpFrtaxs...)
+		mgoProvnc = append(mgoProvnc, tmpProvnc...)
+		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+			"psglst_psgsmr": &mgoPsgsmr,
+			"psglst_psgdtl": &mgoPsgdtl,
+			"apndix_milege": &mgoMilege,
+			"apndix_flhour": &mgoFlhour,
+			"apndix_frbase": &mgoFrbase,
+			"apndix_frtaxs": &mgoFrtaxs,
+			"apndix_provnc": &mgoProvnc,
+		}, 200)
 
 		// Indicator end process
 		nowEnddtm := time.Now()

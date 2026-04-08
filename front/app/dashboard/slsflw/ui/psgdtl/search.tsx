@@ -27,6 +27,7 @@ export default function UixSlsflwDetailSearch({
     tktnfl_psgdtl: prmPsgdtl.tktnfl_psgdtl || "",
     nclear_psgdtl: prmPsgdtl.nclear_psgdtl || "",
     format_psgdtl: prmPsgdtl.format_psgdtl || "",
+    keywrd_psgdtl: prmPsgdtl.keywrd_psgdtl || "",
     pagenw_psgdtl: prmPsgdtl.pagenw_psgdtl || 1,
     limitp_psgdtl: prmPsgdtl.limitp_psgdtl || 15,
   });
@@ -47,6 +48,7 @@ export default function UixSlsflwDetailSearch({
       tktnfl_psgdtl: prmPsgdtl.tktnfl_psgdtl || "",
       nclear_psgdtl: prmPsgdtl.nclear_psgdtl || "",
       format_psgdtl: prmPsgdtl.format_psgdtl || "",
+      keywrd_psgdtl: prmPsgdtl.keywrd_psgdtl || "",
       pagenw_psgdtl: prmPsgdtl.pagenw_psgdtl || 1,
       limitp_psgdtl: prmPsgdtl.limitp_psgdtl || 15,
     });
@@ -104,7 +106,7 @@ export default function UixSlsflwDetailSearch({
   return (
     <UixGlobalWraperSearch
       chnged={chnged}
-      fmtdef={fmtdef}
+      lblupl={fmtdef ? "Upload error" : ""}
       downld={{
         lnk: `/psglst/psgdtl/downld`,
         prm: params,

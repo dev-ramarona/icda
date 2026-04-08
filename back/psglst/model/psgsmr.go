@@ -6,6 +6,7 @@ type MdlPsglstPsgsmrDtbase struct {
 	Provnc string  `json:"provnc,omitempty" bson:"provnc,omitempty"`
 	Depart string  `json:"depart,omitempty" bson:"depart,omitempty"`
 	Flnbfl string  `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
+	Flnbjn string  `json:"flnbjn,omitempty" bson:"flnbjn,omitempty"`
 	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
 	Ndayfl string  `json:"ndayfl,omitempty" bson:"ndayfl,omitempty"`
 	Datefl int32   `json:"datefl,omitempty" bson:"datefl,omitempty"`
@@ -21,13 +22,13 @@ type MdlPsglstPsgsmrDtbase struct {
 	Totqfr float64 `json:"totqfr,omitempty" bson:"totqfr,omitempty"`
 	Totrph float64 `json:"totrph,omitempty" bson:"totrph,omitempty"`
 }
-
 type MdlPsglstPsgsmrFrtend struct {
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
 	Airlfl string  `json:"airlfl" bson:"airlfl"`
 	Provnc string  `json:"provnc" bson:"provnc"`
 	Depart string  `json:"depart" bson:"depart"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
+	Flnbjn string  `json:"flnbjn" bson:"flnbjn"`
 	Routfl string  `json:"routfl" bson:"routfl"`
 	Ndayfl string  `json:"ndayfl" bson:"ndayfl"`
 	Datefl int32   `json:"datefl" bson:"datefl"`

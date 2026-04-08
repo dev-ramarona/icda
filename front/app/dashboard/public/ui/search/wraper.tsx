@@ -5,7 +5,7 @@ import UixGlobalWaitngAction from "../action/waitng";
 export default function UixGlobalWraperSearch({
   children,
   chnged,
-  fmtdef,
+  lblupl,
   downld,
   upload,
   resetx,
@@ -14,7 +14,7 @@ export default function UixGlobalWraperSearch({
 }: {
   children: React.ReactNode;
   chnged: boolean;
-  fmtdef: boolean;
+  lblupl: string;
   downld: { lnk: string; prm: any } | null;
   upload: { lnk: string; prm: FileList } | null;
   resetx: () => void | null;
@@ -65,8 +65,8 @@ export default function UixGlobalWraperSearch({
           </div>
         )}
 
-        {/* Reset button */}
-        {fmtdef && (
+        {/* upload button */}
+        {lblupl && (
           <form
             className="flexctr relative h-20 w-full flex-col gap-1.5 rounded-md ring-2 ring-gray-200 md:h-10 md:w-59 md:flex-row"
             method="POST"
@@ -84,8 +84,8 @@ export default function UixGlobalWraperSearch({
                 labelx="hidden"
                 length={13}
                 params={namefl}
-                plchdr="Select file"
-                queryx="file"
+                plchdr={lblupl}
+                queryx={upload.lnk}
                 repprm={updtfl}
                 typipt="file"
               />

@@ -714,7 +714,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				strTimeis,
 				slcDtaset.Pnrcde,
 				slcDtaset.Pnritl,
-				slcDtaset.Agtdie,
+				slcDtaset.Hmeloc + slcDtaset.Agtdie,
 				slcDtaset.Isitct,
 				slcDtaset.Airtyp,
 				"",

@@ -21,8 +21,10 @@ export interface MdlSlsflwGlobalSrcprm {
   datefl_psgsmr: string;
   airlfl_psgsmr: string;
   flnbfl_psgsmr: string;
+  isitjn_psgsmr: string;
   depart_psgsmr: string;
   routfl_psgsmr: string;
+  keywrd_psgsmr: string;
   pagenw_psgsmr: number;
   limitp_psgsmr: number;
 }
@@ -57,6 +59,7 @@ export interface MdlSlsflwPsgsmrSrcprm {
   datefl_psgsmr: string;
   airlfl_psgsmr: string;
   flnbfl_psgsmr: string;
+  isitjn_psgsmr: string;
   depart_psgsmr: string;
   routfl_psgsmr: string;
   keywrd_psgsmr: string;

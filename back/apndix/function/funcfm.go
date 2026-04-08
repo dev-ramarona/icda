@@ -141,6 +141,15 @@ func FncApndixFormatHstory(prvval, nowval any, hstory string,
 	return fnlDatend, fnlHstory
 }
 
+// Make format date from input excel date general
+func FncApndixFormatDatexl(inputx int) int32 {
+	fmtDatexl := time.Date(1899, 12, 30, 0, 0, 0, 0, time.UTC)
+	rawDatexl := fmtDatexl.AddDate(0, 0, inputx)
+	strDatexl := rawDatexl.Format("060102")
+	intDatexl, _ := strconv.Atoi(strDatexl)
+	return int32(intDatexl)
+}
+
 // Make format date form input front end
 func FncApndixFormatDatein(inputx string) int32 {
 	if val, err := strconv.Atoi(inputx); err == nil || len(inputx) == 6 {
