@@ -161,7 +161,7 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 				}
 			}
 		}
-		if psglst.Tktnvc == "" {
+		if psglst.Tktnvc == "" || cekLstvar {
 			psglst.Tktnvc = getTktnvc
 		}
 
@@ -270,15 +270,12 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 
 	// Get ticketing document
 	if psglst.Tktnvc != "" {
-		cekTcktng = true
 		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst, mapCurrcv)
 		if err != nil {
-			psglst.Source += "|" + err.Error()
-		} else {
-			cekLstvar = true
+			fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, err.Error())
 		}
 
-		// Check non revenue
+		// Split farecalc and check non revenue
 		tmpNonrev := FncPsglstFrcalcSplitd(&psglst, mapCurrcv, sycMilege, objtkn)
 		if tmpNonrev {
 			cekNonrev = true
@@ -287,6 +284,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 			}
 		}
 		psglst.Source += "|GETTKT"
+		if psglst.Statvc == "OK" || psglst.Statvc == "USED" {
+			cekTcktng = true
+		}
 	}
 
 	// Check if data clear or not
