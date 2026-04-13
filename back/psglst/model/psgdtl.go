@@ -117,8 +117,9 @@ type MdlPsglstPsgdtlDtbase struct {
 	Isittx string  `json:"isittx" bson:"isittx,omitempty"`
 	Isitir string  `json:"isitir" bson:"isitir,omitempty"`
 	Isitct string  `json:"isitct" bson:"isitct,omitempty"`
-	Isittf string  `json:"isittf" bson:"isittf,omitempty"`
 	Isitnr string  `json:"isitnr" bson:"isitnr,omitempty"`
+	Srcfrb string  `json:"srcfrb" bson:"srcfrb,omitempty"`
+	Srcyqf string  `json:"srcyqf" bson:"srcyqf,omitempty"`
 	Noteup string  `json:"noteup" bson:"noteup,omitempty"`
 	Updtby string  `json:"updtby" bson:"updtby,omitempty"`
 	Prmkey string  `json:"prmkey" bson:"prmkey,omitempty"`
@@ -270,8 +271,9 @@ type MdlPsglstPsgdtlDfault struct {
 	Isittx string  `json:"isittx" bson:"isittx"`
 	Isitir string  `json:"isitir" bson:"isitir"`
 	Isitct string  `json:"isitct" bson:"isitct"`
-	Isittf string  `json:"isittf" bson:"isittf"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
+	Srcfrb string  `json:"srcfrb" bson:"srcfrb"`
+	Srcyqf string  `json:"srcyqf" bson:"srcyqf"`
 	Noteup string  `json:"noteup" bson:"noteup"`
 	Updtby string  `json:"updtby" bson:"updtby"`
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
@@ -371,10 +373,14 @@ type MdlPsglstPsgdtlSlserr struct {
 	Routfl string  `json:"routfl" bson:"routfl"`
 	Provnc string  `json:"provnc" bson:"provnc"`
 	Datefl int32   `json:"datefl" bson:"datefl"`
+	Timeis int64   `json:"timeis" bson:"timeis"`
+	Timecr int64   `json:"timecr" bson:"timecr"`
 	Tktnvc string  `json:"tktnvc" bson:"tktnvc"`
+	Isitnr string  `json:"isitnr" bson:"isitnr"`
 	Frcalc string  `json:"frcalc" bson:"frcalc"`
 	Curncy string  `json:"curncy" bson:"curncy"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
+	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Qsrcvc float64 `json:"qsrcvc" bson:"qsrcvc"`
 }
 

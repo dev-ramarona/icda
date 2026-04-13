@@ -32,9 +32,9 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	for _, psglst := range rspPsglst {
 
 		// Get null data
-		if psglst.Tktnfl == "" || psglst.Pnrcde == "" {
+		if psglst.Tktnvc == "" || psglst.Pnrcde == "" {
 			err := fncSbrapi.FncSbrapiPsgdtaMainob(nowObjtkn, mapClslvl, &psglst)
-			if err != nil || psglst.Tktnfl == "" || psglst.Pnrcde == "" {
+			if err != nil || psglst.Tktnvc == "" || psglst.Pnrcde == "" {
 				fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, "PSGDATA NIL")
 			} else {
 				fncApndix.FncApndixUpdateSlcstr(&psglst.Noteup, "PSGDATA GET")
@@ -260,14 +260,9 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		}
 		if val, ist := mapFbavbt[psglst.Groupc]; ist {
 			psglst.Ftotbt = int32(val)
-			if psglst.Psgrid == "061259D90001" {
-				fmt.Println("ada", val)
-			}
 		} else {
-			psglst.Ftotbt = psglst.Fbavbt
-			if psglst.Psgrid == "061259D90001" {
-				fmt.Println("tidak ada", psglst.Fbavbt)
-			}
+			psglst.Ftotbt = psglst.Hfbabt
+
 		}
 
 		// Manage route
@@ -358,107 +353,147 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			}
 		}
 
-		// Looping to get farebase vcr and flown
-		for key, val := range func() map[string]string {
+		// Get farebase and faretaxes if flow
+		if psglst.Isitfl == "F" {
+
+			// Looping to get farebase vcr and flown
 			mapRoutfb := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
-			if psglst.Ntafvc == 0 && (psglst.Isitnr == "" || psglst.Frbcde == "HB") {
-				nowRoutvc := psglst.Routvc
+			frbRoutvc := psglst.Routvc
+			if psglst.Ntafvc == 0 && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
 				if psglst.Routvc == "" {
-					nowRoutvc = psglst.Depart + "-" + psglst.Arrivl
+					frbRoutvc = psglst.Depart + "-" + psglst.Arrivl
 				}
-				mapRoutfb["routvc"] = psglst.Airlfl + nowRoutvc
+				mapRoutfb["routvc"] = psglst.Airlfl + frbRoutvc
 				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
-					mapRoutfb["routvc"] = psglst.Airlvc + nowRoutvc
+					mapRoutfb["routvc"] = psglst.Airlvc + frbRoutvc
 				}
 			}
-			return mapRoutfb
-		}() {
-
-			// Get flight hour from API
-			if _, ist := idcFrbase.Load(val); !ist {
-				objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
-					Airlfl: psglst.Airlfl, Depart: val[:3], Arrivl: val[4:], Routfl: val}
-				nowmgo, err := fncSbrapi.FncSbrapiFrbaseMainob(nowObjtkn, objParams, sycFrbase, mapClslvl)
-				if err == nil {
-					mgoFrbase = append(mgoFrbase, nowmgo...)
-					idcFrbase.Store(val, true)
-				}
-			}
-
-			// Looping
-			for nky, nvl := range func() []string {
-				slcKeytax := []string{val + psglst.Frbcde}
-				strKeycls := val + psglst.Clssfl
-				if strings.Contains(psglst.Frbcde, "RT") {
-					strKeycls = val + psglst.Clssfl + "RT"
-				}
-				slcKeytax = append(slcKeytax, strKeycls)
-				return slcKeytax
-			}() {
-				if len(val) != 9 {
+			for keyfst, valfst := range mapRoutfb {
+				if len(valfst) != 9 {
 					continue
 				}
 
-				// Get farebase from sync
-				istFrbase, ist := sycFrbase.Load(nvl)
-				if mtcFrbase, mtc := istFrbase.(mdlApndix.MdlApndixFrbaseDtbase); ist && mtc {
-					if key == "routfl" {
-						psglst.Ntaffl = mtcFrbase.Frbnta
-					} else {
-						psglst.Ntafvc = float64(mtcFrbase.Frbnta)
-					}
-					psglst.Isittf = "CLSSFL"
-					if nky == 0 {
-						psglst.Isittf = "FRBCDE"
-					}
-					break
-				}
-			}
-		}
-
-		// Looping to get faretaxes vcr and flown
-		for key, val := range func() map[string]string {
-			mapRouttx := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
-			if psglst.Isitnr != "CREW" {
-				nowRoutvc := psglst.Routvc
-				if psglst.Routvc == "" {
-					nowRoutvc = psglst.Depart + "-" + psglst.Arrivl
-				}
-				mapRouttx["routvc"] = psglst.Airlfl + nowRoutvc
-				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
-					mapRouttx["routvc"] = psglst.Airlvc + nowRoutvc
-				}
-			}
-			return mapRouttx
-		}() {
-			if len(val) != 9 {
-				continue
-			}
-
-			// Get faretaxes from API
-			if _, ist := idcFrtaxs.Load(val); !ist {
-				for _, clscbn := range []string{"Y", "C"} {
+				// Get flight hour from API
+				if _, istfst := idcFrbase.Load(valfst); !istfst {
 					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
-						Airlfl: psglst.Airlfl, Depart: val[:3], Arrivl: val[4:], Routfl: val}
-					nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, clscbn)
+						Airlfl: valfst[:2], Depart: valfst[2:5], Arrivl: valfst[6:], Routfl: valfst[2:]}
+					nowmgo, err := fncSbrapi.FncSbrapiFrbaseMainob(nowObjtkn, objParams, sycFrbase, mapClslvl)
 					if err == nil {
-						mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
-						idcFrtaxs.Store(val, true)
+						mgoFrbase = append(mgoFrbase, nowmgo...)
+						idcFrbase.Store(valfst, true)
+					}
+				}
+
+				// Looping
+				for keyscd, valscd := range func() []string {
+					slcKeytax := []string{valfst + psglst.Frbcde}
+					strKeycls := valfst + psglst.Clssfl
+					if strings.Contains(psglst.Frbcde, "RT") {
+						strKeycls = valfst + psglst.Clssfl + "RT"
+					}
+					slcKeytax = append(slcKeytax, strKeycls)
+					return slcKeytax
+				}() {
+
+					// Get farebase from sync
+					istFrbase, ist := sycFrbase.Load(valscd)
+					if mtcFrbase, mtc := istFrbase.(mdlApndix.MdlApndixFrbaseDtbase); ist && mtc {
+						if keyfst == "routfl" {
+							psglst.Ntaffl = mtcFrbase.Frbnta
+						} else {
+							psglst.Ntafvc = float64(mtcFrbase.Frbnta)
+						}
+						psglst.Srcfrb = "CLSSFL"
+						if keyscd == 0 {
+							psglst.Srcfrb = "FRBCDE"
+						}
+						break
 					}
 				}
 			}
 
-			// Get Faretaxes from sync
-			nowKeytax := val + psglst.Cbinvc
-			if key == "routfl" {
-				nowKeytax = val + psglst.Cbinfl
+			// Looping to get faretaxes vcr and flown
+			mapRoutax := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
+			taxRoutvc := psglst.Routvc
+			if psglst.Yqtxvc == 0 && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
+				if psglst.Routvc == "" {
+					taxRoutvc = psglst.Depart + "-" + psglst.Arrivl
+				}
+				mapRoutax["routvc"] = psglst.Airlfl + taxRoutvc
+				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
+					mapRoutax["routvc"] = psglst.Airlvc + taxRoutvc
+				}
 			}
-			istFrtaxs, ist := sycFrtaxs.Load(nowKeytax)
-			if mtcFrtaxs, mtc := istFrtaxs.(mdlApndix.MdlApndixFrtaxsDtbase); ist && mtc {
-				if key == "routfl" {
-					psglst.Yqtxfl = mtcFrtaxs.Ftfuel
-				} else {
-					psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
+			for keyfst, valfst := range mapRoutax {
+				if len(valfst) != 9 {
+					continue
+				}
+
+				// Get primary key and time book or issued
+				nowKeytax := valfst + psglst.Cbinvc
+				nowClscbn := psglst.Cbinvc
+				if keyfst == "routfl" || nowClscbn == "" {
+					nowKeytax = valfst + psglst.Cbinfl
+					nowClscbn = psglst.Cbinfl
+				}
+				nowDatemc := strconv.Itoa(int(psglst.Datefl))
+				if len(strconv.Itoa(int(psglst.Timeis))) == 10 {
+					nowDatemc = strconv.Itoa(int(psglst.Timeis))[:6]
+				}
+				if len(strconv.Itoa(int(psglst.Timecr))) == 10 {
+					nowDatemc = strconv.Itoa(int(psglst.Timecr))[:6]
+				}
+				intDatemc, _ := strconv.Atoi(nowDatemc)
+
+				// Looping cabin
+				slcKeytax := []string{"Y"}
+				if psglst.Bookdc != 0 {
+					slcKeytax = append(slcKeytax, "C")
+				}
+
+				// Get flight hour from API
+				if _, ist := idcFrtaxs.Load(valfst); !ist {
+					for _, valscd := range slcKeytax {
+						objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
+							Airlfl: valfst[:2], Depart: valfst[2:5], Arrivl: valfst[6:], Routfl: valfst[2:]}
+						nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, valscd)
+						if err == nil {
+							mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
+							idcFrtaxs.Store(valfst, true)
+						}
+					}
+				}
+
+				// Get farebase from sync
+				istFrtaxs, ist := sycFrtaxs.Load(nowKeytax)
+				if mtcFrtaxs, mtc := istFrtaxs.(mdlApndix.MdlApndixFrtaxsDtbase); ist && mtc {
+					if keyfst == "routfl" {
+						psglst.Yqtxfl = mtcFrtaxs.Ftfuel
+					} else {
+						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
+						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
+						if mtcFrtaxs.Datend <= int32(intDatemc) {
+							continue
+						} else if len(slcHstory) > 0 && mtcFrtaxs.Hstory != "" {
+							lenHstory := len(slcHstory) - 1
+							for idxtrd, valtrd := range slcHstory {
+								slcValtrd := strings.Split(valtrd, "@")
+								intDatend, _ := strconv.Atoi(slcValtrd[0])
+								if intDatend <= intDatemc || lenHstory == idxtrd {
+									slcFrtaxs := strings.Split(slcValtrd[1], "/")
+									for _, valfrt := range slcFrtaxs {
+										slcValfrt := strings.Split(valfrt, ":")
+										strTaxcde := slcValfrt[0]
+										intFrtaxs, _ := strconv.Atoi(slcValfrt[1])
+										if strTaxcde == "yq" && intFrtaxs != 0 {
+											psglst.Yqtxvc = float64(intFrtaxs)
+										}
+									}
+									break
+								}
+							}
+						}
+					}
 				}
 			}
 		}

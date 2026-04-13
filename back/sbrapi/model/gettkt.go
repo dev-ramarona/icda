@@ -69,7 +69,7 @@ type MdlSbrapiGettktRspagt struct {
 type MdlSbrapiGettktRsptkt struct {
 	Details         MdlSbrapiGettktRspdtl   `xml:"Details"`
 	ServiceCoupon   []MdlSbrapiGettktRspsvc `xml:"ServiceCoupon"`
-	Amounts         MdlSbrapiGettktRspbse   `xml:"Amounts>New>Base>Amount"`
+	Amounts         MdlSbrapiGettktRspamt   `xml:"Amounts>New"`
 	FareCalculation string                  `xml:"FareCalculation>New"`
 }
 type MdlSbrapiGettktRspdtl struct {
@@ -81,20 +81,24 @@ type MdlSbrapiGettktRsprsv struct {
 	CreateDate string `xml:"createDate,attr"`
 }
 type MdlSbrapiGettktRspsvc struct {
-	Coupon                int                   `xml:"coupon,attr"`
-	MarketingProvider     string                `xml:"MarketingProvider"`
-	MarketingFlightNumber string                `xml:"MarketingFlightNumber"`
-	ClassOfService        string                `xml:"ClassOfService"`
-	FareBasis             string                `xml:"FareBasis"`
-	StartLocation         string                `xml:"StartLocation"`
-	StartDateTime         string                `xml:"StartDateTime"`
-	EndLocation           string                `xml:"EndLocation"`
-	EndDateTime           string                `xml:"EndDateTime"`
-	BookingStatus         string                `xml:"BookingStatus"`
-	CurrentStatus         string                `xml:"CurrentStatus"`
-	PreviousStatus        string                `xml:"PreviousStatus"`
-	FlownCoupon           MdlSbrapiGettktRspflc `xml:"FlownCoupon"`
-	BagAllowance          string                `xml:"BagAllowance"`
+	Coupon                     int                   `xml:"coupon,attr"`
+	MarketingProvider          string                `xml:"MarketingProvider"`
+	MarketingFlightNumber      string                `xml:"MarketingFlightNumber"`
+	ClassOfService             string                `xml:"ClassOfService"`
+	FareBasis                  string                `xml:"FareBasis"`
+	StartLocation              string                `xml:"StartLocation"`
+	StartDateTime              string                `xml:"StartDateTime"`
+	EndLocation                string                `xml:"EndLocation"`
+	EndDateTime                string                `xml:"EndDateTime"`
+	BookingStatus              string                `xml:"BookingStatus"`
+	CurrentStatus              string                `xml:"CurrentStatus"`
+	PreviousStatus             string                `xml:"PreviousStatus"`
+	CurrentControllingProvider MdlSbrapiGettktRspCrs `xml:"CurrentControllingProvider"`
+	FlownCoupon                MdlSbrapiGettktRspflc `xml:"FlownCoupon"`
+	BagAllowance               string                `xml:"BagAllowance"`
+}
+type MdlSbrapiGettktRspCrs struct {
+	CurrentStatus string `xml:"currentStatus,attr"`
 }
 type MdlSbrapiGettktRspflc struct {
 	MarketingProvider     string `xml:"MarketingProvider"`
@@ -106,6 +110,17 @@ type MdlSbrapiGettktRspflc struct {
 	ArrivalCity           string `xml:"ArrivalCity"`
 	FlightOriginalDate    string `xml:"FlightOriginalDate"`
 }
+type MdlSbrapiGettktRspamt struct {
+	Base       MdlSbrapiGettktRspbse   `xml:"Base>Amount"`
+	Equivalent MdlSbrapiGettktRspbse   `xml:"Equivalent>Amount"`
+	Total      MdlSbrapiGettktRspbse   `xml:"Total>Amount"`
+	Tax        []MdlSbrapiGettktRsptax `xml:"Tax"`
+}
+type MdlSbrapiGettktRsptax struct {
+	Code   string                `xml:"code,attr"`
+	Amount MdlSbrapiGettktRspbse `xml:"Amount"`
+}
 type MdlSbrapiGettktRspbse struct {
 	CurrencyCode string `xml:"currencyCode,attr"`
+	Value        string `xml:",chardata"`
 }

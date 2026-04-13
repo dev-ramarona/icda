@@ -30,7 +30,7 @@ func FncApndixClssvlMapobj() map[string]mdlApndix.MdlApndixClsslvDtbase {
 	for datarw.Next(contxt) {
 		var object mdlApndix.MdlApndixClsslvDtbase
 		datarw.Decode(&object)
-		fnldta[object.Cbncls] = object
+		fnldta[object.Rbdcls] = object
 	}
 
 	// return data

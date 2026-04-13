@@ -91,7 +91,7 @@ func FncSbrapiPsgdtaTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsgdtaRsppdr,
 		psgdta.Pnrcde = rawxml.PNRLocator
 		fncApndix.FncApndixUpdateSlcstr(&psgdta.Noteup, "PNR SYSTEM")
 	}
-	if psgdta.Tktnfl == "" && rawxml.VCRNumber != "" {
+	if psgdta.Tktnvc == "" && psgdta.Tktnfl == "" && rawxml.VCRNumber != "" {
 		psgdta.Tktnfl = rawxml.VCRNumber
 		fncApndix.FncApndixUpdateSlcstr(&psgdta.Noteup, "TKT SYSTEM")
 	}

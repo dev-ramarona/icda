@@ -143,7 +143,6 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 		objPsglst.Seatpx = psglst.Seat
 		objPsglst.Pnrcde = psglst.PNRLocator
 		objPsglst.Tktnfl = psglst.VCRInfo.VCRData.SerialNumber
-		objPsglst.Tktnvc = psglst.VCRInfo.VCRData.SerialNumber
 		objPsglst.Psgrid = psglst.PassengerID
 		objPsglst.Nmefst = psglst.NameDetails.FirstName
 		objPsglst.Nmelst = psglst.NameDetails.LastName

@@ -192,10 +192,6 @@ func FncApndixFrtaxsUpdate(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Ftaxyr"})
 		return
 	}
-	if inputx.Datend == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Datend"})
-		return
-	}
 	if inputx.Ftothr == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Ftothr"})
 		return
@@ -284,7 +280,6 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 		"Ftfuel",
 		"Ftiwjr",
 		"Ftaxyr",
-		"Datend",
 		"Ftothr",
 		"Hstory",
 		"Updtby",
@@ -322,7 +317,6 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 			fmt.Sprintf("%v", slcDtaset.Ftfuel),
 			fmt.Sprintf("%v", slcDtaset.Ftiwjr),
 			fmt.Sprintf("%v", slcDtaset.Ftaxyr),
-			fmt.Sprintf("%v", slcDtaset.Datend),
 			slcDtaset.Ftothr,
 			slcDtaset.Hstory,
 			slcDtaset.Updtby,

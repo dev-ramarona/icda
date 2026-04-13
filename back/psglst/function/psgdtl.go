@@ -259,7 +259,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 
 	// Select db and context to do
 	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("psglst_psgdtl")
-	contxt, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 
 	// Pipeline get the data logic match
@@ -338,10 +338,11 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 
 	// Final match pipeline
 	var mtchfn bson.D
+	var fltrfn bson.D
 	if len(mtchdt) != 0 {
 		mtchfn = bson.D{{Key: "$match", Value: bson.D{{Key: "$and", Value: mtchdt}}}}
+		fltrfn = bson.D{{Key: "$and", Value: mtchdt}}
 	} else {
-		fmt.Println("mtchblnk")
 		mtchfn = bson.D{{Key: "$match", Value: bson.D{}}}
 	}
 
@@ -350,10 +351,17 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	c.Header("Content-Type", "text/csv")
 	c.Header("Content-Disposition", "attachment; filename=Psglst_Detail_"+fnlFilenm+".csv")
 	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
-
-	// Streaming file CSV ke client
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
+
+	// Get total data count
+	totrow, err := tablex.CountDocuments(contxt, fltrfn)
+	if err == nil {
+		writer.Write([]string{"Total data: " + strconv.Itoa(int(totrow))})
+		writer.Flush()
+	}
+
+	// Streaming file CSV ke client
 	switch inputx.Format_psgdtl {
 	case "MNFERR":
 		writer.Write([]string{
@@ -387,10 +395,14 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Routfl",
 			"Provnc",
 			"Datefl",
+			"Timecr",
+			"Timeis",
 			"Tktnvc",
+			"Isitnr",
 			"Frcalc",
 			"Curncy_target",
 			"Ntafvc_target",
+			"Yqtxvc_target",
 			"Qsrcvc_target",
 		})
 	case "EBTFMT":
@@ -457,7 +469,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"OTHER CLS",
 			"OTHER ROUTE",
 			"OTHER STATUS",
-			"Noteup",
+			"Remark",
 			"Gender",
 			"Routfl",
 			"Isitir",
@@ -545,8 +557,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Isittx",
 			"Isitir",
 			"Isitct",
-			"Isittf",
 			"Isitnr",
+			"Srcfrb",
+			"Srcyqf",
 			"Noteup",
 			"Updtby",
 			"Prmkey",
@@ -630,12 +643,13 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 	defer rawDtaset.Close(contxt)
 
 	// Store to slice from raw bson
-	mxflus := 5000
+	mxflus := 1000
 	countr := 0
 	for rawDtaset.Next(contxt) {
 		var slcDtaset mdlPsglst.MdlPsglstPsgdtlDtbase
 		rawDtaset.Decode(&slcDtaset)
 		strTimeis := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timeis))
+		strTimecr := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timecr))
 		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Timeis))
 		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 		strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
@@ -673,11 +687,15 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Flnbfl,
 				slcDtaset.Routfl,
 				slcDtaset.Provnc,
-				fmt.Sprintf("%v", slcDtaset.Datefl),
+				strDatefl,
+				strTimeis,
+				strTimecr,
 				slcDtaset.Tktnvc,
+				slcDtaset.Isitnr,
 				slcDtaset.Frcalc,
 				slcDtaset.Curncy,
 				fmt.Sprintf("%v", slcDtaset.Ntafvc),
+				fmt.Sprintf("%v", slcDtaset.Yqtxvc),
 				fmt.Sprintf("%v", slcDtaset.Qsrcvc),
 			})
 		case "EBTFMT":
@@ -744,7 +762,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"",
 				"",
 				"",
-				slcDtaset.Noteup,
+				slcDtaset.Remark,
 				slcDtaset.Gender,
 				slcDtaset.Routfl,
 				slcDtaset.Isitir})
@@ -831,8 +849,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Isittx,
 				slcDtaset.Isitir,
 				slcDtaset.Isitct,
-				slcDtaset.Isittf,
 				slcDtaset.Isitnr,
+				slcDtaset.Srcfrb,
+				slcDtaset.Srcyqf,
 				slcDtaset.Noteup,
 				slcDtaset.Updtby,
 				slcDtaset.Prmkey,
@@ -1129,6 +1148,12 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 					return
 				}
 
+				// Cek header and data
+				if len(slcDefhdr) != len(slcRowdta) {
+					writer.Write([]string{"Header and data mismatch"})
+					return
+				}
+
 				// read CSV per col
 				objUpdate := make(map[string]any)
 				objUpdate[nowColerr] = "CLEAR"
@@ -1177,15 +1202,7 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 				mgoUpdate = append(mgoUpdate, mongo.NewUpdateOneModel().
 					SetFilter(bson.M{"prmkey": getPrmkey}).
 					SetUpdate(bson.M{"$set": objUpdate}).SetUpsert(true))
-				fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-					"psglst_psgdtl": &mgoUpdate,
-				}, 200)
 			}
-
-			// Push last mongomodel
-			fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-				"psglst_psgdtl": &mgoUpdate,
-			}, 0)
 		}
 	}
 
@@ -1195,6 +1212,10 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 			writer.Write(slcrsp)
 		}
 	} else {
+		// Push last mongomodel
+		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+			"psglst_psgdtl": &mgoUpdate,
+		}, 0)
 		writer.Write([]string{"Success"})
 	}
 }

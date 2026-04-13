@@ -76,9 +76,9 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	var sycProvnc = fncApndix.FncApndixProvncSycmap()
 	var sycFlhour = fncApndix.FncApndixFlhourSycmap()
 	var sycFlnbfl = fncApndix.FncApndixFlnbflSycmap()
-	var sycFrbase = fncApndix.FncApndixFrbaseSycmap()
-	var sycFrtaxs = fncApndix.FncApndixFrtaxsSycmap()
 	var sycMilege = fncApndix.FncApndixMilegeSycmap()
+	var sycFrtaxs = fncApndix.FncApndixFrtaxsSycmap()
+	var sycFrbase = fncApndix.FncApndixFrbaseSycmap()
 	var sycErrlog = FncPsglstErrlogSycmap(int32(intDatefl))
 	var sycCurrcv = &sync.Map{}
 	var sycChrter = &sync.Map{}
@@ -92,6 +92,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	for _, airlfl := range slcAirlfl {
 		fmt.Println("Processing airline:", airlfl, totWorker)
 
+		// Default variable
 		var idcFlhour = &sync.Map{}
 		var idcFrbase = &sync.Map{}
 		var idcFrtaxs = &sync.Map{}
@@ -257,14 +258,14 @@ func FncPsglstPrcessWorker(
 
 	// iterate jobs
 	cntdta := 0
-	for fllist := range jobFllist {
+	for slcFllist := range jobFllist {
 		cntdta++
 
 		// prepare locals
 		var nowStartm = time.Now()
-		var intDatefl = fllist.Datefl
-		var dbsFlnbfl, dbsDepart, dbsArrivl = fllist.Flnbfl, fllist.Depart, fllist.Arrivl
-		var dbsRoutfl, dbsAirlfl = fllist.Routfl, fllist.Airlfl
+		var intDatefl = slcFllist.Datefl
+		var dbsFlnbfl, dbsDepart, dbsArrivl = slcFllist.Flnbfl, slcFllist.Depart, slcFllist.Arrivl
+		var dbsRoutfl, dbsAirlfl = slcFllist.Routfl, slcFllist.Airlfl
 		var objParams = mdlSbrapi.MdlSbrapiMsghdrApndix{
 			Airlfl: dbsAirlfl, Datefl: intDatefl, Depart: dbsDepart,
 			Arrivl: dbsArrivl, Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl}
@@ -283,14 +284,14 @@ func FncPsglstPrcessWorker(
 
 		// Get flight detail
 		func() {
-			err := fncSbrapi.FncSbrapiFldtilMainob(nowObjtkn, objParams, &fllist)
-			if fllist.Flstat == "PDC" {
+			err := fncSbrapi.FncSbrapiFldtilMainob(nowObjtkn, objParams, &slcFllist)
+			if slcFllist.Flstat == "PDC" {
 				FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 					Erpart: "fldtil", Ersrce: "sbrapi", Erdvsn: "SLSRPT",
 					Dateup: int32(intDatenw), Timeup: int64(intTimenw),
 					Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
 					Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
-				}, err != nil || fllist.Routmx == "", sycErrlog, errErignr, errPrmkey)
+				}, err != nil || slcFllist.Routmx == "", sycErrlog, errErignr, errPrmkey)
 			}
 		}()
 
@@ -318,7 +319,7 @@ func FncPsglstPrcessWorker(
 
 					// Push data flight hour if isset
 					if flhour.Routfl[:3] == dbsDepart {
-						fllist.Flhour = flhour.Flhour
+						slcFllist.Flhour = flhour.Flhour
 					}
 				}
 			}
@@ -329,7 +330,7 @@ func FncPsglstPrcessWorker(
 			if getFlhour, ist := sycFlhour.Load(keyFlhour); ist {
 				istFlhour = false
 				if mtcFlhour, mtc := getFlhour.(mdlApndix.MdlApndixFlhourDtbase); mtc {
-					fllist.Flhour = mtcFlhour.Flhour
+					slcFllist.Flhour = mtcFlhour.Flhour
 					if mtcFlhour.Flhour != 0 {
 						nulFlhour = false
 					}
@@ -345,12 +346,12 @@ func FncPsglstPrcessWorker(
 				Routfl: dbsRoutfl,
 				Flnbfl: dbsFlnbfl,
 				Flhour: 0,
-				Timefl: fllist.Timefl,
-				Timerv: fllist.Timerv,
-				Timeup: fllist.Timeup,
+				Timefl: slcFllist.Timefl,
+				Timerv: slcFllist.Timerv,
+				Timeup: slcFllist.Timeup,
 				Dateup: objParams.Dateup,
 				Datend: objParams.Dateup,
-				Airtyp: fllist.Airtyp,
+				Airtyp: slcFllist.Airtyp,
 				Airmls: 0,
 				Hstory: "",
 				Updtby: ""}
@@ -361,7 +362,7 @@ func FncPsglstPrcessWorker(
 		}
 
 		// If doesn't get flight hour API
-		if fllist.Flstat == "PDC" {
+		if slcFllist.Flstat == "PDC" {
 			FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 				Erpart: "flhour", Ersrce: "sbrapi", Erdvsn: "SLSRPT",
 				Dateup: int32(intDatenw), Timeup: int64(intTimenw),
@@ -375,7 +376,7 @@ func FncPsglstPrcessWorker(
 
 			// Make combination all route
 			slcRoutfl := []string{dbsRoutfl}
-			slcRoutmx := strings.Split(fllist.Routmx, "-")
+			slcRoutmx := strings.Split(slcFllist.Routmx, "-")
 			lenRoutmx := len(slcRoutmx)
 			for i := 0; i < lenRoutmx-1; i++ {
 				for e := i + 1; e < lenRoutmx; e++ {
@@ -408,7 +409,7 @@ func FncPsglstPrcessWorker(
 
 					// Declare looping economy and bisnis
 					slcClscbn := []string{"Y"}
-					if fllist.Autrzc != 0 {
+					if slcFllist.Autrzc != 0 {
 						slcClscbn = []string{"Y", "C"}
 					}
 					for _, clscbn := range slcClscbn {
@@ -424,26 +425,26 @@ func FncPsglstPrcessWorker(
 
 		// Push final flight list
 		mgoFllist = append(mgoFllist, mongo.NewUpdateOneModel().
-			SetFilter(bson.M{"prmkey": fllist.Prmkey}).
-			SetUpdate(bson.M{"$set": fllist}).
+			SetFilter(bson.M{"prmkey": slcFllist.Prmkey}).
+			SetUpdate(bson.M{"$set": slcFllist}).
 			SetUpsert(true))
 		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 			Erpart: "fllist", Ersrce: "sbrapi", Erdvsn: "MNFEST",
 			Dateup: int32(intDatenw), Timeup: int64(intTimenw),
 			Datefl: int32(intDatefl), Airlfl: dbsAirlfl, Worker: 1,
-			Depart: dbsDepart, Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Flstat: fllist.Flstat,
-		}, fllist.Flstat != "PDC" && fllist.Flstat != "CANCEL", sycErrlog, errErignr, errPrmkey)
+			Depart: dbsDepart, Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Flstat: slcFllist.Flstat,
+		}, slcFllist.Flstat != "PDC" && slcFllist.Flstat != "CANCEL", sycErrlog, errErignr, errPrmkey)
 
 		// Push final flightnumber
 		var prmkey = dbsAirlfl + dbsFlnbfl
 		if _, ist := idcFlnbfl.Load(prmkey); !ist {
-			tmpFlnbfl := fncApndix.FncApndixFlnbflPrcess(sycFlnbfl, objParams, prmkey, fllist.Routmx)
+			tmpFlnbfl := fncApndix.FncApndixFlnbflPrcess(sycFlnbfl, objParams, prmkey, slcFllist.Routmx)
 			mgoFlnbfl = append(mgoFlnbfl, tmpFlnbfl...)
 			idcFlnbfl.Store(prmkey, true)
 		}
 
 		// Get passangger list
-		rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, fllist, mapClslvl)
+		rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, slcFllist, mapClslvl)
 		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 			Erpart: "psglst", Ersrce: "dtbase", Erdvsn: "MNFEST",
 			Dateup: int32(intDatenw), Timeup: int64(intTimenw),
@@ -451,7 +452,7 @@ func FncPsglstPrcessWorker(
 			Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
 		}, err != nil, sycErrlog, errErignr, errPrmkey)
 		tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc :=
-			FncPsglstPsglstPrcess(rspPsglst, fllist,
+			FncPsglstPsglstPrcess(rspPsglst, slcFllist,
 				nowObjtkn, objParams,
 				sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
 				idcFrbase, idcFrtaxs, sycErrlog, sycProvnc,
@@ -479,7 +480,7 @@ func FncPsglstPrcessWorker(
 		nowDifftm := nowEnddtm.Sub(nowStartm)
 		fmtDifftm := fmt.Sprintf("%02d:%02d:%02d", int(nowDifftm.Hours()),
 			int(nowDifftm.Minutes())%60, int(nowDifftm.Seconds())%60)
-		fmt.Println("End", fllist.Depart+fllist.Airlfl+fllist.Flnbfl, cntdta, "-",
+		fmt.Println("End", slcFllist.Depart+slcFllist.Airlfl+slcFllist.Flnbfl, cntdta, "-",
 			dbsAirlfl, dbsFlnbfl, intDatefl, dbsRoutfl, fmtDifftm)
 
 		// Percentage all done data progress

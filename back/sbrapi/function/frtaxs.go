@@ -6,6 +6,7 @@ import (
 	mdlSbrapi "back/sbrapi/model"
 	"encoding/xml"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"sync"
@@ -23,8 +24,7 @@ func FncSbrapiFrtaxsMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 	// Isi struktur data
 	tmpFrbase := 100000000
-	strDatefl := strconv.Itoa(int(apndix.Datefl))
-	rawDatefl, _ := time.Parse("060102", strDatefl)
+	rawDatefl := time.Now()
 	dmyDatefl := rawDatefl.Format("2006-01-02T00:00:00")
 	fnlFrtaxs := []mongo.WriteModel{}
 	bdyFrtaxs := mdlSbrapi.MdlSbrapiFrtaxsReqenv{
@@ -111,6 +111,7 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 		Prmkey: taxPrmkey,
 		Airlfl: apndix.Airlfl,
 		Cbinfl: clscbn,
+		Depart: apndix.Depart,
 		Routfl: apndix.Routfl,
 		Ftothr: "",
 	}
@@ -147,10 +148,11 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 	// Last treatment taxes ID
 	var now = fnlFrtaxs
 	if len(tmpFrtxid) > 0 {
-		taxRateid := (float64(tmpFrtxid[0]) / float64(now.Ftfuel+now.Ftaxyr+int32(tmpFrbase))) * 100
+		taxRateid := math.Round((float64(tmpFrtxid[0]) / float64(now.Ftfuel+now.Ftaxyr+int32(tmpFrbase))) * 100)
 		strRateid := strconv.Itoa(int(taxRateid))
 		fltRateid, _ := strconv.ParseFloat(strRateid, 32)
-		fnlFrtaxs.Ftppnx = float32(fltRateid / 100)
+		fnlFrtaxs.Ftppnx = fltRateid / 100
+		now.Ftppnx = fnlFrtaxs.Ftppnx
 	}
 
 	// Treatment frtax other
@@ -168,23 +170,26 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 				tmpOthers = append(tmpOthers, scdStrval)
 				fstPrcntg := float64(fstValtax) / float64(tmpFrbase) * 100
 				fstStrval = fstKeytax + ":" + strconv.Itoa(int(fstPrcntg)) + "%"
+			} else {
+				tmpOthers = append(tmpOthers, fstStrval)
 			}
-			tmpOthers = append(tmpOthers, fstStrval)
-			fnlFrtaxs.Ftothr = strings.Join(tmpOthers, "|")
 		}
+		fnlFrtaxs.Ftothr = strings.Join(tmpOthers, "/")
 	}
 
 	// Check now than prev frbase
 	var intDatenw, _ = strconv.Atoi(time.Now().Format("060102"))
 	if val, ist := sycFrtaxs.Load(taxPrmkey); ist {
-		if get, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
-			prvTaxstr := fmt.Sprintf("yq:%v|apt:%v|p4:%v|yr:%v|id:%v",
-				get.Ftfuel, get.Ftaptx, get.Ftiwjr, get.Ftaxyr, get.Ftppnx)
-			nowTaxstr := fmt.Sprintf("yq:%v|apt:%v|p4:%v|yr:%v|id:%v",
+		if prv, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
+			prvTaxstr := fmt.Sprintf("yq:%v/apt:%v/p4:%v/yr:%v/id:%v",
+				prv.Ftfuel, prv.Ftaptx, prv.Ftiwjr, prv.Ftaxyr, prv.Ftppnx)
+			nowTaxstr := fmt.Sprintf("yq:%v/apt:%v/p4:%v/yr:%v/id:%v",
 				now.Ftfuel, now.Ftaptx, now.Ftiwjr, now.Ftaxyr, now.Ftppnx)
 			fnlFrtaxs.Datend, fnlFrtaxs.Hstory = fncApndix.FncApndixFormatHstory(prvTaxstr,
-				nowTaxstr, get.Hstory, get.Datend, int32(intDatenw))
+				nowTaxstr, prv.Hstory, prv.Datend, int32(intDatenw))
 		}
+	} else {
+		fnlFrtaxs.Datend = int32(intDatenw)
 	}
 
 	// Return final data

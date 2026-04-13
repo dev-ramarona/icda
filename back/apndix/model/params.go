@@ -150,14 +150,15 @@ type MdlApndixFrtaxsDtbase struct {
 	Prmkey string  `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
 	Airlfl string  `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
 	Cbinfl string  `json:"cbinfl,omitempty" bson:"cbinfl,omitempty"`
+	Depart string  `json:"depart,omitempty" bson:"depart,omitempty"`
 	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
-	Ftppnx float32 `json:"ftppnx" bson:"ftppnx"`
+	Ftppnx float64 `json:"ftppnx" bson:"ftppnx"`
 	Ftaptx int32   `json:"ftaptx" bson:"ftaptx"`
 	Ftfuel int32   `json:"ftfuel" bson:"ftfuel"`
 	Ftiwjr int32   `json:"ftiwjr" bson:"ftiwjr"`
 	Ftaxyr int32   `json:"ftaxyr" bson:"ftaxyr"`
-	Datend int32   `json:"datend" bson:"datend"`
 	Ftothr string  `json:"ftothr,omitempty" bson:"ftothr,omitempty"`
+	Datend int32   `json:"datend,omitempty" bson:"datend,omitempty"`
 	Hstory string  `json:"hstory,omitempty" bson:"hstory,omitempty"`
 	Updtby string  `json:"updtby,omitempty" bson:"updtby,omitempty"`
 }
@@ -165,14 +166,15 @@ type MdlApndixFrtaxsFrntnd struct {
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
 	Airlfl string  `json:"airlfl" bson:"airlfl"`
 	Cbinfl string  `json:"cbinfl" bson:"cbinfl"`
+	Depart string  `json:"depart" bson:"depart"`
 	Routfl string  `json:"routfl" bson:"routfl"`
-	Ftppnx float32 `json:"ftppnx" bson:"ftppnx"`
+	Ftppnx float64 `json:"ftppnx" bson:"ftppnx"`
 	Ftaptx int32   `json:"ftaptx" bson:"ftaptx"`
 	Ftfuel int32   `json:"ftfuel" bson:"ftfuel"`
 	Ftiwjr int32   `json:"ftiwjr" bson:"ftiwjr"`
 	Ftaxyr int32   `json:"ftaxyr" bson:"ftaxyr"`
-	Datend int32   `json:"datend" bson:"datend"`
 	Ftothr string  `json:"ftothr" bson:"ftothr"`
+	Datend int32   `json:"datend" bson:"datend"`
 	Hstory string  `json:"hstory" bson:"hstory"`
 	Updtby string  `json:"updtby" bson:"updtby"`
 }

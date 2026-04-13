@@ -129,13 +129,6 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 					(idx >= 1 && slcRoutsg[len(slcRoutsg)-1] != rawDepart) {
 					slcSegpnr = append(slcSegpnr, fmtSegpnr)
 					slcRoutsg = append(slcRoutsg, rawDepart)
-					if psglst.Psgrid == "4073A8A90101" {
-						fmt.Println("true", rawDepart)
-					}
-				} else {
-					if psglst.Psgrid == "4073A8A90101" {
-						fmt.Println("false", rawDepart)
-					}
 				}
 			}
 			slcRoutsg = append(slcRoutsg, lstArrivl)
@@ -147,27 +140,29 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 		// Get ticketing detail for issued date
 		var slcTcktng = nowRsvpnr.PassengerReservation.TicketingInfo.TicketDetails
 		var mapEmdnae = map[string]bool{}
+		var getTktnvc = ""
 		if len(slcTcktng) != 0 {
 			for _, tcktng := range slcTcktng {
 
 				// Logical gate for ticket number
-				if psglst.Tktnfl == "" {
-					strFmtnme := (psglst.Nmelst + "     ")[:5]
-					strLstnme := (psglst.Nmefst + " ")[:1]
-					cncFulln1 := strFmtnme + "/" + strLstnme
-					cncFulln2 := psglst.Nmelst + "/" + strLstnme
-					if cncFulln1 == tcktng.PassengerName ||
-						cncFulln2 == tcktng.PassengerName {
+				strFmtnme := (psglst.Nmelst + "     ")[:5]
+				strLstnme := (psglst.Nmefst + " ")[:1]
+				cncFulln1 := strFmtnme + "/" + strLstnme
+				cncFulln2 := psglst.Nmelst + "/" + strLstnme
+				if cncFulln1 == tcktng.PassengerName ||
+					cncFulln2 == tcktng.PassengerName {
 
-						// Get ticket number blank and emd
-						if tcktng.TicketNumber[3:4] != "4" {
-							psglst.Tktnvc = tcktng.TicketNumber[:13]
-						} else if tcktng.TicketNumber[3:4] == "4" {
-							mapEmdnae[tcktng.TicketNumber[:13]] = true
-						}
+					// Get ticket number blank and emd
+					if tcktng.TicketNumber[3:4] != "4" {
+						getTktnvc = tcktng.TicketNumber[:13]
+					} else if tcktng.TicketNumber[3:4] == "4" {
+						mapEmdnae[tcktng.TicketNumber[:13]] = true
 					}
 				}
 			}
+		}
+		if psglst.Tktnvc == "" {
+			psglst.Tktnvc = getTktnvc
 		}
 
 		// Get ancillary
@@ -276,7 +271,7 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	// Get ticketing document
 	if psglst.Tktnvc != "" {
 		cekTcktng = true
-		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst)
+		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst, mapCurrcv)
 		if err != nil {
 			psglst.Source += "|" + err.Error()
 		} else {

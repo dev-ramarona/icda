@@ -2,6 +2,7 @@ package fncSbrapi
 
 import (
 	fncApndix "back/apndix/function"
+	mdlApndix "back/apndix/model"
 	mdlPsglst "back/psglst/model"
 	mdlSbrapi "back/sbrapi/model"
 	"encoding/xml"
@@ -15,7 +16,8 @@ import (
 
 // Get data Reservation PNR froms abre
 func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
-	airlfl string, psglst *mdlPsglst.MdlPsglstPsgdtlDtbase) error {
+	airlfl string, psglst *mdlPsglst.MdlPsglstPsgdtlDtbase,
+	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase) error {
 
 	// Isi struktur data
 	rspEnvpnr := mdlSbrapi.MdlSbrapiGettktRspenv{}
@@ -147,13 +149,30 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		slcRoutvf = append(slcRoutvf, rawDepart)
 	}
 
+	// Get taxes
+	if len(slcSegtkt) == 1 {
+		psglst.Srcyqf = "GETTKT"
+		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
+			if segtax.Code == "YQ" {
+				intTaxyqf, _ := strconv.Atoi(segtax.Amount.Value)
+				getCurncy := segtax.Amount.CurrencyCode
+				valmap, istmap := mapCurrcv[segtax.Amount.CurrencyCode]
+				if getCurncy != "IDR" && istmap {
+					intTaxyqf = int(float64(intTaxyqf) / valmap.Crrate)
+				}
+				psglst.Yqtxvc = float64(intTaxyqf)
+				break
+			}
+		}
+	}
+
 	// Push other data
 	slcRoutvf = append(slcRoutvf, lstArrivl)
 	psglst.Routvf = strings.Join(slcRoutvf, "-")
 	psglst.Segtkt = strings.Join(slcSegtkt, "|")
 	psglst.Agtdie = getTktdoc.Agent.Duty + getTktdoc.Agent.Sine
 	psglst.Frcalc = getTktdoc.Ticket.FareCalculation
-	psglst.Curncy = getTktdoc.Ticket.Amounts.CurrencyCode
+	psglst.Curncy = getTktdoc.Ticket.Amounts.Base.CurrencyCode
 	psglst.Tourcd = getTktdoc.Ticket.Details.TourNumber
 	psglst.Staloc = getTktdoc.Agent.StationLocation
 	psglst.Stanbr = getTktdoc.Agent.StationNumber
@@ -177,7 +196,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		psglst.Flnbvc = getFlsgmn.MarketingFlightNumber
 		psglst.Airlvc = getFlsgmn.MarketingProvider
 		psglst.Frbcde = getFlsgmn.FareBasis
-		psglst.Statvc = getFlsgmn.CurrentStatus
+		psglst.Statvc = getFlsgmn.CurrentControllingProvider.CurrentStatus
 		psglst.Datevc = fncApndix.FncApndixFormatDatein(getFlsgmn.StartDateTime)
 		regmnb := regexp.MustCompile(`\d+`)
 		if strfba := getFlsgmn.BagAllowance; strfba != "" {

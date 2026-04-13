@@ -125,13 +125,16 @@ func FncApndixFormatHstory(prvval, nowval any, hstory string,
 	datend, datenw int32) (int32, string) {
 	var fnlDatend, fnlHstory = datenw, ""
 	if prvval == nowval {
-		fnlDatend = datend
+		if datend != 0 {
+			return datend, hstory
+		}
+		return datenw, hstory
 	} else if nowval != "" && nowval != 0 {
 		arrHstory := []string{}
 		if hstory != "" {
 			arrHstory = strings.Split(hstory, "|")
 		}
-		arrHstory = append(arrHstory, fmt.Sprintf("%v:%v", datend, prvval))
+		arrHstory = append(arrHstory, fmt.Sprintf("%v@%v", datend, prvval))
 		lenHstory := 0
 		if len(arrHstory) > 15 {
 			lenHstory = len(arrHstory) - 15

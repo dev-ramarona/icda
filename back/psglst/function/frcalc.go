@@ -608,9 +608,9 @@ brk:
 			psglst.Qsrcvc, _ = strconv.ParseFloat(getFlsgmn.Qsrcnv, 64)
 			psglst.Qsrcrw = getFlsgmn.Qsrcrw
 			psglst.Routfr = getFlsgmn.Routfl
-			psglst.Isittf = "FRCALC"
+			psglst.Srcfrb = "FRCALC"
 			if getFlsgmn.Isitpr == "PRORTE" {
-				psglst.Isittf = "PRCALC"
+				psglst.Srcfrb = "PRCALC"
 			}
 			cekNonrev = (getFlsgmn.Isitit == "" && allNonrev) || psglst.Ntafvc == 0
 			psglst.Routfx = strings.ReplaceAll(strings.Join(slcRoutfr, "|"), getFlsgmn.Routfl, "")
