@@ -114,9 +114,14 @@ type MdlSbrapiGettktRspamt struct {
 	Base       MdlSbrapiGettktRspbse   `xml:"Base>Amount"`
 	Equivalent MdlSbrapiGettktRspbse   `xml:"Equivalent>Amount"`
 	TotalTax   MdlSbrapiGettktRspbse   `xml:"TotalTax>Amount"`
-	Total      MdlSbrapiGettktRspbse   `xml:"Total>Amount"`
+	Total      MdlSbrapiGettktRsptot   `xml:"Total"`
 	Tax        []MdlSbrapiGettktRsptax `xml:"Tax"`
 }
+type MdlSbrapiGettktRsptot struct {
+	Amount MdlSbrapiGettktRspbse `xml:"Amount"`
+	Text   string                `xml:"text"`
+}
+
 type MdlSbrapiGettktRsptax struct {
 	Code   string                `xml:"code,attr"`
 	Status string                `xml:"status,attr"`
