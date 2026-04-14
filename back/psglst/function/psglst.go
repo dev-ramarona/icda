@@ -69,6 +69,8 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					}
 					if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, nowAirlfl) {
 						fnlPrvpsg[nowAirlfl][nowPnrcde+"|"+mtcPsglst.Prmkey] = mtcPsglst
+					} else {
+						sycClrpsg.Store(mtcPsglst.Prmkey, mtcPsglst)
 					}
 				}
 			}
