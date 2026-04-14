@@ -158,7 +158,6 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		}
 		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
 			if segtax.Code == "YQ" && segtax.Status == "PD" {
-				psglst.Srcyqf = "GETTKT"
 				getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
 				if segtax.Amount.CurrencyCode != "" {
 					getTaxcur = segtax.Amount.CurrencyCode
@@ -179,6 +178,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 					getTaxyqf = int(float64(getTaxyqf) / valmap.Crrate)
 				}
 			}
+			psglst.Srcyqf = "GETTKT"
 			psglst.Yqtxvc = float64(getTaxyqf)
 		}
 	}
