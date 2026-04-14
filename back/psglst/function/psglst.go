@@ -402,10 +402,10 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 							psglst.Ntaffl = mtcFrbase.Frbnta
 						} else {
 							psglst.Ntafvc = float64(mtcFrbase.Frbnta)
-						}
-						psglst.Srcfrb = "CLSSFL"
-						if keyscd == 0 {
-							psglst.Srcfrb = "FRBCDE"
+							psglst.Srcfrb = "CLSSFL"
+							if keyscd == 0 {
+								psglst.Srcfrb = "FRBCDE"
+							}
 						}
 						break
 					}
@@ -414,15 +414,19 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 
 			// Looping to get faretaxes vcr and flown
 			mapRoutax := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
-			taxRoutvc := psglst.Routvc
 			if psglst.Yqtxvc == 0 && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
+				taxRoutvc := psglst.Routvc
 				if psglst.Routvc == "" {
 					taxRoutvc = psglst.Depart + "-" + psglst.Arrivl
 				}
-				mapRoutax["routvc"] = psglst.Airlfl + taxRoutvc
-				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
-					mapRoutax["routvc"] = psglst.Airlvc + taxRoutvc
+				if psglst.Ntafvc != 0 && psglst.Routfr != "" {
+					taxRoutvc = psglst.Routfr
 				}
+				taxArilvc := psglst.Airlfl
+				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
+					taxArilvc = psglst.Airlvc
+				}
+				mapRoutax["routvc"] = taxArilvc + taxRoutvc
 			}
 			for keyfst, valfst := range mapRoutax {
 				if len(valfst) != 9 {
