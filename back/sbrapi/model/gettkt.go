@@ -119,6 +119,7 @@ type MdlSbrapiGettktRspamt struct {
 }
 type MdlSbrapiGettktRsptax struct {
 	Code   string                `xml:"code,attr"`
+	Status string                `xml:"status,attr"`
 	Amount MdlSbrapiGettktRspbse `xml:"Amount"`
 }
 type MdlSbrapiGettktRspbse struct {

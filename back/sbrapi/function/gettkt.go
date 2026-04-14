@@ -152,13 +152,13 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	// Get taxes
 	if len(slcSegtkt) == 1 {
 		getTaxyqf := 0
-		psglst.Srcyqf = "GETTKT"
 		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode
 		if getTaxcur == "" {
 			getTaxcur = getTktdoc.Ticket.Amounts.Total.CurrencyCode
 		}
 		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
-			if segtax.Code == "YQ" {
+			if segtax.Code == "YQ" && segtax.Status == "PD" {
+				psglst.Srcyqf = "GETTKT"
 				getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
 				if segtax.Amount.CurrencyCode != "" {
 					getTaxcur = segtax.Amount.CurrencyCode
