@@ -211,6 +211,9 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		psglst.Airlvc = getFlsgmn.MarketingProvider
 		psglst.Frbcde = getFlsgmn.FareBasis
 		psglst.Statvc = getFlsgmn.CurrentControllingProvider.CurrentStatus
+		if psglst.Statvc == "" {
+			psglst.Statvc = getFlsgmn.CurrentStatus
+		}
 		psglst.Datevc = fncApndix.FncApndixFormatDatein(getFlsgmn.StartDateTime)
 		regmnb := regexp.MustCompile(`\d+`)
 		if strfba := getFlsgmn.BagAllowance; strfba != "" {
