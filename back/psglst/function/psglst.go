@@ -548,12 +548,14 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		psglst.Fareae = psglst.Fareae * psglst.Frrate * valChrter
 
 		// Push summary
-		totSmmary.Totnta += psglst.Ntafvc
-		totSmmary.Tottyq += psglst.Yqtxvc
-		totSmmary.Totpax += 1
-		totSmmary.Totfae += psglst.Fareae
-		totSmmary.Totqfr += psglst.Qsrcvc
-		totSmmary.Totrph += (psglst.Ntafvc + psglst.Yqtxvc) / fllist.Flhour
+		if psglst.Isitfl == "F" {
+			totSmmary.Totnta += psglst.Ntafvc
+			totSmmary.Tottyq += psglst.Yqtxvc
+			totSmmary.Totpax += 1
+			totSmmary.Totfae += psglst.Fareae
+			totSmmary.Totqfr += psglst.Qsrcvc
+			totSmmary.Totrph += (psglst.Ntafvc + psglst.Yqtxvc) / fllist.Flhour
+		}
 
 		// Get province
 		cekProvnc := true

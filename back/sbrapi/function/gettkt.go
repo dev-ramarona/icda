@@ -16,7 +16,7 @@ import (
 
 // Get data Reservation PNR froms abre
 func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
-	airlfl string, psglst *mdlPsglst.MdlPsglstPsgdtlDtbase,
+	airlfl string, psglst *mdlPsglst.MdlPsglstPsgdtlDtbase, tktnow string,
 	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase) error {
 
 	// Isi struktur data
@@ -151,18 +151,32 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 	// Get taxes
 	if len(slcSegtkt) == 1 {
+		getTaxyqf := 0
 		psglst.Srcyqf = "GETTKT"
+		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode
 		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
 			if segtax.Code == "YQ" {
-				intTaxyqf, _ := strconv.Atoi(segtax.Amount.Value)
-				getCurncy := segtax.Amount.CurrencyCode
-				valmap, istmap := mapCurrcv[segtax.Amount.CurrencyCode]
-				if getCurncy != "IDR" && istmap {
-					intTaxyqf = int(float64(intTaxyqf) / valmap.Crrate)
+				getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
+				if segtax.Amount.CurrencyCode != "" {
+					getTaxcur = segtax.Amount.CurrencyCode
+					break
 				}
-				psglst.Yqtxvc = float64(intTaxyqf)
-				break
 			}
+
+			// Get other taxes if not get
+			if segtax.Amount.CurrencyCode != "" {
+				getTaxcur = segtax.Amount.CurrencyCode
+			}
+		}
+
+		// Convert YQ if not IDR and push
+		if getTaxyqf != 0 {
+			if getTaxcur != "" && getTaxcur != "IDR" {
+				if valmap, istmap := mapCurrcv[getTaxcur]; istmap {
+					getTaxyqf = int(float64(getTaxyqf) / valmap.Crrate)
+				}
+			}
+			psglst.Yqtxvc = float64(getTaxyqf)
 		}
 	}
 

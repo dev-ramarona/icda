@@ -269,8 +269,12 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Get ticketing document
-	if psglst.Tktnvc != "" {
-		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst, mapCurrcv)
+	if psglst.Tktnvc != "" || (cekLstvar && psglst.Tktnfl != "") {
+		getTktnow := psglst.Tktnvc
+		if psglst.Tktnvc == "" {
+			getTktnow = psglst.Tktnfl
+		}
+		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst, getTktnow, mapCurrcv)
 		if err != nil {
 			fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, err.Error())
 		}
@@ -286,6 +290,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 		psglst.Source += "|GETTKT"
 		if psglst.Statvc == "OK" || psglst.Statvc == "USED" {
 			cekTcktng = true
+			if psglst.Tktnvc == "" {
+				psglst.Tktnvc = psglst.Tktnfl
+			}
 		}
 	}
 
