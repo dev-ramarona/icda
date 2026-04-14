@@ -154,6 +154,9 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		getTaxyqf := 0
 		psglst.Srcyqf = "GETTKT"
 		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode
+		if getTaxcur == "" {
+			getTaxcur = getTktdoc.Ticket.Amounts.Total.CurrencyCode
+		}
 		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
 			if segtax.Code == "YQ" {
 				getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
