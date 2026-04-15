@@ -303,6 +303,17 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			}
 			if psglst.Routfl == "" {
 				psglst.Routfl = psglst.Depart + "-" + psglst.Arrivl
+				if psglst.Routmx != "" {
+					intCountr := 0
+					for slcCountr, nowDepart := range strings.Split(fllist.Routmx, "-") {
+						if nowDepart == psglst.Depart {
+							intCountr = slcCountr + 1
+						}
+						if intCountr == slcCountr {
+							psglst.Routfl = fllist.Depart + "-" + nowDepart
+						}
+					}
+				}
 			}
 		}
 
@@ -581,16 +592,16 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				Erpart: "provnc", Ersrce: "dtbase", Erdvsn: "SLSRPT",
 				Dateup: int32(objParams.Dateup), Timeup: int64(objParams.Timeup),
 				Datefl: int32(objParams.Datefl), Airlfl: objParams.Airlfl,
-				Flnbfl: objParams.Flnbfl, Routfl: objParams.Routfl, Worker: 1,
+				Flnbfl: objParams.Flnbfl, Routfl: psglst.Routfl, Worker: 1,
 			}, cekProvnc, sycErrlog, errErignr, errPrmkey)
 
 			// Push to database provnc blank
 			if !istProvnc {
 				varProvnc := mdlApndix.MdlApndixProvncDtbase{
-					Routfl: objParams.Routfl, Provnc: "", Updtby: ""}
-				sycProvnc.Store(objParams.Routfl, varProvnc)
+					Routfl: psglst.Routfl, Provnc: "", Updtby: ""}
+				sycProvnc.Store(psglst.Routfl, varProvnc)
 				mgoProvnc = append(mgoProvnc, mongo.NewUpdateOneModel().
-					SetFilter(bson.M{"routfl": objParams.Routfl}).
+					SetFilter(bson.M{"routfl": psglst.Routfl}).
 					SetUpdate(bson.M{"$set": varProvnc}).SetUpsert(true))
 			}
 		}

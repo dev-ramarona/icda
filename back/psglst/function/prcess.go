@@ -151,6 +151,21 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 				continue
 			}
 
+			// Get API Flight List data
+			// nowFligh
+			// rawFllist, err := fncSbrapi.FncSbrapiFllistMainob(slcRspssn[0],
+			// 	mdlSbrapi.MdlSbrapiMsghdrApndix{Datefl: int32(intDatefl),
+			// 		Airlfl: airlfl, Depart: depart})
+			// FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
+			// 	Erpart: "fllstl", Ersrce: "sbrapi", Erdvsn: "MNFEST",
+			// 	Dateup: int32(intDatenw), Timeup: int64(intTimenw),
+			// 	Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 5,
+			// 	Depart: depart,
+			// }, err != nil, sycErrlog, &errErignr, &errPrmkey)
+			// if err != nil {
+			// 	continue
+			// }
+
 			// Counting all maximal data progress
 			if valmax, istmax := sycPrgrss.Load("maxfln"); istmax {
 				if valFltmax, mtc := valmax.(float64); mtc {
