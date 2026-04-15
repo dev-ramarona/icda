@@ -135,6 +135,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		}
 
 		// Looping slice departures
+		var mgoFllist []mongo.WriteModel
 		for _, depart := range slcDepart {
 
 			// Get API Flight List data
@@ -152,19 +153,21 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 			}
 
 			// Get API Flight List data
-			// nowFligh
-			// rawFllist, err := fncSbrapi.FncSbrapiFllistMainob(slcRspssn[0],
-			// 	mdlSbrapi.MdlSbrapiMsghdrApndix{Datefl: int32(intDatefl),
-			// 		Airlfl: airlfl, Depart: depart})
-			// FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
-			// 	Erpart: "fllstl", Ersrce: "sbrapi", Erdvsn: "MNFEST",
-			// 	Dateup: int32(intDatenw), Timeup: int64(intTimenw),
-			// 	Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 5,
-			// 	Depart: depart,
-			// }, err != nil, sycErrlog, &errErignr, &errPrmkey)
-			// if err != nil {
-			// 	continue
-			// }
+			nowDatefl, _ := time.Parse("060102", strconv.Itoa(intDatefl))
+			tdyDatefl, _ := strconv.Atoi(nowDatefl.AddDate(0, 0, +1).Format("060102"))
+			tmrDatefl, _ := strconv.Atoi(nowDatefl.AddDate(0, 0, +2).Format("060102"))
+			for _, datefl := range []int{tdyDatefl, tmrDatefl} {
+				slcFllist, _ := fncSbrapi.FncSbrapiFllistMainob(slcRspssn[0],
+					mdlSbrapi.MdlSbrapiMsghdrApndix{Datefl: int32(datefl),
+						Airlfl: airlfl, Depart: depart})
+				for _, fllist := range slcFllist {
+					mgoFllist = append(mgoFllist, mongo.NewUpdateOneModel().
+						SetFilter(bson.M{"prmkey": fllist.Prmkey}).
+						SetUpdate(bson.M{"$setOnInsert": fllist}).SetUpsert(true))
+					fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+						"apndix_fllist": &mgoFllist}, 200)
+				}
+			}
 
 			// Counting all maximal data progress
 			if valmax, istmax := sycPrgrss.Load("maxfln"); istmax {
@@ -185,6 +188,8 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		}
 
 		// Finish
+		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+			"apndix_fllist": &mgoFllist}, 0)
 		close(jobFllist)
 		swg.Wait()
 		fmt.Printf("Done airline:%s time:%s \n", airlfl,

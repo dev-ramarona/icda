@@ -59,26 +59,26 @@ export default function UixGlobalAppbarClient({
       >
         <div className="afull flexstr relative z-10 rounded-md">
           <div
-            className={`absolute ${scroll || onclik ? "w-36 opacity-100" : "w-full opacity-0"} flexstr h-full rounded-2xl bg-cyan-600 pl-10 font-semibold whitespace-nowrap text-white duration-300 ease-in-out`}
+            className={`absolute ${scroll || onclik ? `w-36 ${onclik ? "opacity-100" : "opacity-50 hover:opacity-100"}` : "w-full opacity-0"} flexstr group h-full rounded-2xl bg-cyan-600 pl-10 font-semibold whitespace-nowrap text-white duration-300 ease-in-out`}
           >
             <div>IC Data Analyst</div>
             <div
               className={`w-6 ${onclik ? "translate-x-8 opacity-100" : "translate-x-0 opacity-0"} flexctr absolute right-0 h-full flex-col gap-1 duration-300`}
             >
               <div
-                className={`absolute h-1 w-1 rounded-full bg-cyan-600 ${onclik ? "-translate-x-2 -translate-y-2" : "-translate-y-2"} duration-300`}
+                className={`absolute h-1 w-1 origin-center rotate-45 rounded-full bg-cyan-600 group-hover:w-3 ${onclik ? "-translate-x-2 -translate-y-2" : "-translate-y-2"} duration-300`}
               ></div>
               <div
-                className={`absolute h-1 w-1 rounded-full bg-cyan-600 ${onclik ? "translate-x-2 -translate-y-2" : ""} duration-300`}
+                className={`absolute h-1 w-1 origin-center -rotate-45 rounded-full bg-cyan-600 group-hover:w-3 ${onclik ? "translate-x-2 -translate-y-2" : ""} duration-300`}
               ></div>
               <div
-                className={`absolute h-1 w-1 rounded-full bg-cyan-600 ${onclik ? "" : ""}`}
+                className={`absolute h-1 w-1 rounded-full bg-cyan-600 group-hover:w-1 ${onclik ? "" : ""}`}
               ></div>
               <div
-                className={`absolute h-1 w-1 rounded-full bg-cyan-600 ${onclik ? "-translate-x-2 translate-y-2" : ""} duration-300`}
+                className={`absolute h-1 w-1 origin-center -rotate-45 rounded-full bg-cyan-600 group-hover:w-3 ${onclik ? "-translate-x-2 translate-y-2" : ""} duration-300`}
               ></div>
               <div
-                className={`absolute h-1 w-1 rounded-full bg-cyan-600 ${onclik ? "translate-x-2 translate-y-2" : "translate-y-2"} duration-300`}
+                className={`absolute h-1 w-1 origin-center rotate-45 rounded-full bg-cyan-600 group-hover:w-3 ${onclik ? "translate-x-2 translate-y-2" : "translate-y-2"} duration-300`}
               ></div>
             </div>
           </div>

@@ -118,16 +118,12 @@ func FncSbrapiFllistTrtmnt(rawxml mdlSbrapi.MdlSbrapiFllistRspfls,
 			Flstat: fllist.Status,
 			Routfl: nowRoutfl,
 			Routac: nowRoutac,
-			// Routmx: "",
-			// Flsarr: "fldtil",
 			Flhour: 1,
 			Flrpdc: 0,
 			Flgate: fllist.DepartureGate,
 			Depart: nowDepart,
 			Arrivl: nowArrivl,
 			Airtyp: fllist.AircraftType,
-			// Aircnf: "fldtil",
-			// Seatcn: "fldtil",
 		})
 	}
 

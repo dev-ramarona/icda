@@ -24,6 +24,15 @@ export default async function UixApndixFllistMainpg({
   const rslobj = await ApiApndixGetallDtbase(qryprm);
   const arrdta: MdlApndixFllistFrntnd[] = rslobj.arrdta;
   const totdta: number = rslobj.totdta;
+
+  // Get h+1 day
+  const nowdte = new Date();
+  nowdte.setDate(nowdte.getDate() + 1);
+  const yearxx = nowdte.getFullYear();
+  const monthx = String(nowdte.getMonth() + 1).padStart(2, "0");
+  const dayxxx = String(nowdte.getDate()).padStart(2, "0");
+  const formtd = `${yearxx}-${monthx}-${dayxxx}`;
+  actdte.push(formtd);
   return (
     <>
       <UixApndixFllistSearch qryprm={qryprm} datefl={actdte} />
