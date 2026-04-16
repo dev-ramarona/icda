@@ -29,6 +29,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel) {
 	sycWgroup, sycClrpsg, sycNulpsg := &sync.WaitGroup{}, &sync.Map{}, &sync.Map{}
 	totPsgdtl := len(rspPsglst)
+	fstPrvpsg := map[string]bool{}
 	for _, psglst := range rspPsglst {
 
 		// Get null data
@@ -42,6 +43,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		}
 
 		// Running concurency every psglst
+		fstPrvpsg[psglst.Airlfl+psglst.Pnrcde] = true
 		sycWgroup.Add(1)
 		go FncPslgstRsvpnrMainpg(psglst,
 			sycClrpsg, sycNulpsg, sycPnrcde, sycChrter, sycMilege,
@@ -51,7 +53,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	}
 
 	// Looping null and wait all goroutine finish
-	fnlPrvpsg := map[string]map[string]mdlPsglst.MdlPsglstPsgdtlDtbase{}
+	scdPrvpsg := map[string]map[string]mdlPsglst.MdlPsglstPsgdtlDtbase{}
 	sycWgroup.Wait()
 	sycNulpsg.Range(func(key, val any) bool {
 		if mtcPsglst, mtc := val.(mdlPsglst.MdlPsglstPsgdtlDtbase); mtc {
@@ -64,11 +66,11 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					arrPnritl := strings.Split(pntitl, "*")
 					nowAirlfl := arrPnritl[0]
 					nowPnrcde := arrPnritl[1]
-					if fnlPrvpsg[nowAirlfl] == nil {
-						fnlPrvpsg[nowAirlfl] = make(map[string]mdlPsglst.MdlPsglstPsgdtlDtbase)
+					if scdPrvpsg[nowAirlfl] == nil {
+						scdPrvpsg[nowAirlfl] = make(map[string]mdlPsglst.MdlPsglstPsgdtlDtbase)
 					}
 					if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, nowAirlfl) {
-						fnlPrvpsg[nowAirlfl][nowPnrcde+"|"+mtcPsglst.Prmkey] = mtcPsglst
+						scdPrvpsg[nowAirlfl][nowPnrcde+"|"+mtcPsglst.Prmkey] = mtcPsglst
 					} else {
 						sycClrpsg.Store(mtcPsglst.Prmkey, mtcPsglst)
 					}
@@ -79,11 +81,11 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	})
 
 	// Looping exist data
-	for airlfl, fstPrvpsg := range fnlPrvpsg {
+	for airlfl, fstprv := range scdPrvpsg {
 		newObjtkn, er1 := fncSbrapi.FncSbrapiCrtssnMainob(airlfl)
 		tmpSycwgp := &sync.WaitGroup{}
 		if er1 != nil {
-			for i := 0; i < 3; i++ {
+			for range 3 {
 				getObjtkn, er3 := fncSbrapi.FncSbrapiCrtssnMainob(airlfl)
 				if er3 == nil && getObjtkn.Bsttkn != "" {
 					newObjtkn = getObjtkn
@@ -92,16 +94,78 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				time.Sleep(500 * time.Millisecond)
 			}
 		}
-		for rawkey, scdPrvpsg := range fstPrvpsg {
+		for rawkey, scdprv := range fstprv {
 			slckey := strings.Split(rawkey, "|")
 			pnrcde, prmkey := slckey[0], slckey[1]
 			if _, ist := sycClrpsg.Load(prmkey); !ist {
 				tmpSycwgp.Add(1)
-				go FncPslgstRsvpnrMainpg(scdPrvpsg,
+				go FncPslgstRsvpnrMainpg(scdprv,
 					sycClrpsg, sycNulpsg, sycPnrcde, sycChrter, sycMilege,
 					mapCurrcv,
 					tmpSycwgp, newObjtkn,
-					airlfl, pnrcde, "last")
+					airlfl, pnrcde, "fst")
+			}
+		}
+		tmpSycwgp.Wait()
+		fncSbrapi.FncSbrapiClsssnMainob(newObjtkn)
+	}
+
+	// Looping null and wait all goroutine finish
+	trdPrvpsg := map[string]map[string]mdlPsglst.MdlPsglstPsgdtlDtbase{}
+	sycWgroup.Wait()
+	sycNulpsg.Range(func(key, val any) bool {
+		if mtcPsglst, mtc := val.(mdlPsglst.MdlPsglstPsgdtlDtbase); mtc {
+			if _, ist := sycClrpsg.Load(key); !ist {
+				slcPntitl := strings.Split(mtcPsglst.Pnritl, "|")
+				for _, pntitl := range slcPntitl {
+					if pntitl == "" {
+						continue
+					}
+					arrPnritl := strings.Split(pntitl, "*")
+					nowAirlfl := arrPnritl[0]
+					nowPnrcde := arrPnritl[1]
+					if trdPrvpsg[nowAirlfl] == nil {
+						trdPrvpsg[nowAirlfl] = make(map[string]mdlPsglst.MdlPsglstPsgdtlDtbase)
+					}
+					if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, nowAirlfl) {
+						if _, istfst := fstPrvpsg[nowAirlfl+nowPnrcde]; !istfst {
+							if _, istscd := scdPrvpsg[nowAirlfl][nowPnrcde+"|"+mtcPsglst.Prmkey]; !istscd {
+								trdPrvpsg[nowAirlfl][nowPnrcde+"|"+mtcPsglst.Prmkey] = mtcPsglst
+							}
+						}
+					} else {
+						sycClrpsg.Store(mtcPsglst.Prmkey, mtcPsglst)
+					}
+				}
+			}
+		}
+		return true
+	})
+
+	// Looping exist data
+	for airlfl, fstprv := range trdPrvpsg {
+		newObjtkn, er1 := fncSbrapi.FncSbrapiCrtssnMainob(airlfl)
+		tmpSycwgp := &sync.WaitGroup{}
+		if er1 != nil {
+			for range 3 {
+				getObjtkn, er3 := fncSbrapi.FncSbrapiCrtssnMainob(airlfl)
+				if er3 == nil && getObjtkn.Bsttkn != "" {
+					newObjtkn = getObjtkn
+					break
+				}
+				time.Sleep(500 * time.Millisecond)
+			}
+		}
+		for rawkey, scdprv := range fstprv {
+			slckey := strings.Split(rawkey, "|")
+			pnrcde, prmkey := slckey[0], slckey[1]
+			if _, ist := sycClrpsg.Load(prmkey); !ist {
+				tmpSycwgp.Add(1)
+				go FncPslgstRsvpnrMainpg(scdprv,
+					sycClrpsg, sycNulpsg, sycPnrcde, sycChrter, sycMilege,
+					mapCurrcv,
+					tmpSycwgp, newObjtkn,
+					airlfl, pnrcde, "scd")
 			}
 		}
 		tmpSycwgp.Wait()
@@ -603,6 +667,15 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				mgoProvnc = append(mgoProvnc, mongo.NewUpdateOneModel().
 					SetFilter(bson.M{"routfl": psglst.Routfl}).
 					SetUpdate(bson.M{"$set": varProvnc}).SetUpsert(true))
+			}
+
+			// Cek data IR
+			if psglst.Isitir == "IR" {
+				if !((strings.Contains(psglst.Routac, psglst.Routvc[:3]) && strings.Contains(psglst.Routac, psglst.Routvc[4:])) ||
+					(strings.Contains(psglst.Routsg, psglst.Routfl[:3]) && strings.Contains(psglst.Routsg, psglst.Routfl[4:]))) {
+					psglst.Mnfest = "NOT CLEAR"
+					fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, "CHECK COUPON")
+				}
 			}
 		}
 

@@ -242,12 +242,10 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 							if istQtycek {
 								istQtycek = false
 								intQntybt, _ := strconv.Atoi(rslmmb[0])
-								// mapQntybt[objPsglst.Groupc] += intQntybt
 								objPsglst.Qntybt = int32(intQntybt)
 							} else {
 								intWghtbt, _ := strconv.Atoi(rslmmb[0])
 								objPsglst.Wghtbt = int32(intWghtbt)
-								// mapWghtbt[objPsglst.Groupc] += int(intWghtbt)
 							}
 						}
 					}

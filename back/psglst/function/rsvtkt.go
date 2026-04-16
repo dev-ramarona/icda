@@ -27,9 +27,11 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// DEBUGING
-	if lstvar == "last" {
+	if lstvar == "scd" || lstvar == "fst" {
 		psglst.Source += "|INTERLINE"
-		cekLstvar = true
+		if lstvar == "scd" {
+			cekLstvar = true
+		}
 	}
 	if objtkn.Bsttkn == "" {
 		psglst.Source += "|TOKEN NIL" + airlfl
@@ -78,12 +80,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 
 		// Get PNR interline
 		objPnritl := nowRsvpnr.POS.Source.TTYRecordLocator
-		slcPnrtil := strings.Split(psglst.Pnritl, "|")
 		if objPnritl.RecordLocator != "" {
 			nowPnritl := objPnritl.CRSCode + "*" + objPnritl.RecordLocator
-			if !strings.Contains(psglst.Pnritl+psglst.Pnrcde, objPnritl.RecordLocator) {
-				slcPnrtil = append(slcPnrtil, nowPnritl)
-			}
+			psglst.Pnritl = fncApndix.FncApndixUpdateSlcstr(&psglst.Pnritl, nowPnritl)
 		}
 
 		// Get PNR interline and itinerary
@@ -100,9 +99,7 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 				// PNR Interline
 				rawPnritl := itinry.Air.AirlineRefId
 				if len(rawPnritl) > 5 {
-					if !strings.Contains(psglst.Pnritl+psglst.Pnrcde, rawPnritl[5:]) {
-						slcPnrtil = append(slcPnrtil, rawPnritl[2:])
-					}
+					psglst.Pnritl = fncApndix.FncApndixUpdateSlcstr(&psglst.Pnritl, rawPnritl[2:])
 				}
 
 				// Get time flown
@@ -135,7 +132,6 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 			psglst.Routsg = strings.Join(slcRoutsg, "-")
 			psglst.Segpnr = strings.Join(slcSegpnr, "|")
 		}
-		psglst.Pnritl = strings.Join(slcPnrtil, "|")
 
 		// Get ticketing detail for issued date
 		var slcTcktng = nowRsvpnr.PassengerReservation.TicketingInfo.TicketDetails
@@ -155,13 +151,16 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 					// Get ticket number blank and emd
 					if tcktng.TicketNumber[3:4] != "4" {
 						getTktnvc = tcktng.TicketNumber[:13]
+						if psglst.Psgrid == "FB79CD940001" {
+							fmt.Println(pnrcde, tcktng.TicketNumber[:13])
+						}
 					} else if tcktng.TicketNumber[3:4] == "4" {
 						mapEmdnae[tcktng.TicketNumber[:13]] = true
 					}
 				}
 			}
 		}
-		if psglst.Tktnvc == "" || cekLstvar {
+		if getTktnvc != "" {
 			psglst.Tktnvc = getTktnvc
 		}
 
@@ -269,10 +268,16 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Get ticketing document
+	if psglst.Psgrid == "FB79CD940001" {
+		fmt.Println("Tktnvc:", psglst.Tktnvc, "pnrcde:", pnrcde, "airlfl:", airlfl)
+	}
 	if psglst.Tktnvc != "" || (cekLstvar && psglst.Tktnfl != "") {
 		getTktnow := psglst.Tktnvc
 		if psglst.Tktnvc == "" {
 			getTktnow = psglst.Tktnfl
+		}
+		if psglst.Psgrid == "FB79CD940001" {
+			fmt.Println("masuk")
 		}
 		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst, getTktnow, mapCurrcv)
 		if err != nil {
