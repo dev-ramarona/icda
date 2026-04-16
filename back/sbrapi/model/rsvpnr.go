@@ -135,13 +135,14 @@ type MdlSbrapiRsvpnrRsptki struct {
 	TicketDetails []MdlSbrapiRsvpnrRsptkd `xml:"TicketDetails"`
 }
 type MdlSbrapiRsvpnrRsptkd struct {
-	TransactionIndicator string `xml:"TransactionIndicator"`
-	TicketNumber         string `xml:"TicketNumber"`
-	PassengerName        string `xml:"PassengerName"`
-	AgencyLocation       string `xml:"AgencyLocation"`
-	DutyCode             string `xml:"DutyCode"`
-	AgentSine            string `xml:"AgentSine"`
-	Timestamp            string `xml:"Timestamp"`
+	OriginalTicketDetails string `xml:"OriginalTicketDetails"`
+	TransactionIndicator  string `xml:"TransactionIndicator"`
+	TicketNumber          string `xml:"TicketNumber"`
+	PassengerName         string `xml:"PassengerName"`
+	AgencyLocation        string `xml:"AgencyLocation"`
+	DutyCode              string `xml:"DutyCode"`
+	AgentSine             string `xml:"AgentSine"`
+	Timestamp             string `xml:"Timestamp"`
 }
 
 // TPRICING_INFORMATION

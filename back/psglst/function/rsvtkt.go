@@ -136,9 +136,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 		// Get ticketing detail for issued date
 		var slcTcktng = nowRsvpnr.PassengerReservation.TicketingInfo.TicketDetails
 		var mapEmdnae = map[string]bool{}
-		var getTktnvc = ""
+		var mapTktnvc = map[string]int{}
 		if len(slcTcktng) != 0 {
-			for _, tcktng := range slcTcktng {
+			for idx, tcktng := range slcTcktng {
 
 				// Logical gate for ticket number
 				strFmtnme := (psglst.Nmelst + "     ")[:5]
@@ -150,14 +150,34 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 
 					// Get ticket number blank and emd
 					if tcktng.TicketNumber[3:4] != "4" {
-						getTktnvc = tcktng.TicketNumber[:13]
+						mapTktnvc[tcktng.TicketNumber[:13]] = idx
+						if psglst.Psgrid == "A61EF7190001" {
+							fmt.Println(pnrcde, tcktng.TicketNumber[:13])
+						}
 					} else if tcktng.TicketNumber[3:4] == "4" {
 						mapEmdnae[tcktng.TicketNumber[:13]] = true
 					}
 				}
+
+				// Delete void tiket
+				if strings.Contains(tcktng.OriginalTicketDetails, "*VOID*") {
+					delete(mapTktnvc, tcktng.TicketNumber[:13])
+				}
 			}
 		}
-		if getTktnvc != "" {
+
+		// Push highest ticket
+		slcCodels := strings.Split(psglst.Codels, "|")
+		if len(mapTktnvc) > 0 &&
+			(psglst.Tktnvc == "" || !slices.Contains(slcCodels, "ET")) {
+			getTktnvc := ""
+			lvlTktnvc := 0
+			for tkt, lvl := range mapTktnvc {
+				if lvlTktnvc < lvl {
+					lvlTktnvc = lvl
+					getTktnvc = tkt
+				}
+			}
 			psglst.Tktnvc = getTktnvc
 		}
 
@@ -265,6 +285,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Get ticketing document
+	if psglst.Psgrid == "A61EF7190001" {
+		fmt.Println("Tktnvc:", psglst.Tktnvc, "pnrcde:", pnrcde, "airlfl:", airlfl)
+	}
 	if psglst.Tktnvc != "" || (cekLstvar && psglst.Tktnfl != "") {
 		getTktnow := psglst.Tktnvc
 		if psglst.Tktnvc == "" {
@@ -293,6 +316,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Check if data clear or not
+	if psglst.Psgrid == "A61EF7190001" {
+		fmt.Println(cekChrter, !cekIsflwn, cekNonrev, cekLstvar, cekTcktng)
+	}
 	if cekChrter || !cekIsflwn || cekNonrev || cekLstvar || cekTcktng {
 		istStlerr := true
 		mapSuberr := map[string]bool{}
