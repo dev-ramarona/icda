@@ -151,9 +151,6 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 					// Get ticket number blank and emd
 					if tcktng.TicketNumber[3:4] != "4" {
 						getTktnvc = tcktng.TicketNumber[:13]
-						if psglst.Psgrid == "FB79CD940001" {
-							fmt.Println(pnrcde, tcktng.TicketNumber[:13])
-						}
 					} else if tcktng.TicketNumber[3:4] == "4" {
 						mapEmdnae[tcktng.TicketNumber[:13]] = true
 					}
@@ -268,16 +265,10 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Get ticketing document
-	if psglst.Psgrid == "FB79CD940001" {
-		fmt.Println("Tktnvc:", psglst.Tktnvc, "pnrcde:", pnrcde, "airlfl:", airlfl)
-	}
 	if psglst.Tktnvc != "" || (cekLstvar && psglst.Tktnfl != "") {
 		getTktnow := psglst.Tktnvc
 		if psglst.Tktnvc == "" {
 			getTktnow = psglst.Tktnfl
-		}
-		if psglst.Psgrid == "FB79CD940001" {
-			fmt.Println("masuk")
 		}
 		err := fncSbrapi.FncSbrapiGettktMainob(objtkn, airlfl, &psglst, getTktnow, mapCurrcv)
 		if err != nil {
