@@ -55,6 +55,17 @@ export default async function Page(props: { searchParams: Promise<MdlSlsflwGloba
       <div className="h-180 max-h-fit w-full min-w-full p-3 md:h-160 md:w-[20rem]">
         <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
           <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
+            Passangger Summary
+            <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
+          </div>
+          <Suspense fallback={<UixGlobalLoadngAnmate />}>
+            <UixSlsflwPsgsmrMainpg prmPsgsmr={prmPsgsmr} datefl={actdte} cookie={cookie} />
+          </Suspense>
+        </div>
+      </div>
+      <div className="h-180 max-h-fit w-full min-w-full p-3 md:h-160 md:w-[20rem]">
+        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
+          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
             Passangger Detail
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
@@ -68,29 +79,18 @@ export default async function Page(props: { searchParams: Promise<MdlSlsflwGloba
           </Suspense>
         </div>
       </div>
-      <div className="h-180 max-h-fit w-full min-w-full p-3 md:h-160 md:w-[20rem]">
-        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
-          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
-            Summary 30 Day
-            <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
-          </div>
-          <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            {/* <UixSlsflwDetailMainpg prmPsgdtl={prmPsgdtl} datefl={actdte} cookie={cookie} /> */}
-            <UixSlsflwSmmry1Mainpg />
-          </Suspense>
-        </div>
-      </div>
-      <div className="h-180 max-h-fit w-full min-w-full p-3 md:h-160 md:w-[20rem]">
-        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
-          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
-            Passangger Summary
-            <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
-          </div>
-          <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixSlsflwPsgsmrMainpg prmPsgsmr={prmPsgsmr} datefl={actdte} cookie={cookie} />
-          </Suspense>
-        </div>
-      </div>
+      {/* <div className="h-180 max-h-fit w-full min-w-full p-3 md:h-160 md:w-[20rem]"> */}
+      {/* <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200"> */}
+      {/* <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800"> */}
+      {/* Summary 30 Day */}
+      {/* <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} /> */}
+      {/* </div> */}
+      {/* <Suspense fallback={<UixGlobalLoadngAnmate />}> */}
+      {/* <UixSlsflwDetailMainpg prmPsgdtl={prmPsgdtl} datefl={actdte} cookie={cookie} /> */}
+      {/* <UixSlsflwSmmry1Mainpg /> */}
+      {/* </Suspense> */}
+      {/* </div> */}
+      {/* </div> */}
     </div>
   );
 }
