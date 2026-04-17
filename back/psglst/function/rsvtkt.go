@@ -151,9 +151,6 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 					// Get ticket number blank and emd
 					if tcktng.TicketNumber[3:4] != "4" {
 						mapTktnvc[tcktng.TicketNumber[:13]] = idx
-						if psglst.Psgrid == "A61EF7190001" {
-							fmt.Println(pnrcde, tcktng.TicketNumber[:13])
-						}
 					} else if tcktng.TicketNumber[3:4] == "4" {
 						mapEmdnae[tcktng.TicketNumber[:13]] = true
 					}
@@ -173,7 +170,7 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 			getTktnvc := ""
 			lvlTktnvc := 0
 			for tkt, lvl := range mapTktnvc {
-				if lvlTktnvc < lvl {
+				if lvlTktnvc <= lvl {
 					lvlTktnvc = lvl
 					getTktnvc = tkt
 				}
@@ -285,9 +282,6 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Get ticketing document
-	if psglst.Psgrid == "A61EF7190001" {
-		fmt.Println("Tktnvc:", psglst.Tktnvc, "pnrcde:", pnrcde, "airlfl:", airlfl)
-	}
 	if psglst.Tktnvc != "" || (cekLstvar && psglst.Tktnfl != "") {
 		getTktnow := psglst.Tktnvc
 		if psglst.Tktnvc == "" {
@@ -316,9 +310,6 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	}
 
 	// Check if data clear or not
-	if psglst.Psgrid == "A61EF7190001" {
-		fmt.Println(cekChrter, !cekIsflwn, cekNonrev, cekLstvar, cekTcktng)
-	}
 	if cekChrter || !cekIsflwn || cekNonrev || cekLstvar || cekTcktng {
 		istStlerr := true
 		mapSuberr := map[string]bool{}
