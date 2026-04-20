@@ -74,6 +74,7 @@ func main() {
 	r.POST("/psglst/psgdtl/downld", fncPsglst.FncPsglstPsgdtlDownld)
 	r.POST("/psglst/psgdtl/getall", fncPsglst.FncPsglstPsgdtlGetall)
 	r.POST("/psglst/psgsmr/getall", fncPsglst.FncPsglstPsgsmrGetall)
+	r.POST("/psglst/psgsmr/downld", fncPsglst.FncPsglstPsgsmrDownld)
 	r.POST("/psglst/errlog/getall", fncPsglst.FncPsglstErrlogGetall)
 	r.GET("/psglst/actlog/getall", fncPsglst.FncPsglstActlogGetall)
 	r.POST("/psglst/psgdtl/upload", fncPsglst.FncPsglstPsgdtlUpload)

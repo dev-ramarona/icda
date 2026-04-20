@@ -64,21 +64,16 @@ export default function UixSlsflwPsgsmrSearch({
     chngedSet(true);
     rplprm(
       [
-        "prmkey_psgdtl",
-        "mnthfl_psgdtl",
-        "datefl_psgdtl",
-        "airlfl_psgdtl",
-        "flnbfl_psgdtl",
-        "depart_psgdtl",
-        "routfl_psgdtl",
-        "pnrcde_psgdtl",
-        "tktnfl_psgdtl",
-        "isitfl_psgdtl",
-        "isittx_psgdtl",
-        "isitir_psgdtl",
-        "nclear_psgdtl",
-        "format_psgdtl",
-        "pagenw_psgdtl",
+        "mnthfl_psgsmr",
+        "datefl_psgsmr",
+        "airlfl_psgsmr",
+        "flnbfl_psgsmr",
+        "isitjn_psgsmr",
+        "depart_psgsmr",
+        "routfl_psgsmr",
+        "keywrd_psgsmr",
+        "pagenw_psgsmr",
+        "limitp_psgsmr",
       ],
       "",
     );
@@ -100,7 +95,7 @@ export default function UixSlsflwPsgsmrSearch({
       chnged={chnged}
       lblupl="Upload File Join"
       downld={{
-        lnk: `/psglst/psgdtl/downld`,
+        lnk: `/psglst/psgsmr/downld`,
         prm: params,
       }}
       upload={{
@@ -136,7 +131,7 @@ export default function UixSlsflwPsgsmrSearch({
       <div className="flexctr relative h-10 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
           typipt={"select"}
-          length={["Combined ", " Separated"]}
+          length={["Combined", "Separated"]}
           queryx={"isitjn_psgsmr"}
           params={params.isitjn_psgsmr}
           plchdr="Combine Join"

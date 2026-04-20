@@ -48,6 +48,9 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
+	mtchdt = append(mtchdt, bson.D{
+		{Key: "totpax", Value: bson.D{
+			{Key: "$ne", Value: 0}}}})
 	if inputx.Datefl_psgsmr != "" {
 		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
 		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
@@ -90,54 +93,51 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		mtchfn = bson.D{{Key: "$match", Value: bson.D{}}}
 	}
 
+	// Final group pipeline
+	var addfld = bson.D{{Key: "$addFields", Value: bson.D{
+		{Key: "flnb_fix", Value: bson.D{
+			{Key: "$ifNull", Value: bson.A{
+				bson.D{{Key: "$cond", Value: bson.A{
+					bson.D{{Key: "$eq", Value: bson.A{"$flnbjn", ""}}},
+					nil, "$flnbjn"}}}, "$flnbfl"}}}}}}}
+	var grupfn = bson.D{{Key: "$group", Value: bson.D{
+		{Key: "_id", Value: bson.D{
+			{Key: "flnbfl", Value: "$flnb_fix"},
+			{Key: "datefl", Value: "$datefl"},
+			{Key: "depart", Value: "$depart"},
+		}},
+		{Key: "data", Value: bson.D{{Key: "$first", Value: "$$ROOT"}}},
+		{Key: "totpax", Value: bson.D{{Key: "$sum", Value: "$totpax"}}},
+		{Key: "totnta", Value: bson.D{{Key: "$sum", Value: "$totnta"}}},
+		{Key: "tottyq", Value: bson.D{{Key: "$sum", Value: "$tottyq"}}},
+		{Key: "totfae", Value: bson.D{{Key: "$sum", Value: "$totfae"}}},
+		{Key: "totrph", Value: bson.D{{Key: "$sum", Value: "$totrph"}}},
+	}}}
+	var rplrot = bson.D{{Key: "$replaceRoot", Value: bson.D{
+		{Key: "newRoot", Value: bson.D{
+			{Key: "$mergeObjects", Value: bson.A{
+				"$data",
+				bson.D{
+					{Key: "flnbfl", Value: "$_id.flnbfl"}, // ⬅️ penting!
+					{Key: "totpax", Value: "$totpax"},
+					{Key: "totnta", Value: "$totnta"},
+					{Key: "tottyq", Value: "$tottyq"},
+					{Key: "totfae", Value: "$totfae"},
+					{Key: "totrph", Value: "$totrph"},
+				},
+			}},
+		}},
+	}}}
+
 	// Get Total Count Data
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		nowPillne := mongo.Pipeline{
-			mtchfn,
-			bson.D{{Key: "$count", Value: "totalCount"}},
+		nowPillne := mongo.Pipeline{mtchfn}
+		if inputx.Isitjn_psgsmr == "Combined" {
+			nowPillne = mongo.Pipeline{mtchfn, addfld, grupfn, rplrot}
 		}
-
-		// // Grouping flight join
-		// if inputx.Isitjn_psgsmr != "" {
-		// 	nowPillne = append(nowPillne,
-		// 		bson.D{
-		// 			{Key: "$group", Value: bson.D{
-		// 				{Key: "_id", Value: bson.D{
-		// 					{Key: "flnbjn", Value: "$flnbjn"},
-		// 					{Key: "datefl", Value: "$datefl"},
-		// 					{Key: "depart", Value: "$depart"},
-		// 				}},
-		// 				{Key: "data", Value: bson.D{
-		// 					{Key: "$first", Value: "$$ROOT"},
-		// 				}},
-		// 				{Key: "totpax", Value: bson.D{{Key: "$sum", Value: "$totpax"}}},
-		// 				{Key: "totnta", Value: bson.D{{Key: "$sum", Value: "$totnta"}}},
-		// 				{Key: "tottyq", Value: bson.D{{Key: "$sum", Value: "$tottyq"}}},
-		// 			}},
-		// 		},
-		// 		bson.D{
-		// 			{Key: "$replaceRoot", Value: bson.D{
-		// 				{Key: "newRoot", Value: bson.D{
-		// 					{Key: "$mergeObjects", Value: bson.A{
-		// 						"$data",
-		// 						bson.D{
-		// 							{Key: "totpax", Value: "$totpax"},
-		// 							{Key: "totnta", Value: "$totnta"},
-		// 							{Key: "tottyq", Value: "$tottyq"},
-		// 						},
-		// 					}},
-		// 				},
-		// 				}},
-		// 			}},
-		// 		bson.D{
-		// 			{Key: "$addFields", Value: bson.D{
-		// 				{Key: "flnbfl", Value: "$flnbjn"},
-		// 			}},
-		// 		},
-		// 	)
-		// }
+		nowPillne = append(nowPillne, bson.D{{Key: "$count", Value: "totalCount"}})
 
 		// Find user by username in database
 		rawDtaset, err := tablex.Aggregate(contxt, nowPillne)
@@ -164,12 +164,14 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		pipeln := mongo.Pipeline{
-			mtchfn,
-			sortdt,
-			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw_psgsmr, 1) - 1) * inputx.Limitp_psgsmr}},
-			bson.D{{Key: "$limit", Value: inputx.Limitp_psgsmr}},
+		pipeln := mongo.Pipeline{mtchfn}
+		if inputx.Isitjn_psgsmr == "Combined" {
+			pipeln = mongo.Pipeline{mtchfn,
+				mtchfn, addfld, grupfn, rplrot}
 		}
+		pipeln = append(pipeln, sortdt)
+		pipeln = append(pipeln, bson.D{{Key: "$skip", Value: (max(inputx.Pagenw_psgsmr, 1) - 1) * inputx.Limitp_psgsmr}})
+		pipeln = append(pipeln, bson.D{{Key: "$limit", Value: inputx.Limitp_psgsmr}})
 
 		// Find user by username in database
 		rawDtaset, err := tablex.Aggregate(contxt, pipeln)
@@ -201,15 +203,9 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("0601021504")}
-	rawipt := c.PostForm("data")
-	if rawipt == "" {
-		c.String(400, "missing data")
-		return
-	}
 	var inputx mdlPsglst.MdlPsglstParamsInputx
-	if err := json.Unmarshal([]byte(rawipt), &inputx); err != nil {
-		c.String(400, "invalid data")
-		return
+	if err := c.BindJSON(&inputx); err != nil {
+		panic(err)
 	}
 
 	// Treatment date number
@@ -257,8 +253,10 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 
 	// Final match pipeline
 	var mtchfn bson.D
+	var fltrfn bson.D
 	if len(mtchdt) != 0 {
 		mtchfn = bson.D{{Key: "$match", Value: bson.D{{Key: "$and", Value: mtchdt}}}}
+		fltrfn = bson.D{{Key: "$and", Value: mtchdt}}
 	} else {
 		mtchfn = bson.D{{Key: "$match", Value: bson.D{}}}
 	}
@@ -268,15 +266,24 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	c.Header("Content-Type", "text/csv")
 	c.Header("Content-Disposition", "attachment; filename=Psglst_Detail_"+fnlFilenm+".csv")
 	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
-
-	// Streaming file CSV ke client
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
+
+	// Get total data count
+	totrow, err := tablex.CountDocuments(contxt, fltrfn)
+	if err == nil {
+		writer.Write([]string{"Total data: " + strconv.Itoa(int(totrow))})
+		writer.Flush()
+	}
+
+	// Streaming file CSV ke client
 	writer.Write([]string{
 		"prmkey",
 		"airlfl",
+		"provnc",
 		"depart",
 		"flnbfl",
+		"flnbjn",
 		"routfl",
 		"ndayfl",
 		"datefl",
@@ -290,6 +297,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		"totpax",
 		"totfae",
 		"totqfr",
+		"totrph",
 	})
 	writer.Flush()
 
@@ -312,17 +320,21 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	for rawDtaset.Next(contxt) {
 		var slcDtaset mdlPsglst.MdlPsglstPsgsmrDtbase
 		rawDtaset.Decode(&slcDtaset)
+		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
+		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Mnthfl))
 
 		// Write to CSV
 		writer.Write([]string{
 			slcDtaset.Prmkey,
 			slcDtaset.Airlfl,
+			slcDtaset.Provnc,
 			slcDtaset.Depart,
 			slcDtaset.Flnbfl,
+			slcDtaset.Flnbjn,
 			slcDtaset.Routfl,
 			slcDtaset.Ndayfl,
-			fmt.Sprintf("%v", slcDtaset.Datefl),
-			fmt.Sprintf("%v", slcDtaset.Mnthfl),
+			strDatefl,
+			strMnthfl,
 			slcDtaset.Flstat,
 			slcDtaset.Seatcn,
 			slcDtaset.Airtyp,
@@ -332,6 +344,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 			fmt.Sprintf("%v", slcDtaset.Totpax),
 			fmt.Sprintf("%v", slcDtaset.Totfae),
 			fmt.Sprintf("%v", slcDtaset.Totqfr),
+			fmt.Sprintf("%v", slcDtaset.Totrph),
 		})
 
 		// Flush every 1000row

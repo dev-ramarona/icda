@@ -645,7 +645,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		rawDtaset.Decode(&slcDtaset)
 		strTimeis := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timeis))
 		strTimecr := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timecr))
-		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Timeis))
+		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Mnthfl))
 		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 		strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
 
