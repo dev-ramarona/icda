@@ -147,7 +147,6 @@ type MdlPsglstPsgdtlDtbase struct {
 	Wtotbt int32  `json:"wtotbt" bson:"wtotbt,omitempty"`
 	Ptotbt int32  `json:"ptotbt" bson:"ptotbt,omitempty"`
 	Ftotbt int32  `json:"ftotbt" bson:"ftotbt,omitempty"`
-	Excsbt int32  `json:"excsbt" bson:"excsbt,omitempty"`
 	Typebt string `json:"typebt" bson:"typebt,omitempty"`
 	Coment string `json:"coment" bson:"coment,omitempty"`
 
@@ -301,7 +300,6 @@ type MdlPsglstPsgdtlDfault struct {
 	Wtotbt int32  `json:"wtotbt" bson:"wtotbt"`
 	Ptotbt int32  `json:"ptotbt" bson:"ptotbt"`
 	Ftotbt int32  `json:"ftotbt" bson:"ftotbt"`
-	Excsbt int32  `json:"excsbt" bson:"excsbt"`
 	Typebt string `json:"typebt" bson:"typebt"`
 	Coment string `json:"coment" bson:"coment"`
 

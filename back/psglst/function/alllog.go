@@ -163,6 +163,9 @@ func FncPsglstErrlogManage(errlog mdlPsglst.MdlPsglstErrlogDtbase,
 	case "fldtil", "flhour", "psglst", "psgdtl", "fllist", "provnc":
 		errlog.Prmkey = erpart + airlfl + flnbfl + routfl + datefl
 		depart = errlog.Routfl[:3]
+		if len(errlog.Routfl) >= 3 {
+			depart = errlog.Routfl[:3]
+		}
 	}
 
 	// If data not error and complete

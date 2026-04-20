@@ -360,25 +360,25 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				fnlRoutac = strings.Join(slcRoutac, "-")
 				psglst.Routac = strings.Join(slcRoutac, "-")
 			}
+		}
 
-			// Get route actual
-			slcRoutac := strings.Split(fnlRoutac, "-")
-			if slcPstion := slices.Index(slcRoutac, psglst.Depart); slcPstion != -1 {
-				if slcPstion+1 < len(slcRoutac) {
-					psglst.Routfl = strings.Join(slcRoutac[slcPstion:slcPstion+2], "-")
-				}
+		// Get route actual
+		slcRoutac := strings.Split(fnlRoutac, "-")
+		if slcPstion := slices.Index(slcRoutac, psglst.Depart); slcPstion != -1 {
+			if slcPstion+1 < len(slcRoutac) {
+				psglst.Routfl = strings.Join(slcRoutac[slcPstion:slcPstion+2], "-")
 			}
-			if psglst.Routfl == "" {
-				psglst.Routfl = psglst.Depart + "-" + psglst.Arrivl
-				if psglst.Routmx != "" {
-					intCountr := 0
-					for slcCountr, nowDepart := range strings.Split(fllist.Routmx, "-") {
-						if nowDepart == psglst.Depart {
-							intCountr = slcCountr + 1
-						}
-						if intCountr == slcCountr {
-							psglst.Routfl = fllist.Depart + "-" + nowDepart
-						}
+		}
+		if psglst.Routfl == "" {
+			psglst.Routfl = psglst.Depart + "-" + psglst.Arrivl
+			if psglst.Routmx != "" {
+				intCountr := 0
+				for slcCountr, nowDepart := range strings.Split(fllist.Routmx, "-") {
+					if nowDepart == psglst.Depart {
+						intCountr = slcCountr + 1
+					}
+					if intCountr == slcCountr {
+						psglst.Routfl = fllist.Depart + "-" + nowDepart
 					}
 				}
 			}

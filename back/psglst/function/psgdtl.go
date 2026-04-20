@@ -582,7 +582,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Wtotbt",
 			"Ptotbt",
 			"Ftotbt",
-			"Excsbt",
 			"Typebt",
 			"Coment",
 
@@ -870,7 +869,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Wtotbt),
 				fmt.Sprintf("%v", slcDtaset.Ptotbt),
 				fmt.Sprintf("%v", slcDtaset.Ftotbt),
-				fmt.Sprintf("%v", slcDtaset.Excsbt),
 				slcDtaset.Typebt,
 				slcDtaset.Coment,
 				slcDtaset.Airlob,
