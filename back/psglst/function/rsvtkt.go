@@ -185,8 +185,8 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 				minNmefst := math.Min(20, float64(len(elm.NameAssociationList.FirstName)))
 				minNmelst := math.Min(30, float64(len(elm.NameAssociationList.LastName)))
 				if elm.ActionCode != "HI" ||
-					elm.NameAssociationList.FirstName[:int(minNmefst)] != psglst.Nmefst ||
-					elm.NameAssociationList.LastName[:int(minNmelst)] != psglst.Nmelst {
+					strings.TrimSpace(elm.NameAssociationList.FirstName[:int(minNmefst)]) != psglst.Nmefst ||
+					strings.TrimSpace(elm.NameAssociationList.LastName[:int(minNmelst)]) != psglst.Nmelst {
 					continue
 				}
 

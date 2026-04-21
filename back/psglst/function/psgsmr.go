@@ -49,8 +49,9 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 
 	// Check if data Route all is isset
 	mtchdt = append(mtchdt, bson.D{
-		{Key: "totpax", Value: bson.D{
-			{Key: "$ne", Value: 0}}}})
+		{Key: "totpax", Value: bson.D{{Key: "$ne", Value: 0}}}})
+	mtchdt = append(mtchdt, bson.D{
+		{Key: "totpax", Value: bson.D{{Key: "$exists", Value: true}}}})
 	if inputx.Datefl_psgsmr != "" {
 		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
 		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
@@ -225,6 +226,10 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
 
 	// Check if data Route all is isset
+	mtchdt = append(mtchdt, bson.D{
+		{Key: "totpax", Value: bson.D{{Key: "$ne", Value: 0}}}})
+	mtchdt = append(mtchdt, bson.D{
+		{Key: "totpax", Value: bson.D{{Key: "$exists", Value: true}}}})
 	if inputx.Datefl_psgsmr != "" {
 		csvFilenm = append(csvFilenm, inputx.Datefl_psgsmr)
 		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
