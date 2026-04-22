@@ -56,7 +56,7 @@ export default function UixSlsflwPsgsmrSearch({
       ...params,
       [namefl]: valuef,
     });
-    rplprm([namefl, "pagenw_psgdtl"], [valuef as string, ""]);
+    rplprm([namefl, "pagenw_psgsmr"], [valuef as string, ""]);
   };
 
   // Reset function
