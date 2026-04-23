@@ -97,14 +97,19 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 
 	// Final group pipeline
 	var addfld = bson.D{{Key: "$addFields", Value: bson.D{
-		{Key: "flnb_fix", Value: bson.D{
+		{Key: "flnbfx", Value: bson.D{
 			{Key: "$ifNull", Value: bson.A{
 				bson.D{{Key: "$cond", Value: bson.A{
 					bson.D{{Key: "$eq", Value: bson.A{"$flnbjn", ""}}},
 					nil, "$flnbjn"}}}, "$flnbfl"}}}}}}}
+	var addpry = bson.D{{Key: "$addFields", Value: bson.D{
+		{Key: "ismtch", Value: bson.D{{Key: "$cond", Value: bson.A{
+			bson.D{{Key: "$eq", Value: bson.A{"$flnbfl", "$flnbjn"}}}, 1, 0}}}}}}}
+	var srtpry = bson.D{{Key: "$sort", Value: bson.D{
+		{Key: "ismtch", Value: -1}}}}
 	var grupfn = bson.D{{Key: "$group", Value: bson.D{
 		{Key: "_id", Value: bson.D{
-			{Key: "flnbfl", Value: "$flnb_fix"},
+			{Key: "flnbfl", Value: "$flnbfx"},
 			{Key: "datefl", Value: "$datefl"},
 			{Key: "depart", Value: "$depart"},
 		}},
@@ -169,7 +174,7 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		pipeln := mongo.Pipeline{mtchfn}
 		if inputx.Isitjn_psgsmr == "Combined" {
 			pipeln = mongo.Pipeline{mtchfn,
-				mtchfn, addfld, grupfn, rplrot}
+				mtchfn, addfld, addpry, srtpry, grupfn, rplrot}
 		}
 		pipeln = append(pipeln, sortdt)
 		pipeln = append(pipeln, bson.D{{Key: "$skip", Value: (max(inputx.Pagenw_psgsmr, 1) - 1) * inputx.Limitp_psgsmr}})
@@ -232,7 +237,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	mtchdt = append(mtchdt, bson.D{
 		{Key: "totpax", Value: bson.D{{Key: "$exists", Value: true}}}})
 	if inputx.Datefl_psgsmr != "" {
-		csvFilenm = append(csvFilenm, inputx.Datefl_psgsmr)
+		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
 		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
 			Value: intDatefl}})
 	}
@@ -243,8 +248,9 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	}
 	if inputx.Flnbfl_psgsmr != "" {
 		csvFilenm = append(csvFilenm, inputx.Flnbfl_psgsmr)
-		mtchdt = append(mtchdt, bson.D{{Key: "flnbfl",
-			Value: inputx.Flnbfl_psgsmr}})
+		mtchdt = append(mtchdt, bson.D{{Key: "$or", Value: bson.A{
+			bson.D{{Key: "flnbfl", Value: inputx.Flnbfl_psgsmr}},
+			bson.D{{Key: "flnbjn", Value: inputx.Flnbfl_psgsmr}}}}})
 	}
 	if inputx.Depart_psgsmr != "" {
 		csvFilenm = append(csvFilenm, inputx.Depart_psgsmr)
@@ -255,6 +261,14 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		csvFilenm = append(csvFilenm, inputx.Routfl_psgsmr)
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: inputx.Routfl_psgsmr}})
+	}
+	if inputx.Keywrd_psgsmr != "" && !strings.Contains(inputx.Keywrd_psgsmr, "REG ALL") {
+		var slcKeywrd []string
+		if err := json.Unmarshal([]byte(inputx.Keywrd_psgsmr), &slcKeywrd); err == nil {
+			csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
+			mtchdt = append(mtchdt, bson.D{{Key: "provnc",
+				Value: bson.D{{Key: "$in", Value: slcKeywrd}}}})
+		}
 	}
 
 	// Final match pipeline
@@ -307,10 +321,52 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	})
 	writer.Flush()
 
+	// Final group pipeline
+	var addfld = bson.D{{Key: "$addFields", Value: bson.D{
+		{Key: "flnbfx", Value: bson.D{
+			{Key: "$ifNull", Value: bson.A{
+				bson.D{{Key: "$cond", Value: bson.A{
+					bson.D{{Key: "$eq", Value: bson.A{"$flnbjn", ""}}},
+					nil, "$flnbjn"}}}, "$flnbfl"}}}}}}}
+	var addpry = bson.D{{Key: "$addFields", Value: bson.D{
+		{Key: "ismtch", Value: bson.D{{Key: "$cond", Value: bson.A{
+			bson.D{{Key: "$eq", Value: bson.A{"$flnbfl", "$flnbjn"}}}, 1, 0}}}}}}}
+	var srtpry = bson.D{{Key: "$sort", Value: bson.D{
+		{Key: "isMatch", Value: -1}}}}
+	var grupfn = bson.D{{Key: "$group", Value: bson.D{
+		{Key: "_id", Value: bson.D{
+			{Key: "flnbfl", Value: "$flnbfx"},
+			{Key: "datefl", Value: "$datefl"},
+			{Key: "depart", Value: "$depart"},
+		}},
+		{Key: "data", Value: bson.D{{Key: "$first", Value: "$$ROOT"}}},
+		{Key: "totpax", Value: bson.D{{Key: "$sum", Value: "$totpax"}}},
+		{Key: "totnta", Value: bson.D{{Key: "$sum", Value: "$totnta"}}},
+		{Key: "tottyq", Value: bson.D{{Key: "$sum", Value: "$tottyq"}}},
+		{Key: "totfae", Value: bson.D{{Key: "$sum", Value: "$totfae"}}},
+		{Key: "totrph", Value: bson.D{{Key: "$sum", Value: "$totrph"}}},
+	}}}
+	var rplrot = bson.D{{Key: "$replaceRoot", Value: bson.D{
+		{Key: "newRoot", Value: bson.D{
+			{Key: "$mergeObjects", Value: bson.A{
+				"$data",
+				bson.D{
+					{Key: "flnbfl", Value: "$_id.flnbfl"}, // ⬅️ penting!
+					{Key: "totpax", Value: "$totpax"},
+					{Key: "totnta", Value: "$totnta"},
+					{Key: "tottyq", Value: "$tottyq"},
+					{Key: "totfae", Value: "$totfae"},
+					{Key: "totrph", Value: "$totrph"},
+				},
+			}},
+		}},
+	}}}
+
 	// Get All Match Data
-	pipeln := mongo.Pipeline{
-		mtchfn,
-		sortdt,
+	pipeln := mongo.Pipeline{mtchfn, sortdt}
+	if inputx.Isitjn_psgsmr == "Combined" {
+		pipeln = mongo.Pipeline{mtchfn,
+			mtchfn, addfld, addpry, srtpry, grupfn, rplrot}
 	}
 
 	// Find user by username in database

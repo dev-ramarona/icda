@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -7,6 +8,7 @@ export async function POST(req: NextRequest) {
     method: "POST",
     body: form,
   });
+  revalidateTag("flight-data");
   return new Response(res.body, {
     headers: res.headers,
   });

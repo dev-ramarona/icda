@@ -42,7 +42,8 @@ func FncApndixConvrtFlhour(tmestr string) (float64, error) {
 
 	// Convert format to float
 	dcimal := float64(hournw) + float64(minute)/60
-	return dcimal, nil
+	roundd := math.Round(dcimal*100) / 100
+	return roundd, nil
 }
 
 // Treatment 920A / 1230P to string format time

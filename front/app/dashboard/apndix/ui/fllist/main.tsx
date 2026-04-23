@@ -43,7 +43,7 @@ export default async function UixApndixFllistMainpg({
         cookie={cookie}
       />
       <UixGlobalPagntnMainpg
-        pgview={5}
+        pgview={15}
         pgenbr={qryprm.pagenw_apndix}
         pgestr="pagenw_apndix"
         totdta={totdta}

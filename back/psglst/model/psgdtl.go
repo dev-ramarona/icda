@@ -374,6 +374,8 @@ type MdlPsglstPsgdtlSlserr struct {
 	Timeis int64   `json:"timeis" bson:"timeis"`
 	Timecr int64   `json:"timecr" bson:"timecr"`
 	Tktnvc string  `json:"tktnvc" bson:"tktnvc"`
+	Clssfl string  `json:"clssfl" bson:"clssfl"`
+	Clssvc string  `json:"clssvc" bson:"clssvc"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
 	Frcalc string  `json:"frcalc" bson:"frcalc"`
 	Curncy string  `json:"curncy" bson:"curncy"`
