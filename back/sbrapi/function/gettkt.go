@@ -20,9 +20,6 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase) error {
 
 	// Isi struktur data
-	if psglst.Psgrid == "F82616320001" {
-		fmt.Println("masuk 1")
-	}
 	rspEnvpnr := mdlSbrapi.MdlSbrapiGettktRspenv{}
 	bdyGettkt := mdlSbrapi.MdlSbrapiGettktReqenv{
 		Xmlns: "http://schemas.xmlsoap.org/soap/envelope/",
@@ -97,9 +94,6 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	// Looping and scoring per coupon
 	slcSegtkt, slcRoutvf, lstArrivl := []string{}, []string{}, ""
 	for _, cpn := range getTktdoc.Ticket.ServiceCoupon {
-		if psglst.Psgrid == "F82616320001" {
-			fmt.Println("masuk 2")
-		}
 		nowDepart, nowArrivl := cpn.StartLocation, cpn.EndLocation
 		keyGettkt := nowDepart + nowArrivl + cpn.MarketingFlightNumber
 		mapCountr[keyGettkt] += 1
@@ -210,9 +204,6 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		key string
 		val int
 	}{}
-	if psglst.Psgrid == "F82616320001" {
-		fmt.Println("masuk 3")
-	}
 	for keyseg, valint := range mapCountr {
 		if hghest.val == 0 || hghest.val < valint {
 			hghest.key = keyseg
@@ -220,9 +211,6 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		}
 	}
 	if getFlsgmn, ist := mapGettkt[hghest.key]; ist {
-		if psglst.Psgrid == "F82616320001" {
-			fmt.Println("masuk 4")
-		}
 		psglst.Flnbvc = getFlsgmn.MarketingFlightNumber
 		psglst.Airlvc = getFlsgmn.MarketingProvider
 		psglst.Frbcde = getFlsgmn.FareBasis
