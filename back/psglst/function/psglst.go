@@ -389,14 +389,18 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		if len(psglst.Routfr) >= 7 {
 			regRoutfr := regexp.MustCompile(fmt.Sprintf("%s.+%s", psglst.Routfr[:3],
 				psglst.Routfr[4:]))
-			if res := regRoutfr.MatchString(psglst.Routsg); res {
+			maxRoutsg := psglst.Routsg
+			if len(maxRoutsg) < len(psglst.Routvf) {
+				maxRoutsg = psglst.Routvf
+			}
+			if res := regRoutfr.MatchString(maxRoutsg); res {
 
 				// Combine route
 				slcRoutmx := strings.Split(psglst.Routmx, "-")
 				nowRoutmx := slcRoutmx[0] + "-" + slcRoutmx[len(slcRoutmx)-1]
-				segFullrt := psglst.Routsg
-				if strings.Contains(psglst.Routsg, nowRoutmx) {
-					segFullrt = strings.Replace(psglst.Routsg, nowRoutmx, psglst.Routmx, 1)
+				segFullrt := maxRoutsg
+				if strings.Contains(maxRoutsg, nowRoutmx) {
+					segFullrt = strings.Replace(maxRoutsg, nowRoutmx, psglst.Routmx, 1)
 				}
 
 				// Looping full rout max
@@ -453,7 +457,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					continue
 				}
 
-				// Get flight hour from API
+				// Get Farebase from API
 				if _, istfst := idcFrbase.Load(valfst); !istfst {
 					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
 						Airlfl: valfst[:2], Depart: valfst[2:5], Arrivl: valfst[6:], Routfl: valfst[2:]}
@@ -499,12 +503,15 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				if psglst.Routvc == "" {
 					taxRoutvc = psglst.Depart + "-" + psglst.Arrivl
 				}
-				if psglst.Ntafvc != 0 && psglst.Routfr != "" {
-					taxRoutvc = psglst.Routfr
-				}
 				taxArilvc := psglst.Airlfl
 				if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlvc) {
 					taxArilvc = psglst.Airlvc
+				}
+				if psglst.Ntafvc != 0 && psglst.Routfr != "" {
+					taxRoutvc = psglst.Routfr
+					if slices.Contains([]string{"JT", "ID", "IW", "IU", "OD", "SL"}, psglst.Airlfr) {
+						taxArilvc = psglst.Airlfr
+					}
 				}
 				mapRoutax["routvc"] = taxArilvc + taxRoutvc
 			}

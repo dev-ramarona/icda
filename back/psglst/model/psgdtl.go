@@ -64,6 +64,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Timecr int64   `json:"timecr" bson:"timecr"`
 	Airlfl string  `json:"airlfl" bson:"airlfl,omitempty"`
 	Airlvc string  `json:"airlvc" bson:"airlvc,omitempty"`
+	Airlfr string  `json:"airlfr" bson:"airlfr,omitempty"`
 	Airtyp string  `json:"airtyp" bson:"airtyp,omitempty"`
 	Seatcn string  `json:"seatcn" bson:"seatcn,omitempty"`
 	Flhour float64 `json:"flhour" bson:"flhour,omitempty"`
@@ -217,6 +218,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Timecr int64   `json:"timecr" bson:"timecr"`
 	Airlfl string  `json:"airlfl" bson:"airlfl"`
 	Airlvc string  `json:"airlvc" bson:"airlvc"`
+	Airlfr string  `json:"airlfr" bson:"airlfr"`
 	Airtyp string  `json:"airtyp" bson:"airtyp"`
 	Seatcn string  `json:"seatcn" bson:"seatcn"`
 	Flhour float64 `json:"flhour" bson:"flhour"`

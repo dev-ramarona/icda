@@ -412,7 +412,9 @@ brk:
 		// Logic match not use data after end
 		case len(regNotuse.FindAllString(slc, -1)) >= 1:
 			rsl := regNotuse.FindAllString(slc, -1)
-			if slices.Contains(rsl, "IT") || slices.Contains(rsl, "M/IT") {
+			if slices.Contains(rsl, "IT") ||
+				slices.Contains(rsl, "M/IT") ||
+				slices.Contains(rsl, "/IT") {
 				for idx := range nowFrbase {
 					if nowFrbase[idx].Routfl != "" {
 						nowFrbase[idx].Isitit = "IT FARE"
@@ -571,9 +573,6 @@ brk:
 						nowval.Frbcnv = fmt.Sprintf("%v", nowFrrate*tmpFrbcnv)
 						nowval.Isitpr = "PRORTE"
 						mapFrcacl[keymap] = nowval
-						// if psglst.Prmkey == "2512227051HLP8DRUMINTO" {
-						// 	fmt.Println("prorate", keymap, nowFrrate, "*", tmpFrbcnv, "=", nowFrrate*tmpFrbcnv)
-						// }
 					}
 				}
 			}
@@ -608,6 +607,7 @@ brk:
 			psglst.Qsrcvc, _ = strconv.ParseFloat(getFlsgmn.Qsrcnv, 64)
 			psglst.Qsrcrw = getFlsgmn.Qsrcrw
 			psglst.Routfr = getFlsgmn.Routfl
+			psglst.Airlfr = getFlsgmn.Airlfl
 			psglst.Srcfrb = "FRCALC"
 			if getFlsgmn.Isitpr == "PRORTE" {
 				psglst.Srcfrb = "PRCALC"

@@ -274,6 +274,7 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 		"Prmkey",
 		"Airlfl",
 		"Cbinfl",
+		"Depart",
 		"Routfl",
 		"Ftppnx",
 		"Ftaptx",
@@ -281,6 +282,7 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 		"Ftiwjr",
 		"Ftaxyr",
 		"Ftothr",
+		"Datend",
 		"Hstory",
 		"Updtby",
 	})
@@ -311,6 +313,7 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 			slcDtaset.Prmkey,
 			slcDtaset.Airlfl,
 			slcDtaset.Cbinfl,
+			slcDtaset.Depart,
 			slcDtaset.Routfl,
 			fmt.Sprintf("%v", slcDtaset.Ftppnx),
 			fmt.Sprintf("%v", slcDtaset.Ftaptx),
@@ -318,8 +321,10 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 			fmt.Sprintf("%v", slcDtaset.Ftiwjr),
 			fmt.Sprintf("%v", slcDtaset.Ftaxyr),
 			slcDtaset.Ftothr,
+			fmt.Sprintf("%v", slcDtaset.Datend),
 			slcDtaset.Hstory,
 			slcDtaset.Updtby,
+			fmt.Sprintf("%v", slcDtaset.Ftppnx),
 		})
 
 		// Flush every 1000row

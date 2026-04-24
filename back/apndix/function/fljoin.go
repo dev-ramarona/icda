@@ -352,6 +352,12 @@ func FncApndixFljoinDownld(c *gin.Context) {
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
 
 	// Check if data Route all is isset
+	if inputx.Datefl_apndix != "" {
+		intDatefl := FncApndixFormatDatein(inputx.Datefl_apndix)
+		csvFilenm = append(csvFilenm, inputx.Datefl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
+			Value: intDatefl}})
+	}
 	if inputx.Airlfl_apndix != "" {
 		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
