@@ -437,7 +437,11 @@ brk:
 	allNonrev := true
 	for _, val := range nowFrbase {
 		if val.Routfl != "" {
-			slcRoutsg := strings.Split(psglst.Routsg, "-")
+			maxRoutsg := psglst.Routsg
+			if len(maxRoutsg) < len(psglst.Routvf) {
+				maxRoutsg = psglst.Routvf
+			}
+			slcRoutsg := strings.Split(maxRoutsg, "-")
 			keyFrcalc := strconv.Itoa(int(val.Cpnbfl)) + "|" + val.Routfl
 			fltFrbase, _ := strconv.ParseFloat(val.Frbase, 64)
 			fltCrrate, _ := strconv.ParseFloat(val.Crrate, 64)
