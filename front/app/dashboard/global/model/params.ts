@@ -15,3 +15,9 @@ export interface MdlGlobalActlogDtbase {
   datefl: number;
   statdt: string;
 }
+
+// Action log
+export interface MdlGlobalConfrmAction {
+  paramx: string;
+  valuex: string;
+}

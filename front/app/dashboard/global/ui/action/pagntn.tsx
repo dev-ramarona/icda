@@ -1,5 +1,5 @@
 "use client";
-import UixGlobalWaitngAction from "../../../public/ui/action/waitng";
+import UixGlobalWaitngAction from "./waitng";
 import { FncGlobalQuerysEdlink } from "../../function/querys";
 import {
   UixGlobalIconvcNextpg,
@@ -24,26 +24,23 @@ export default function UixGlobalPagntnMainpg({
   const totpge = Math.min(Math.ceil(totdta / pgview), 10);
   const [chnged, chngedSet] = useState(false);
   const pagent = function (qry: string | string[], prm: string | string[]) {
-    rplprm(qry, prm)
+    rplprm(qry, prm);
     if (pgenbr != Number(prm)) {
       chngedSet(true);
     }
-  }
+  };
   useEffect(() => {
     chngedSet(false);
   }, [pgenbr]);
   return (
-    <div className="w-full h-16 pt-1.5 flexctr relative">
+    <div className="flexctr relative h-16 w-full pt-1.5">
       <UixGlobalWaitngAction chnged={chnged} />
       <div className="afull flexbtw">
-        <div
-          className="w-6 h-6 flexctr cursor-pointer"
-          onClick={() => pagent(pgestr, 0 + "")}
-        >
+        <div className="flexctr h-6 w-6 cursor-pointer" onClick={() => pagent(pgestr, 0 + "")}>
           <UixGlobalIconvcPrevpg bold={3} color="black" size={1.3} />
         </div>
         <div
-          className="w-6 h-6 flexctr cursor-pointer"
+          className="flexctr h-6 w-6 cursor-pointer"
           onClick={() => pagent(pgestr, Math.max(pgenbr - 10, 1) + "")}
         >
           <UixGlobalIconvcPrevpg bold={3} color="black" size={1.3} />
@@ -53,10 +50,11 @@ export default function UixGlobalPagntnMainpg({
           if (pgenow > maxpge) return null;
           return (
             <div
-              className={`w-4 md:w-7 min-w-fit h-4 md:h-7 flexctr  cursor-pointer text-[0.45rem] md:text-xs ${pgenow == Number(pgenbr)
-                ? "btnsbm ring-2 ring-sky-800"
-                : "hover:bg-slate-200 ring-2 ring-slate-400 rounded-md duration-300"
-                }`}
+              className={`flexctr h-4 w-4 min-w-fit cursor-pointer text-[0.45rem] md:h-7 md:w-7 md:text-xs ${
+                pgenow == Number(pgenbr)
+                  ? "btnsbm ring-2 ring-sky-800"
+                  : "rounded-md ring-2 ring-slate-400 duration-300 hover:bg-slate-200"
+              }`}
               key={pgenow}
               onClick={() => pagent(pgestr, pgenow + "")}
             >
@@ -65,15 +63,12 @@ export default function UixGlobalPagntnMainpg({
           );
         })}
         <div
-          className="w-6 h-6 flexctr cursor-pointer"
+          className="flexctr h-6 w-6 cursor-pointer"
           onClick={() => pagent(pgestr, Math.min(pgenbr + 10, maxpge) + "")}
         >
           <UixGlobalIconvcNextpg bold={3} color="black" size={1.3} />
         </div>
-        <div
-          className="w-6 h-6 flexctr cursor-pointer"
-          onClick={() => pagent(pgestr, maxpge + "")}
-        >
+        <div className="flexctr h-6 w-6 cursor-pointer" onClick={() => pagent(pgestr, maxpge + "")}>
           <UixGlobalIconvcNextpg bold={3} color="black" size={1.3} />
         </div>
       </div>

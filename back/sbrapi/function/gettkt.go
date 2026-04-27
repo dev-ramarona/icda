@@ -229,10 +229,15 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 				}
 			}
 		}
-		if psglst.Frbcde == "CHARTER" {
+		if psglst.Frbcde == "CHARTER" ||
+			psglst.Frbcde == "HB" ||
+			psglst.Frbcde == "HRBLOCK" {
 			psglst.Isitct = "CT"
 		}
-		if psglst.Frbcde == "LOA" || psglst.Frbcde == "FOC" {
+		if psglst.Frbcde == "LOA" {
+			psglst.Isitnr = "STAFF"
+		}
+		if psglst.Frbcde == "FOC" {
 			psglst.Isitnr = "NONREV"
 		}
 		if len(getFlsgmn.StartLocation) == 3 && len(getFlsgmn.EndLocation) == 3 {

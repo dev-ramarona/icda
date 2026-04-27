@@ -42,7 +42,7 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 	if psglst.Nmefst == "XXDHC" || psglst.Nmelst == "XXDHC" ||
 		psglst.Nmefst == "XXSNY" || psglst.Nmelst == "XXSNY" ||
 		psglst.Nmefst == "XDHC" || psglst.Nmelst == "XDHC" {
-		psglst.Isitnr = "CREW"
+		psglst.Isitnr = "STAFF"
 		cekNonrev = true
 	}
 

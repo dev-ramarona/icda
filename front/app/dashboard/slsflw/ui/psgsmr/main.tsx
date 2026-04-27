@@ -1,5 +1,5 @@
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
-import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
+import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
 import { ApiSlsflwPsgsmrGetall } from "../../api/psgsmr";
 import { MdlSlsflwPsgsmrFrntnd, MdlSlsflwPsgsmrSrcprm } from "../../model/params";
 import UixSlsflwPsgsmrSearch from "./search";

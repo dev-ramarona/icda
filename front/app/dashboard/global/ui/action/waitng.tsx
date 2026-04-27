@@ -1,4 +1,4 @@
-import { UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
+import { UixGlobalIconvcRfresh } from "../server/iconvc";
 
 export default function UixGlobalWaitngAction({ chnged }: { chnged: boolean }) {
   return (

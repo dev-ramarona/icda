@@ -1,5 +1,5 @@
 import { SetStateAction } from "react";
-import { UixGlobalIconvcCancel, UixGlobalIconvcCeklis } from "../../../global/ui/server/iconvc";
+import { UixGlobalIconvcCancel, UixGlobalIconvcCeklis } from "../server/iconvc";
 import { MdlGlobalConfrmAction } from "../../model/params";
 
 export default function UixGlobalConfrmAction({

@@ -1,9 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import { MdlApndixSearchQueryx } from "../../model/parmas";
-import UixGlobalWraperSearch from "../../../public/ui/search/wraper";
+import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
 import { FncGlobalFormatDfault } from "../../../global/function/format";
 
 export default function UixApndixFllistSearch({

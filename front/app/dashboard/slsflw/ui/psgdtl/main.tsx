@@ -2,7 +2,7 @@ import UixSlsflwDetailSearch from "./search";
 import UixSlsflwDetailTablex from "./tablex";
 import { MdlSlsflwPsgdtlFrntnd, MdlSlsflwPsgdtlSrcprm } from "../../model/params";
 import { ApiSlsflwPsgdtlGetall } from "../../api/psgdtl";
-import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
+import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
 import { ApiApndixAcpedtDtbase } from "../../../apndix/api/dtbase";

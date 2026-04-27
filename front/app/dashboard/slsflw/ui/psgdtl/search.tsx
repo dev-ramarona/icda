@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { MdlSlsflwPsgdtlSrcprm } from "../../model/params";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { FncGlobalFormatDfault } from "../../../global/function/format";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
-import UixGlobalWraperSearch from "../../../public/ui/search/wraper";
+import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
+import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
 
 export default function UixSlsflwDetailSearch({
   prmPsgdtl,
@@ -57,6 +57,8 @@ export default function UixSlsflwDetailSearch({
   // Replace params
   const rplprm = FncGlobalQuerysEdlink();
   const repprm = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("diklik");
+
     chngedSet(true);
     const namefl = e.currentTarget.name;
     const valuef = FncGlobalFormatDfault(namefl, e.currentTarget.value);

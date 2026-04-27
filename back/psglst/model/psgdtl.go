@@ -379,6 +379,7 @@ type MdlPsglstPsgdtlSlserr struct {
 	Clssfl string  `json:"clssfl" bson:"clssfl"`
 	Clssvc string  `json:"clssvc" bson:"clssvc"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
+	Isitct string  `json:"isitct" bson:"isitct"`
 	Frcalc string  `json:"frcalc" bson:"frcalc"`
 	Curncy string  `json:"curncy" bson:"curncy"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`

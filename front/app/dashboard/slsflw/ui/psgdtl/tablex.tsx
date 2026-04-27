@@ -9,10 +9,10 @@ import {
   FncGlobalIntialObject,
 } from "../../../global/function/format";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
-import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
-import UixGlobalConfrmAction from "../../../public/ui/action/confrm";
-import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
-import { MdlGlobalConfrmAction } from "../../../public/model/params";
+import UixGlobalTheadxTablex from "../../../global/ui/tablex/theadx";
+import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
+import UixGlobalTbodyxTablex from "../../../global/ui/tablex/tbodyx";
+import { MdlGlobalConfrmAction } from "../../../global/model/params";
 
 export default function UixSlsflwDetailTablex({
   arrdta,

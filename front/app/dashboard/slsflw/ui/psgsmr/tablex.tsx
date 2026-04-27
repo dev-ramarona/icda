@@ -1,7 +1,7 @@
 "use client";
 
-import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
-import UixGlobalTbodyrTablex from "../../../public/ui/tablex/tbodyr";
+import UixGlobalTheadxTablex from "../../../global/ui/tablex/theadx";
+import UixGlobalTbodyrTablex from "../../../global/ui/tablex/tbodyr";
 import { MdlSlsflwPsgsmrFrntnd } from "../../model/params";
 import { FncGlobalIntialObject } from "../../../global/function/format";
 

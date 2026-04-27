@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { MdlPsglstErrlogDtbase } from "../../model/params";
 import { ApiPsglstPrcessManual } from "../../api/prcess";
 import { FncGlobalQuerysEdlink, FncGlobalParamsHminfr } from "../../../global/function/querys";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
 import { UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";

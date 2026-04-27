@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { MdlPsglstPsgdtlSrcprm } from "../../model/params";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { FncGlobalFormatDfault } from "../../../global/function/format";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
-import UixGlobalWraperSearch from "../../../public/ui/search/wraper";
+import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
+import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
 
 export default function UixPsglstDetailSearch({
   prmPsgdtl,

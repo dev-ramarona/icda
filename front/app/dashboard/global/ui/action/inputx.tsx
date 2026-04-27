@@ -113,6 +113,7 @@ export default function UixGlobalInputxFormdt({
                       id={queryx + key}
                       type="radio"
                       onChange={(e) => (repprm ? repprm(e) : "")}
+                      checked={params == val}
                       hidden
                     />
                     <label
@@ -131,6 +132,7 @@ export default function UixGlobalInputxFormdt({
                   id={"reset" + queryx}
                   type="radio"
                   onChange={(e) => (repprm ? repprm(e) : "")}
+                  checked={params == ""}
                   hidden
                 />
                 <label

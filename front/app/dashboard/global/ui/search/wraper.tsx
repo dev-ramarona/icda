@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
-import UixGlobalWaitngAction from "../action/waitng";
+import UixGlobalInputxFormdt from "../action/inputx";
+import UixGlobalWaitngAction from "../../../global/ui/action/waitng";
 
 export default function UixGlobalWraperSearch({
   children,

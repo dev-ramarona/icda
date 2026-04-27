@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
-import UixGlobalWaitngAction from "../../../public/ui/action/waitng";
+import UixGlobalWaitngAction from "../../../global/ui/action/waitng";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 
 export default function UixApndixApplstSelect({

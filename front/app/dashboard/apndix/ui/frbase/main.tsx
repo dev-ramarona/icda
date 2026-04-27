@@ -5,7 +5,7 @@ import {
   MdlApndixSearchQueryx,
 } from "../../model/parmas";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
-import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
+import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
 import UixPsglstFrbaseTablex from "./table";
 import UixApndixFrbaseSearch from "./search";
 

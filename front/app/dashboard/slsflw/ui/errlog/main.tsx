@@ -1,5 +1,5 @@
 import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";
-import UixGlobalPagntnMainpg from "../../../global/ui/client/pagntn";
+import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
 import { ApiPsglstErrlogDtbase } from "../../../psglst/api/errlog";
 import { MdlPsglstErrlogDtbase, MdlPsglstErrlogSrcprm } from "../../../psglst/model/params";
 import UixPsglstErrlogTablex from "./tablex";

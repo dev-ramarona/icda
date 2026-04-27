@@ -5,8 +5,8 @@ import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { ApiPsglstPrcessManual } from "../../../psglst/api/prcess";
 import { MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
-import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
-import UixGlobalTbodyrTablex from "../../../public/ui/tablex/tbodyr";
+import UixGlobalTheadxTablex from "../../../global/ui/tablex/theadx";
+import UixGlobalTbodyrTablex from "../../../global/ui/tablex/tbodyr";
 
 export default function UixPsglstErrlogTablex({
   errlog,

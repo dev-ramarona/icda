@@ -5,7 +5,7 @@ import {
   UixGlobalIconvcCeklis,
   UixGlobalIconvcEditdt,
 } from "../../../global/ui/server/iconvc";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import UixGlobalInputxFormdt from "../action/inputx";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
 
 export default function UixGlobalTbodyxTablex({

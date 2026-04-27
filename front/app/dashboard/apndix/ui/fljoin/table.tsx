@@ -10,11 +10,11 @@ import {
   FncGlobalIntialObject,
 } from "../../../global/function/format";
 import { ApiApndixUpdateDtbase } from "../../api/dtbase";
-import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
-import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
-import UixGlobalTfootxTablex from "../../../public/ui/tablex/tfootx";
-import UixGlobalConfrmAction from "../../../public/ui/action/confrm";
-import { MdlGlobalConfrmAction } from "../../../public/model/params";
+import UixGlobalTheadxTablex from "../../../global/ui/tablex/theadx";
+import UixGlobalTbodyxTablex from "../../../global/ui/tablex/tbodyx";
+import UixGlobalTfootxTablex from "../../../global/ui/tablex/tfootx";
+import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
+import { MdlGlobalConfrmAction } from "../../../global/model/params";
 
 export default function UixPsglstFljoinTablex({
   arrdta,

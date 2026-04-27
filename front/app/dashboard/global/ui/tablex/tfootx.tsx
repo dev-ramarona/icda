@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import UixGlobalInputxFormdt from "../action/inputx";
 import {
   UixGlobalIconvcAddpls,
   UixGlobalIconvcCancel,

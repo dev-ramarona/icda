@@ -11,10 +11,10 @@ import {
 } from "../../../global/function/format";
 import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
-import UixGlobalTbodyxTablex from "../../../public/ui/tablex/tbodyx";
-import UixGlobalTheadxTablex from "../../../public/ui/tablex/theadx";
-import UixGlobalConfrmAction from "../../../public/ui/action/confrm";
-import { MdlGlobalConfrmAction } from "../../../public/model/params";
+import UixGlobalTbodyxTablex from "../../../global/ui/tablex/tbodyx";
+import UixGlobalTheadxTablex from "../../../global/ui/tablex/theadx";
+import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
+import { MdlGlobalConfrmAction } from "../../../global/model/params";
 
 export default function UixPsglstDetailTablex({
   arrdta,

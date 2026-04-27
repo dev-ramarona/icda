@@ -2,9 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { FncGlobalFormatDfault } from "../../../global/function/format";
-import UixGlobalInputxFormdt from "../../../global/ui/client/inputx";
+import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import { MdlApndixSearchQueryx } from "../../model/parmas";
-import UixGlobalWraperSearch from "../../../public/ui/search/wraper";
+import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
 
 export default function UixApndixFrbaseSearch({ qryprm }: { qryprm: MdlApndixSearchQueryx }) {
   const [params, paramsSet] = useState<MdlApndixSearchQueryx>({
