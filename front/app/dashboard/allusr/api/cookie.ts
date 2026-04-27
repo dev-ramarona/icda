@@ -20,18 +20,16 @@ export async function ApiAllusrCookieGetdta() {
 
   // Try hit API
   try {
-    const rspnse = await fetch(
-      `${process.env.NEXT_PUBLIC_URL_SERVER}/allusr/tokenx`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: tokenx,
-        },
-        credentials: "include",
+    const rspnse = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/allusr/tokenx`, {
+      method: "GET",
+      headers: {
+        Authorization: tokenx,
       },
-    );
+      credentials: "include",
+    });
     if (!rspnse.ok) throw new Error("Failed to fetch user data");
     const fnlobj: mdlAllusrCookieObjson = await rspnse.json();
+    if (!fnlobj.keywrd) fnlobj.keywrd = [""];
     return fnlobj;
   } catch (error) {
     console.log(error);

@@ -8,6 +8,7 @@ export interface MdlAllusrSearchParams {
   update: string;
 }
 export interface MdlAllusrFormipParams {
+  prmkey: string;
   stfnme: string;
   usrnme: string;
   stfeml: string;
@@ -16,6 +17,7 @@ export interface MdlAllusrFormipParams {
   keywrd: string[];
 }
 export interface MdlAllusrFrntndParams {
+  prmkey: string;
   stfnme: string;
   usrnme: string;
   stfeml: string;

@@ -99,7 +99,7 @@ func FncAllusrTokenxHandle(c *gin.Context) {
 
 	// Convert JWT to claims
 	tokenx, err := jwt.ParseWithClaims(cookie, &mdlAllusr.MdlAllusrTokensFormat{},
-		func(token *jwt.Token) (interface{}, error) {
+		func(token *jwt.Token) (any, error) {
 			return fncApndix.Jwtkey, nil
 		})
 
@@ -150,7 +150,7 @@ func FncAllusrRegistHandle(c *gin.Context) {
 	}
 
 	// Validasi kosong
-	if usript.Usrnme == "" || usript.Psswrd == "" {
+	if usript.Usrnme == "" {
 		c.JSON(400, "Username or password empty")
 		return
 	}
@@ -161,15 +161,17 @@ func FncAllusrRegistHandle(c *gin.Context) {
 	defer cancel()
 
 	// hash password
-	hashed, err := bcrypt.GenerateFromPassword([]byte(usript.Psswrd), bcrypt.DefaultCost)
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(500, gin.H{
-			"error": "Password hashing failed",
-		})
-		return
+	if usript.Psswrd != "" {
+		hashed, err := bcrypt.GenerateFromPassword([]byte(usript.Psswrd), bcrypt.DefaultCost)
+		if err != nil {
+			fmt.Println(err)
+			c.JSON(500, gin.H{
+				"error": "Password hashing failed",
+			})
+			return
+		}
+		usript.Psswrd = string(hashed)
 	}
-	usript.Psswrd = string(hashed)
 
 	// Cek apakah username sudah ada
 	if usript.Action == "regist" {
@@ -203,7 +205,7 @@ func FncAllusrRegistHandle(c *gin.Context) {
 	} else {
 
 		// Update user
-		_, err = tablex.UpdateOne(contxt,
+		_, err := tablex.UpdateOne(contxt,
 			bson.M{"usrnme": usript.Usrnme},
 			bson.M{"$set": usript})
 		if err != nil {
@@ -233,14 +235,17 @@ func FncAllusrUsrlstGetall(c *gin.Context) {
 
 	// Select db and context to do
 	var totidx = 0
-	var slcobj interface{}
+	var slcobj any
 	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("allusr_usrlst")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	// Pipeline get the data logic match
+	var addfld = bson.D{{Key: "$addFields", Value: bson.D{
+		{Key: "usrnme_lower", Value: bson.D{
+			{Key: "$toLower", Value: "$usrnme"}}}}}}
 	var mtchdt = bson.A{}
-	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
+	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "usrnme_lower", Value: 1}}}}
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
@@ -277,6 +282,8 @@ func FncAllusrUsrlstGetall(c *gin.Context) {
 		defer wg.Done()
 		nowPillne := mongo.Pipeline{
 			mtchfn,
+			addfld,
+			sortdt,
 			bson.D{{Key: "$count", Value: "totalCount"}},
 		}
 
@@ -307,6 +314,7 @@ func FncAllusrUsrlstGetall(c *gin.Context) {
 		defer wg.Done()
 		pipeln := mongo.Pipeline{
 			mtchfn,
+			addfld,
 			sortdt,
 			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw, 1) - 1) * inputx.Limitp}},
 			bson.D{{Key: "$limit", Value: inputx.Limitp}},
@@ -325,6 +333,7 @@ func FncAllusrUsrlstGetall(c *gin.Context) {
 		for rawDtaset.Next(contxt) {
 			slcDtaset := mdlAllusr.MdlAllusrFrntndFormat{}
 			rawDtaset.Decode(&slcDtaset)
+			slcDtaset.Prmkey = slcDtaset.Usrnme
 			slctmp = append(slctmp, slcDtaset)
 		}
 		slcobj = slctmp

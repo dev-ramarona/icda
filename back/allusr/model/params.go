@@ -23,6 +23,7 @@ type MdlAllusrUsrlstDtbase struct {
 	Keywrd []string `json:"keywrd,omitempty" bson:"keywrd,omitempty"`
 }
 type MdlAllusrFrntndFormat struct {
+	Prmkey string   `json:"prmkey" bson:"prmkey"`
 	Usrnme string   `json:"usrnme" bson:"usrnme"`
 	Stfnme string   `json:"stfnme" bson:"stfnme"`
 	Stfeml string   `json:"stfeml" bson:"stfeml"`

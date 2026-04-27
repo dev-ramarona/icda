@@ -12,6 +12,7 @@ export default function UixGlobalTbodyrTablex({
   objdta,
   datefm,
   nmbrfm,
+  spclfm,
   rfresh,
   ignore,
   tolink,
@@ -24,6 +25,7 @@ export default function UixGlobalTbodyrTablex({
   objdta: any;
   datefm: string[];
   nmbrfm: string[];
+  spclfm: string[];
   rfresh: (log: any) => void | null;
   ignore: (log: any) => void | null;
   tolink: (log: any) => void | null;
@@ -96,7 +98,7 @@ export default function UixGlobalTbodyrTablex({
                 )}
                 {trashx && (
                   <div
-                    className={`flexctr btnwrn cursor-pointer duration-300`}
+                    className={`flexctr btncxl cursor-pointer duration-300`}
                     onClick={() => trashx(log)}
                   >
                     <UixGlobalIconvcTrashx bold={3} color="#fff" size={1.4} />
@@ -127,6 +129,16 @@ export default function UixGlobalTbodyrTablex({
                     FncGlobalFormatDatefm(String(val))
                   ) : nmbrfm.includes(key) ? (
                     <div className="text-right">{val.toLocaleString("en-US")}</div>
+                  ) : spclfm.includes(key) && Array.isArray(val) ? (
+                    <div className="mx-auto w-36 overflow-x-scroll px-1.5">
+                      <div className="flexctr w-fit min-w-full gap-x-1">
+                        {val.map((val, key) => (
+                          <div className="rounded-md bg-gray-100 p-1" key={key}>
+                            {val}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   ) : (
                     val
                   )}

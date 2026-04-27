@@ -179,14 +179,6 @@ export interface MdlPsglstPsgdtlFrntnd {
   nmbrxt: string;
 }
 
-// Log action
-export interface MdlPsglstActlogDtbase {
-  timeup: number;
-  dateup: number;
-  datefl: number;
-  statdt: string;
-}
-
 // Log error
 export interface MdlPsglstErrlogDtbase {
   prmkey: string;

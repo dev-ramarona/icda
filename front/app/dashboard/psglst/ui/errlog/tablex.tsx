@@ -133,6 +133,7 @@ export default function UixPsglstErrlogTablex({
               "mnthfl",
             ]}
             nmbrfm={["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"]}
+            spclfm={[""]}
             rfresh={rfresh}
             ignore={ignore}
             tolink={null}

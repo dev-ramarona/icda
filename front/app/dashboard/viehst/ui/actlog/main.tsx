@@ -1,7 +1,7 @@
 import { MdlGlobalActlogDtbase } from "../../../global/model/params";
 import UixGlobalActlogTablex from "../../../global/ui/action/actlog";
 
-export default async function UixPsglstActlogMainpg({
+export default async function UixViehstActlogMainpg({
   actlog,
 }: {
   actlog: MdlGlobalActlogDtbase[];

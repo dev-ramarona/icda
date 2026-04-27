@@ -32,6 +32,7 @@ export default function UixSlsflwPsgsmrTablex({ arrdta }: { arrdta: MdlSlsflwPsg
               "mnthfl",
             ]}
             nmbrfm={["flhour", "totnta", "tottyq", "totpax", "totfae", "totqfr", "totrph"]}
+            spclfm={[""]}
             rfresh={null}
             ignore={null}
             tolink={null}

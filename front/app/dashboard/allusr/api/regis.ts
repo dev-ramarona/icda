@@ -1,16 +1,14 @@
 "use server";
 
 // import { cookies } from "next/headers";
-export async function apiAllusrFormipRegist(
-  prevState: any,
-  formData: FormData,
-) {
+export async function apiAllusrFormipRegist(prevState: any, formData: FormData) {
   const action = formData.get("action") as string;
   const stfnme = formData.get("stfnme") as string;
   const stfeml = formData.get("stfeml") as string;
   const usrnme = formData.get("usrnme") as string;
   const psswrd = formData.get("psswrd") as string;
   const confrm = formData.get("confrm") as string;
+  const isited = (formData.get("isited") as string) == "Create user";
   const access = formData.getAll("access") as string[];
   const keywrd = formData.getAll("keywrd") as string[];
   const rawobj = {
@@ -23,6 +21,7 @@ export async function apiAllusrFormipRegist(
     psswrd_errrsp: "",
     psswrd_dfault: "",
     access_errrsp: "",
+    isited_dfault: "",
     access_dfault: [],
     keywrd_dfault: [],
     finals_errrsp: "",
@@ -36,11 +35,20 @@ export async function apiAllusrFormipRegist(
   errobj.psswrd_dfault = psswrd;
   errobj.access_dfault = access;
   errobj.keywrd_dfault = keywrd;
-  if (!stfnme || !stfeml || !usrnme || !psswrd || !confrm || !access.length) {
+  if (
+    !stfnme ||
+    !stfeml ||
+    !usrnme ||
+    ((!psswrd || !confrm) && isited) ||
+    psswrd != confrm ||
+    !access.length
+  ) {
+    console.log(isited, psswrd, confrm);
     if (!stfnme) errobj.stfnme_errrsp = "Staff name is empty";
     if (!stfeml) errobj.stfeml_errrsp = "Staff email is empty";
     if (!usrnme) errobj.usrnme_errrsp = "Username is empty";
-    if (!psswrd || !confrm) errobj.psswrd_errrsp = "Password is empty";
+    if ((!psswrd || !confrm) && isited) errobj.psswrd_errrsp = "Password is empty";
+    if (isited && psswrd != confrm) errobj.psswrd_errrsp = "Password not match";
     if (!access.length) errobj.access_errrsp = "Access is empty";
     if (!keywrd.length) errobj.access_errrsp = "Keyword is empty";
     errobj.finals_errrsp = "Check the data";

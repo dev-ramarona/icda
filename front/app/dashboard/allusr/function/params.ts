@@ -8,7 +8,7 @@ export function FncAllusrSearchParams(params: MdlAllusrSearchParams) {
     stfnme: params.stfnme || "",
     stfeml: params.stfeml || "",
     pagenw: Number(params.pagenw) || 1,
-    limitp: Number(params.limitp) || 5,
+    limitp: Number(params.limitp) || 10,
     update: params.update || "",
   } as MdlAllusrSearchParams;
 }

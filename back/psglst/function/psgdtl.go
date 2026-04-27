@@ -42,7 +42,7 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 
 	// Select db and context to do
 	var totidx = 0
-	var slcobj interface{}
+	var slcobj any
 	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("psglst_psgdtl")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
@@ -397,6 +397,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"clssfl",
 			"clssvc",
 			"Isitnr",
+			"Isitfl",
 			"Frcalc",
 			"Curncy_target",
 			"Ntafvc_target",
@@ -692,6 +693,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Clssfl,
 				slcDtaset.Clssvc,
 				slcDtaset.Isitnr,
+				slcDtaset.Isitfl,
 				slcDtaset.Frcalc,
 				slcDtaset.Curncy,
 				fmt.Sprintf("%v", slcDtaset.Ntafvc),
