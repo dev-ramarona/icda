@@ -111,6 +111,7 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		{Key: "_id", Value: bson.D{
 			{Key: "flnbfl", Value: "$flnbfx"},
 			{Key: "datefl", Value: "$datefl"},
+			{Key: "airlfl", Value: "$airlfl"},
 			{Key: "depart", Value: "$depart"},
 		}},
 		{Key: "data", Value: bson.D{{Key: "$first", Value: "$$ROOT"}}},
@@ -280,11 +281,14 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 	} else {
 		mtchfn = bson.D{{Key: "$match", Value: bson.D{}}}
 	}
+	if inputx.Isitjn_psgsmr == "Combined" {
+		csvFilenm = append(csvFilenm, "Combined")
+	}
 
 	// Set header untuk file CSV
 	fnlFilenm := strings.Join(csvFilenm, "_")
 	c.Header("Content-Type", "text/csv")
-	c.Header("Content-Disposition", "attachment; filename=Psglst_Detail_"+fnlFilenm+".csv")
+	c.Header("Content-Disposition", "attachment; filename=Psglst_Summary"+fnlFilenm+".csv")
 	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
@@ -337,6 +341,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		{Key: "_id", Value: bson.D{
 			{Key: "flnbfl", Value: "$flnbfx"},
 			{Key: "datefl", Value: "$datefl"},
+			{Key: "airlfl", Value: "$airlfl"},
 			{Key: "depart", Value: "$depart"},
 		}},
 		{Key: "data", Value: bson.D{{Key: "$first", Value: "$$ROOT"}}},

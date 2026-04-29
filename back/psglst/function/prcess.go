@@ -96,6 +96,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		var idcFlhour = &sync.Map{}
 		var idcFrbase = &sync.Map{}
 		var idcFrtaxs = &sync.Map{}
+		var idcViehst = &sync.Map{}
 		var idcFlnbfl = &sync.Map{}
 
 		// Get Multiple API sessions/tokens
@@ -126,7 +127,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 						mapClslvl, slcHfbalv,
 						sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
 						sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
-						idcFlhour, idcFrbase, idcFrtaxs, idcFlnbfl,
+						idcFlhour, idcFrbase, idcFrtaxs, idcViehst, idcFlnbfl,
 						strTimenw, &errErignr, &errPrmkey)
 					continue
 				}
@@ -243,7 +244,7 @@ func FncPsglstPrcessWorker(
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
 	sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
 	sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
-	idcFlhour, idcFrbase, idcFrtaxs, idcFlnbfl *sync.Map,
+	idcFlhour, idcFrbase, idcFrtaxs, idcViehst, idcFlnbfl *sync.Map,
 	strTimenw string, errErignr, errPrmkey *string) {
 
 	// Declare global variable
@@ -253,6 +254,7 @@ func FncPsglstPrcessWorker(
 	var mgoMilege, mgoFlnbfl []mongo.WriteModel
 	var mgoPsgsmr, mgoPsgdtl []mongo.WriteModel
 	var mgoProvnc, mgoCurrcv []mongo.WriteModel
+	var mgoViehst []mongo.WriteModel
 
 	// Get currency
 	mapCurrcv := map[string]mdlApndix.MdlApndixCurrcvDtbase{}
@@ -301,6 +303,21 @@ func FncPsglstPrcessWorker(
 		objParams.Dateup = int32(intDatenw)
 		intTimenw, _ := strconv.Atoi(strTimenw)
 		objParams.Timeup = int64(intTimenw)
+
+		// Get vie history
+		keyViehst := strconv.Itoa(int(intDatefl)) + dbsAirlfl + dbsFlnbfl
+		if _, ist := idcViehst.Load(keyViehst); !ist {
+			nowMgohst, err := fncSbrapi.FncSbrapiViehstMainob(nowObjtkn, objParams)
+			if err == nil {
+				mgoViehst = append(mgoViehst, nowMgohst...)
+				idcViehst.Store(keyViehst, true)
+			}
+		}
+		if len(mgoViehst) > 0 {
+			fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+				"viehst_rwdata": &mgoViehst,
+			}, 200)
+		}
 
 		// Get flight detail
 		func() {
@@ -533,5 +550,6 @@ func FncPsglstPrcessWorker(
 		"apndix_frbase": &mgoFrbase,
 		"apndix_frtaxs": &mgoFrtaxs,
 		"apndix_provnc": &mgoProvnc,
+		"viehst_rwdata": &mgoViehst,
 	}, 0)
 }

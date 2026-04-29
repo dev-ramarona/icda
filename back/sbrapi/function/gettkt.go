@@ -150,7 +150,8 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	}
 
 	// Get taxes
-	cekExchge := !strings.Contains("A", getTktdoc.Ticket.Amounts.Total.Text)
+	cekExchge := !strings.Contains("A", getTktdoc.Ticket.Amounts.Total.Text) ||
+		getTktdoc.Ticket.Amounts.Total.Text == ""
 	if len(slcSegtkt) == 1 && cekExchge && psglst.Routfx == "" {
 		getTaxyqf := 0
 		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode

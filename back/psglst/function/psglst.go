@@ -567,21 +567,25 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 							continue
 						} else if len(slcHstory) > 0 && mtcFrtaxs.Hstory != "" {
 							lenHstory := len(slcHstory) - 1
-							for idxtrd, valtrd := range slcHstory {
+							for i, idxtrd := lenHstory, 0; i >= 0; i-- {
+								valtrd := slcHstory[i]
 								slcValtrd := strings.Split(valtrd, "@")
 								intDatend, _ := strconv.Atoi(slcValtrd[0])
-								if intDatend <= intDatemc || lenHstory == idxtrd {
-									slcFrtaxs := strings.Split(slcValtrd[1], "/")
-									for _, valfrt := range slcFrtaxs {
-										slcValfrt := strings.Split(valfrt, ":")
-										strTaxcde := slcValfrt[0]
-										intFrtaxs, _ := strconv.Atoi(slcValfrt[1])
-										if strTaxcde == "yq" && intFrtaxs != 0 {
-											psglst.Yqtxvc = float64(intFrtaxs)
+								if len(slcValtrd) >= 2 {
+									if intDatend <= intDatemc || lenHstory == idxtrd {
+										slcFrtaxs := strings.Split(slcValtrd[1], "/")
+										for _, valfrt := range slcFrtaxs {
+											slcValfrt := strings.Split(valfrt, ":")
+											strTaxcde := slcValfrt[0]
+											intFrtaxs, _ := strconv.Atoi(slcValfrt[1])
+											if strTaxcde == "yq" && intFrtaxs != 0 {
+												psglst.Yqtxvc = float64(intFrtaxs)
+											}
 										}
+										break
 									}
-									break
 								}
+								idxtrd++
 							}
 						}
 					}

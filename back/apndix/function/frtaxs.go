@@ -66,6 +66,14 @@ func FncApndixFrtaxsGetall(c *gin.Context) {
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "frtaxs", Value: 1}}}}
 	var wg sync.WaitGroup
 
+	// Check if data airline all is isset
+	if inputx.Airlfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
+			Value: bson.D{{Key: "$regex",
+				Value: "^" + inputx.Airlfl_apndix}}}})
+	}
+
 	// Check if data Route all is isset
 	if inputx.Routfl_apndix != "" {
 		csvFilenm = append(csvFilenm, inputx.Routfl_apndix)
