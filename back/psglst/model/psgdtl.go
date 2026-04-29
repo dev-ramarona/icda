@@ -373,12 +373,13 @@ type MdlPsglstPsgdtlSlserr struct {
 	Routfl string  `json:"routfl" bson:"routfl"`
 	Provnc string  `json:"provnc" bson:"provnc"`
 	Datefl int32   `json:"datefl" bson:"datefl"`
-	Timeis int64   `json:"timeis" bson:"timeis"`
 	Timecr int64   `json:"timecr" bson:"timecr"`
+	Timeis int64   `json:"timeis" bson:"timeis"`
 	Tktnvc string  `json:"tktnvc" bson:"tktnvc"`
 	Clssfl string  `json:"clssfl" bson:"clssfl"`
 	Clssvc string  `json:"clssvc" bson:"clssvc"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
+	Isitfl string  `json:"isitfl" bson:"isitfl"`
 	Isitct string  `json:"isitct" bson:"isitct"`
 	Frcalc string  `json:"frcalc" bson:"frcalc"`
 	Curncy string  `json:"curncy" bson:"curncy"`

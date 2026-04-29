@@ -398,6 +398,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"clssvc",
 			"Isitnr",
 			"Isitfl",
+			"Isitct",
 			"Frcalc",
 			"Curncy_target",
 			"Ntafvc_target",
@@ -504,6 +505,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Timecr",
 			"Airlfl",
 			"Airlvc",
+			"Airlfr",
 			"Airtyp",
 			"Seatcn",
 			"Flhour",
@@ -649,9 +651,12 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		rawDtaset.Decode(&slcDtaset)
 		strTimeis := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timeis))
 		strTimecr := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timecr))
+		strTimefl := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timefl))
+		strTimerv := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timerv))
 		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Mnthfl))
 		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 		strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
+		strDaterv := fncApndix.FncApndixFormatDateot(int(slcDtaset.Daterv))
 
 		// Write to CSV
 		switch inputx.Format_psgdtl {
@@ -686,14 +691,15 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Flnbfl,
 				slcDtaset.Routfl,
 				slcDtaset.Provnc,
-				strDatefl,
-				strTimeis,
-				strTimecr,
+				fmt.Sprintf("%v", slcDtaset.Datefl),
+				fmt.Sprintf("%v", slcDtaset.Timeis),
+				fmt.Sprintf("%v", slcDtaset.Timecr),
 				slcDtaset.Tktnvc,
 				slcDtaset.Clssfl,
 				slcDtaset.Clssvc,
 				slcDtaset.Isitnr,
 				slcDtaset.Isitfl,
+				slcDtaset.Isitct,
 				slcDtaset.Frcalc,
 				slcDtaset.Curncy,
 				fmt.Sprintf("%v", slcDtaset.Ntafvc),
@@ -789,16 +795,17 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Qsrcvc),
 				slcDtaset.Frcalc,
 				slcDtaset.Ndayfl,
-				fmt.Sprintf("%v", slcDtaset.Datefl),
-				fmt.Sprintf("%v", slcDtaset.Datevc),
-				fmt.Sprintf("%v", slcDtaset.Daterv),
-				fmt.Sprintf("%v", slcDtaset.Mnthfl),
-				fmt.Sprintf("%v", slcDtaset.Timefl),
-				fmt.Sprintf("%v", slcDtaset.Timerv),
-				fmt.Sprintf("%v", slcDtaset.Timeis),
-				fmt.Sprintf("%v", slcDtaset.Timecr),
+				strDatefl,
+				strDatevc,
+				strDaterv,
+				strMnthfl,
+				strTimefl,
+				strTimerv,
+				strTimeis,
+				strTimecr,
 				slcDtaset.Airlfl,
 				slcDtaset.Airlvc,
+				slcDtaset.Airlfr,
 				slcDtaset.Airtyp,
 				slcDtaset.Seatcn,
 				fmt.Sprintf("%v", slcDtaset.Flhour),
@@ -1152,6 +1159,10 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 
 				// Cek header and data
 				if len(slcDefhdr) != len(slcRowdta) {
+					r, _ := json.MarshalIndent(slcDefhdr, " ", " ")
+					fmt.Println(len(slcDefhdr), string(r))
+					a, _ := json.MarshalIndent(slcRowdta, " ", " ")
+					fmt.Println(len(slcRowdta), string(a))
 					writer.Write([]string{"Header and data mismatch"})
 					return
 				}
