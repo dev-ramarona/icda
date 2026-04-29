@@ -47,6 +47,8 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 						"ServiceCoupon",
 						"FareCalculation",
 						"Amounts",
+						"RelatedDocument",
+						"Remark",
 					},
 				},
 			},
@@ -149,10 +151,35 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		slcRoutvf = append(slcRoutvf, rawDepart)
 	}
 
+	// Get related document
+	if getTktdoc.Ticket.RelatedDocument.Original.Number != "" {
+		slcTktnxc := []string{}
+		for _, tktnxc := range getTktdoc.Ticket.RelatedDocument.Exchange {
+			strDateis := fncApndix.FncApndixFormatDatein(tktnxc.IssueDate)
+			slcTktnxc = append(slcTktnxc, fmt.Sprintf("%v:%v-%v",
+				tktnxc.Number, strDateis, tktnxc.IssueCity))
+		}
+		strTktnvc := strings.Join(slcTktnxc, "|")
+		objTktnor := getTktdoc.Ticket.RelatedDocument.Original
+		if !strings.Contains(strTktnvc, objTktnor.Number) {
+			strDateis := fncApndix.FncApndixFormatDatein(objTktnor.IssueDate)
+			strTktnor := fmt.Sprintf("%v:%v-%v",
+				objTktnor.Number, strDateis, objTktnor.IssueCity)
+			slcTktnxc = append([]string{strTktnor}, slcTktnxc...)
+		}
+		psglst.Tktnxc = strings.Join(slcTktnxc, "|")
+	}
+
+	// Get remark and invol indicator
+	psglst.Rmkvcr = getTktdoc.Ticket.Remark.Manual
+	if getTktdoc.Ticket.Remark.Endorsements == "INVOL" {
+		psglst.Isitiv = "INVL"
+	} else if psglst.Tktnxc != "" {
+		psglst.Isitiv = "EXCH"
+	}
+
 	// Get taxes
-	cekExchge := !strings.Contains("A", getTktdoc.Ticket.Amounts.Total.Text) ||
-		getTktdoc.Ticket.Amounts.Total.Text == ""
-	if len(slcSegtkt) == 1 && cekExchge && psglst.Routfx == "" {
+	if len(slcSegtkt) == 1 && psglst.Isitiv == "" && psglst.Routfx == "" {
 		getTaxyqf := 0
 		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode
 		if getTaxcur == "" {

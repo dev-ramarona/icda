@@ -71,6 +71,8 @@ type MdlSbrapiGettktRsptkt struct {
 	ServiceCoupon   []MdlSbrapiGettktRspsvc `xml:"ServiceCoupon"`
 	Amounts         MdlSbrapiGettktRspamt   `xml:"Amounts>New"`
 	FareCalculation string                  `xml:"FareCalculation>New"`
+	Remark          MdlSbrapiGettktRsprmk   `xml:"Remark"`
+	RelatedDocument MdlSbrapiGettktRsprld   `xml:"RelatedDocument"`
 }
 type MdlSbrapiGettktRspdtl struct {
 	TourNumber         string                `xml:"TourNumber"`
@@ -119,7 +121,7 @@ type MdlSbrapiGettktRspamt struct {
 }
 type MdlSbrapiGettktRsptot struct {
 	Amount MdlSbrapiGettktRspbse `xml:"Amount"`
-	Text   string                `xml:"text"`
+	Text   string                `xml:"Text"`
 }
 
 type MdlSbrapiGettktRsptax struct {
@@ -130,4 +132,18 @@ type MdlSbrapiGettktRsptax struct {
 type MdlSbrapiGettktRspbse struct {
 	CurrencyCode string `xml:"currencyCode,attr"`
 	Value        string `xml:",chardata"`
+}
+type MdlSbrapiGettktRsprmk struct {
+	Endorsements string `xml:"Endorsements"`
+	Manual       string `xml:"Manual"`
+}
+type MdlSbrapiGettktRsprld struct {
+	Original MdlSbrapiGettktRspexo   `xml:"Original"`
+	Exchange []MdlSbrapiGettktRspexo `xml:"Exchange"`
+}
+type MdlSbrapiGettktRspexo struct {
+	Number     string `xml:"Number"`
+	IssueDate  string `xml:"IssueDate"`
+	IssueCity  string `xml:"IssueCity"`
+	IataNumber string `xml:"IataNumber"`
 }

@@ -531,8 +531,10 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				if len(strconv.Itoa(int(psglst.Timeis))) == 10 {
 					nowDatemc = strconv.Itoa(int(psglst.Timeis))[:6]
 				}
-				if len(strconv.Itoa(int(psglst.Timecr))) == 10 {
-					nowDatemc = strconv.Itoa(int(psglst.Timecr))[:6]
+				if psglst.Isitiv == "INVL" {
+					if len(strconv.Itoa(int(psglst.Timecr))) == 10 {
+						nowDatemc = strconv.Itoa(int(psglst.Timecr))[:6]
+					}
 				}
 				intDatemc, _ := strconv.Atoi(nowDatemc)
 

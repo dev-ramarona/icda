@@ -351,13 +351,13 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 
 		// Final push to map
 		strDatefl := strconv.Itoa(int(objPsglst.Datefl))
-		strSeatpx := objPsglst.Seatpx
+		strFlnbfl, strDepart := objPsglst.Flnbfl, objPsglst.Depart
+		strSeatpx, strAirfl := objPsglst.Seatpx, objPsglst.Airlfl
 		strOtherk := ""
 		if strSeatpx == "" {
 			strOtherk = objPsglst.Psgrid
 		}
-		strFlnbfl, strDepart := objPsglst.Flnbfl, objPsglst.Depart
-		objPsglst.Prmkey = strDatefl + strFlnbfl + strDepart + strSeatpx + strOtherk
+		objPsglst.Prmkey = strDatefl + strAirfl + strFlnbfl + strDepart + strSeatpx + strOtherk
 		slcPsglst = append(slcPsglst, objPsglst)
 	}
 

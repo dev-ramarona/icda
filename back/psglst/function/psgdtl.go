@@ -379,7 +379,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Cpnbvc_target",
 			"Statvc_target",
 			"Timeis_target",
-			"Remark_target",
+			"Rmkusr_target",
 		})
 	case "SLSERR":
 		writer.Write([]string{
@@ -469,7 +469,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"OTHER CLS",
 			"OTHER ROUTE",
 			"OTHER STATUS",
-			"Remark",
+			"Rmkusr",
 			"Gender",
 			"Routfl",
 			"Isitir",
@@ -482,6 +482,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Source",
 			"Tktnfl",
 			"Tktnvc",
+			"Tktnxc",
 			"Pnrcde",
 			"Pnritl",
 			"Curncy",
@@ -560,6 +561,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Isitir",
 			"Isitct",
 			"Isitnr",
+			"Isitiv",
 			"Srcfrb",
 			"Srcyqf",
 			"Noteup",
@@ -680,7 +682,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Cpnbvc),
 				slcDtaset.Statvc,
 				fmt.Sprintf("%v", slcDtaset.Timeis),
-				slcDtaset.Remark,
+				slcDtaset.Rmkusr,
 			})
 		case "SLSERR":
 			writer.Write([]string{
@@ -770,7 +772,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"",
 				"",
 				"",
-				slcDtaset.Remark,
+				slcDtaset.Rmkusr,
 				slcDtaset.Gender,
 				slcDtaset.Routfl,
 				slcDtaset.Isitir})
@@ -782,6 +784,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Source,
 				slcDtaset.Tktnfl,
 				slcDtaset.Tktnvc,
+				slcDtaset.Tktnxc,
 				slcDtaset.Pnrcde,
 				slcDtaset.Pnritl,
 				slcDtaset.Curncy,
@@ -860,6 +863,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Isitir,
 				slcDtaset.Isitct,
 				slcDtaset.Isitnr,
+				slcDtaset.Isitiv,
 				slcDtaset.Srcfrb,
 				slcDtaset.Srcyqf,
 				slcDtaset.Noteup,

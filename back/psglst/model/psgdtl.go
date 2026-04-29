@@ -41,6 +41,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Source string  `json:"source" bson:"source,omitempty"`
 	Tktnfl string  `json:"tktnfl" bson:"tktnfl,omitempty"`
 	Tktnvc string  `json:"tktnvc" bson:"tktnvc,omitempty"`
+	Tktnxc string  `json:"tktnxc" bson:"tktnxc,omitempty"`
 	Pnrcde string  `json:"pnrcde" bson:"pnrcde,omitempty"`
 	Pnritl string  `json:"pnritl" bson:"pnritl,omitempty"`
 	Curncy string  `json:"curncy" bson:"curncy,omitempty"`
@@ -119,12 +120,14 @@ type MdlPsglstPsgdtlDtbase struct {
 	Isitir string  `json:"isitir" bson:"isitir,omitempty"`
 	Isitct string  `json:"isitct" bson:"isitct,omitempty"`
 	Isitnr string  `json:"isitnr" bson:"isitnr,omitempty"`
+	Isitiv string  `json:"isitiv" bson:"isitiv,omitempty"`
 	Srcfrb string  `json:"srcfrb" bson:"srcfrb,omitempty"`
 	Srcyqf string  `json:"srcyqf" bson:"srcyqf,omitempty"`
 	Noteup string  `json:"noteup" bson:"noteup,omitempty"`
 	Updtby string  `json:"updtby" bson:"updtby,omitempty"`
 	Prmkey string  `json:"prmkey" bson:"prmkey,omitempty"`
-	Remark string  `json:"remark" bson:"remark,omitempty"`
+	Rmkusr string  `json:"rmkusr" bson:"rmkusr,omitempty"`
+	Rmkvcr string  `json:"Rmkvcr" bson:"Rmkvcr,omitempty"`
 
 	// Ancillary
 	Gpcdae string  `json:"gpcdae" bson:"gpcdae,omitempty"`
@@ -195,6 +198,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Source string  `json:"source" bson:"source"`
 	Tktnfl string  `json:"tktnfl" bson:"tktnfl"`
 	Tktnvc string  `json:"tktnvc" bson:"tktnvc"`
+	Tktnxc string  `json:"tktnxc" bson:"tktnxc"`
 	Pnrcde string  `json:"pnrcde" bson:"pnrcde"`
 	Pnritl string  `json:"pnritl" bson:"pnritl"`
 	Curncy string  `json:"curncy" bson:"curncy"`
@@ -273,12 +277,14 @@ type MdlPsglstPsgdtlDfault struct {
 	Isitir string  `json:"isitir" bson:"isitir"`
 	Isitct string  `json:"isitct" bson:"isitct"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
+	Isitiv string  `json:"isitiv" bson:"isitiv"`
 	Srcfrb string  `json:"srcfrb" bson:"srcfrb"`
 	Srcyqf string  `json:"srcyqf" bson:"srcyqf"`
 	Noteup string  `json:"noteup" bson:"noteup"`
 	Updtby string  `json:"updtby" bson:"updtby"`
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
-	Remark string  `json:"remark" bson:"remark"`
+	Rmkusr string  `json:"rmkusr" bson:"rmkusr"`
+	Rmkvcr string  `json:"Rmkvcr" bson:"Rmkvcr"`
 
 	// Ancillary
 	Gpcdae string  `json:"gpcdae" bson:"gpcdae"`
