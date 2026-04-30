@@ -367,7 +367,7 @@ type MdlPsglstPsgdtlMnferr struct {
 	Cpnbvc int32  `json:"cpnbvc" bson:"cpnbvc"`
 	Statvc string `json:"statvc" bson:"statvc"`
 	Timeis int64  `json:"timeis" bson:"timeis"`
-	Remark string `json:"remark" bson:"remark"`
+	Rmkusr string `json:"rmkusr" bson:"rmkusr"`
 }
 
 type MdlPsglstPsgdtlSlserr struct {
