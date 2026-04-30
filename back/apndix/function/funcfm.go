@@ -46,6 +46,13 @@ func FncApndixConvrtFlhour(tmestr string) (float64, error) {
 	return roundd, nil
 }
 
+// Convert time 12.30 to float 12.5
+func FncApndixRevrseFlhour(tmeflt float64) string {
+	hournw := int(tmeflt)
+	minute := (tmeflt - float64(hournw)) * 60
+	return fmt.Sprintf("%v:%02.0f", hournw, minute)
+}
+
 // Treatment 920A / 1230P to string format time
 func FncApndixConvrtFltime(timefl string) (string, error) {
 

@@ -389,6 +389,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		rawDtaset.Decode(&slcDtaset)
 		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Mnthfl))
+		strFlhour := fncApndix.FncApndixRevrseFlhour(slcDtaset.Flhour)
 
 		// Write to CSV
 		writer.Write([]string{
@@ -405,7 +406,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 			slcDtaset.Flstat,
 			slcDtaset.Seatcn,
 			slcDtaset.Airtyp,
-			fmt.Sprintf("%v", slcDtaset.Flhour),
+			strFlhour,
 			fmt.Sprintf("%v", slcDtaset.Totnta),
 			fmt.Sprintf("%v", slcDtaset.Tottyq),
 			fmt.Sprintf("%v", slcDtaset.Totpax),
