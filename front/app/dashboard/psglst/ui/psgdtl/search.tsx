@@ -64,11 +64,11 @@ export default function UixPsglstDetailSearch({
     chngedSet(true);
     const namefl = e.currentTarget.name;
     const valuef = FncGlobalFormatDfault(namefl, e.currentTarget.value);
-    paramsSet({
-      ...params,
-      [namefl]: valuef,
-    });
-    rplprm([namefl, "pagenw_psgdtl"], [valuef as string, ""]);
+    const random = String(Math.random());
+    paramsSet({ ...params, [namefl]: valuef });
+    if (namefl.includes("date")) {
+      rplprm([namefl, "pagenw_psgdtl", "update_global"], [valuef as string, "", random]);
+    } else rplprm([namefl, "pagenw_psgdtl"], [valuef as string, ""]);
   };
 
   // Reset function

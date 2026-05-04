@@ -2,6 +2,7 @@ package fncPsglst
 
 import (
 	fncApndix "back/apndix/function"
+	mdlApndix "back/apndix/model"
 	mdlPsglst "back/psglst/model"
 
 	"context"
@@ -37,6 +38,7 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 
 	// Select db and context to do
 	var totidx = 0
+	var joinrd = false
 	var slcobj any
 	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("psglst_psgsmr")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
@@ -199,11 +201,25 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		slcobj = slctmp
 	}()
 
+	// Get Join data
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+
+		// Find sample join data by datefl
+		objJoindt := mdlApndix.MdlApndixFljoinFrntnd{}
+		tablej := fncApndix.Client.Database(fncApndix.Dbases).Collection("apndix_fljoin")
+		err := tablej.FindOne(contxt, bson.M{"datefl": intDatefl}).Decode(&objJoindt)
+		if err == nil {
+			joinrd = true
+		}
+	}()
+
 	// Waiting until all go done
 	wg.Wait()
 
 	// Return final output
-	c.JSON(200, gin.H{"totdta": totidx, "arrdta": slcobj})
+	c.JSON(200, gin.H{"totdta": totidx, "arrdta": slcobj, "joinrd": joinrd})
 }
 
 // Download PNR Detail all

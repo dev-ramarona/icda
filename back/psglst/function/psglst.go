@@ -20,8 +20,9 @@ import (
 
 func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist mdlApndix.MdlApndixFllistDtbase,
 	nowObjtkn mdlSbrapi.MdlSbrapiMsghdrParams, objParams mdlSbrapi.MdlSbrapiMsghdrApndix,
-	sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
-	idcFrbase, idcFrtaxs, sycErrlog, sycProvnc *sync.Map,
+	sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour,
+	sycMilege, sycErrlog, sycProvnc, sycFljoin,
+	idcFrbase, idcFrtaxs *sync.Map,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
 	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase, errErignr, errPrmkey *string) (
@@ -663,6 +664,17 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			totSmmary.Provnc = strProvnc
 			if strProvnc != "" {
 				cekProvnc = false
+			}
+		}
+
+		// Get flight join
+		keyFljoin := psglst.Airlfl + psglst.Flnbfl + psglst.Depart + strconv.Itoa(int(psglst.Datefl))
+		if getFljoin, istFljoin := sycFljoin.Load(keyFljoin); istFljoin {
+			if valFljoin, mtcFljoin := getFljoin.(mdlApndix.MdlApndixFljoinDtbase); mtcFljoin {
+				psglst.Flnbjn = valFljoin.Flnbjn
+				if totSmmary.Flnbjn == "" {
+					totSmmary.Flnbjn = valFljoin.Flnbjn
+				}
 			}
 		}
 

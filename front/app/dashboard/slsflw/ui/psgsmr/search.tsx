@@ -9,9 +9,11 @@ import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
 export default function UixSlsflwPsgsmrSearch({
   prmPsgsmr,
   datefl,
+  joinar,
 }: {
   prmPsgsmr: MdlSlsflwPsgsmrSrcprm;
   datefl: string[];
+  joinar: string[];
 }) {
   const [params, paramsSet] = useState<MdlSlsflwPsgsmrSrcprm>({
     update_global: prmPsgsmr.update_global || "",
@@ -52,11 +54,11 @@ export default function UixSlsflwPsgsmrSearch({
     chngedSet(true);
     const namefl = e.currentTarget.name;
     const valuef = FncGlobalFormatDfault(namefl, e.currentTarget.value);
-    paramsSet({
-      ...params,
-      [namefl]: valuef,
-    });
-    rplprm([namefl, "pagenw_psgsmr"], [valuef as string, ""]);
+    const random = String(Math.random());
+    paramsSet({ ...params, [namefl]: valuef });
+    if (namefl.includes("date")) {
+      rplprm([namefl, "pagenw_psgsmr", "update_global"], [valuef as string, "", random]);
+    } else rplprm([namefl, "pagenw_psgsmr"], [valuef as string, ""]);
   };
 
   // Reset function
@@ -131,7 +133,7 @@ export default function UixSlsflwPsgsmrSearch({
       <div className="flexctr relative h-10 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
           typipt={"select"}
-          length={["Combined", "Separated"]}
+          length={joinar}
           queryx={"isitjn_psgsmr"}
           params={params.isitjn_psgsmr}
           plchdr="Combine Join"

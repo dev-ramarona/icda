@@ -20,9 +20,11 @@ export default async function UixSlsflwPsgsmrMainpg({
   });
   const arrdta: MdlSlsflwPsgsmrFrntnd[] = psgsmr.arrdta;
   const totdta: number = psgsmr.totdta;
+  const joinrd: boolean = psgsmr.joinrd;
+  const joinar: string[] = joinrd ? ["Combined", "Separated"] : ["Separated"];
   return (
     <>
-      <UixSlsflwPsgsmrSearch prmPsgsmr={prmPsgsmr} datefl={datefl} />
+      <UixSlsflwPsgsmrSearch prmPsgsmr={prmPsgsmr} datefl={datefl} joinar={joinar} />
       {arrdta.length > 0 ? (
         <UixSlsflwPsgsmrTablex arrdta={arrdta} />
       ) : (

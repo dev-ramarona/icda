@@ -79,6 +79,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	var sycMilege = fncApndix.FncApndixMilegeSycmap()
 	var sycFrtaxs = fncApndix.FncApndixFrtaxsSycmap()
 	var sycFrbase = fncApndix.FncApndixFrbaseSycmap()
+	var sycFljoin = fncApndix.FncApndixFljoinSycmap(int32(intDatefl))
 	var sycErrlog = FncPsglstErrlogSycmap(int32(intDatefl))
 	var sycCurrcv = &sync.Map{}
 	var sycChrter = &sync.Map{}
@@ -126,7 +127,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 						jobFllist,
 						mapClslvl, slcHfbalv,
 						sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
-						sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
+						sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc, sycFljoin,
 						idcFlhour, idcFrbase, idcFrtaxs, idcViehst, idcFlnbfl,
 						strTimenw, &errErignr, &errPrmkey)
 					continue
@@ -243,7 +244,7 @@ func FncPsglstPrcessWorker(
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
 	sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
-	sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
+	sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc, sycFljoin,
 	idcFlhour, idcFrbase, idcFrtaxs, idcViehst, idcFlnbfl *sync.Map,
 	strTimenw string, errErignr, errPrmkey *string) {
 
@@ -491,8 +492,9 @@ func FncPsglstPrcessWorker(
 		tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc :=
 			FncPsglstPsglstPrcess(rspPsglst, slcFllist,
 				nowObjtkn, objParams,
-				sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour, sycMilege,
-				idcFrbase, idcFrtaxs, sycErrlog, sycProvnc,
+				sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour,
+				sycMilege, sycErrlog, sycProvnc, sycFljoin,
+				idcFrbase, idcFrtaxs,
 				slcHfbalv,
 				mapCurrcv, mapClslvl, errErignr, errPrmkey)
 		mgoPsgsmr = append(mgoPsgsmr, tmpPsgsmr...)

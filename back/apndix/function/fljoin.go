@@ -18,6 +18,35 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
+// Get Sync map data farebase
+func FncApndixFljoinSycmap(datefl int32) *sync.Map {
+
+	// Inisialisasi variabel
+	fnldta := &sync.Map{}
+
+	// Select database and collection
+	tablex := Client.Database(Dbases).Collection("apndix_fljoin")
+	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Get route data
+	datarw, err := tablex.Find(contxt, bson.M{"datefl": datefl})
+	if err != nil {
+		panic(err)
+	}
+	defer datarw.Close(contxt)
+
+	// Append to slice
+	for datarw.Next(contxt) {
+		var object mdlApndix.MdlApndixFljoinDtbase
+		datarw.Decode(&object)
+		fnldta.Store(object.Prmkey, object)
+	}
+
+	// return data
+	return fnldta
+}
+
 // Get Response Upload database from input
 func FncApndixFljoinUpload(c *gin.Context) {
 
@@ -180,15 +209,15 @@ func FncApndixFljoinUpload(c *gin.Context) {
 						"psglst_psgsmr": &mgoPsgsmr}, 200)
 
 					// Update psgdtl
-					mgoPsgdtl = append(mgoPsgdtl, mongo.NewUpdateOneModel().
+					mgoPsgdtl = append(mgoPsgdtl, mongo.NewUpdateManyModel().
 						SetFilter(bson.M{
-							"airlfl": tmpFljoin.Airlfl,
 							"flnbfl": tmpFljoin.Flnbfl,
 							"depart": tmpFljoin.Depart,
-							"datefl": tmpFljoin.Datefl}).
+							"datefl": tmpFljoin.Datefl,
+							"airlfl": tmpFljoin.Airlfl}).
 						SetUpdate(bson.M{"$set": bson.M{"flnbjn": nowFljoin}}))
 					FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-						"psglst_psgdtl": &mgoPsgdtl}, 200)
+						"psglst_psgdtl": &mgoPsgdtl}, 100)
 				}
 			}
 

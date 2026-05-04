@@ -523,7 +523,9 @@ brk:
 			val.Frbcnv = fmt.Sprintf("%v", nucNtafvc)
 			val.Qsrcnv = fmt.Sprintf("%v", nucQsrcvc)
 			if psglst.Curncy != "IDR" {
-				if vlx, ist := mapCurrcv[psglst.Curncy]; ist {
+				if vlx, ist := mapCurrcv[psglst.Curncy]; ist &&
+					nucNtafvc/vlx.Crrate < 99000000 &&
+					nucQsrcvc/vlx.Crrate < 99000000 {
 					val.Frbcnv = fmt.Sprintf("%v", nucNtafvc/vlx.Crrate)
 					val.Qsrcnv = fmt.Sprintf("%v", nucQsrcvc/vlx.Crrate)
 				} else {
