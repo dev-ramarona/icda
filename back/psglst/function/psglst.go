@@ -565,6 +565,11 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					if keyfst == "routfl" {
 						psglst.Yqtxfl = mtcFrtaxs.Ftfuel
 					} else {
+						if psglst.Prmkey == "260505SL100DMK12A" {
+							fmt.Println(mtcFrtaxs)
+							fmt.Println(nowKeytax)
+							fmt.Println(intDatemc)
+						}
 						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
 						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
 						if mtcFrtaxs.Datend <= int32(intDatemc) {
