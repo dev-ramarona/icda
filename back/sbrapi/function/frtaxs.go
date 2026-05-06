@@ -148,10 +148,12 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 	// Last treatment taxes ID
 	var now = fnlFrtaxs
 	if len(tmpFrtxid) > 0 {
-		taxRateid := math.Round((float64(tmpFrtxid[0]) / float64(now.Ftfuel+now.Ftaxyr+int32(tmpFrbase))) * 100)
+		taxRateid := math.Round((float64(tmpFrtxid[0]) /
+			float64(now.Ftfuel+now.Ftaxyr+int32(tmpFrbase))) * 100)
 		strRateid := strconv.Itoa(int(taxRateid))
 		fltRateid, _ := strconv.ParseFloat(strRateid, 32)
 		fnlFrtaxs.Ftppnx = fltRateid / 100
+		fmt.Println(tmpFrtxid)
 		now.Ftppnx = fnlFrtaxs.Ftppnx
 	}
 

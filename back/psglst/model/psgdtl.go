@@ -44,9 +44,12 @@ type MdlPsglstPsgdtlDtbase struct {
 	Tktnxc string  `json:"tktnxc" bson:"tktnxc,omitempty"`
 	Pnrcde string  `json:"pnrcde" bson:"pnrcde,omitempty"`
 	Pnritl string  `json:"pnritl" bson:"pnritl,omitempty"`
-	Curncy string  `json:"curncy" bson:"curncy,omitempty"`
+	Ntacrr string  `json:"ntacrr" bson:"ntacrr,omitempty"`
+	Ntacrt float64 `json:"ntacrt" bson:"ntacrt,omitempty"`
 	Ntaffl int32   `json:"ntaffl" bson:"ntaffl"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
+	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr,omitempty"`
+	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt,omitempty"`
 	Yqtxfl int32   `json:"yqtxfl" bson:"yqtxfl"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Frrate float64 `json:"frrate" bson:"frrate,omitempty"`
@@ -201,9 +204,12 @@ type MdlPsglstPsgdtlDfault struct {
 	Tktnxc string  `json:"tktnxc" bson:"tktnxc"`
 	Pnrcde string  `json:"pnrcde" bson:"pnrcde"`
 	Pnritl string  `json:"pnritl" bson:"pnritl"`
-	Curncy string  `json:"curncy" bson:"curncy"`
+	Ntacrr string  `json:"ntacrr" bson:"ntacrr"`
+	Ntacrt float64 `json:"ntacrt" bson:"ntacrt"`
 	Ntaffl int32   `json:"ntaffl" bson:"ntaffl"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
+	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr"`
+	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt"`
 	Yqtxfl int32   `json:"yqtxfl" bson:"yqtxfl"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Frrate float64 `json:"frrate" bson:"frrate"`
@@ -388,8 +394,11 @@ type MdlPsglstPsgdtlSlserr struct {
 	Isitfl string  `json:"isitfl" bson:"isitfl"`
 	Isitct string  `json:"isitct" bson:"isitct"`
 	Frcalc string  `json:"frcalc" bson:"frcalc"`
-	Curncy string  `json:"curncy" bson:"curncy"`
+	Ntacrr string  `json:"ntacrr" bson:"ntacrr"`
+	Ntacrt float64 `json:"ntacrt" bson:"ntacrt"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
+	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr"`
+	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Qsrcvc float64 `json:"qsrcvc" bson:"qsrcvc"`
 }
@@ -413,8 +422,7 @@ type MdlPsglstPsgdtlEbtfmt struct {
 	Qtotbt int32  `json:"qtotbt" bson:"qtotbt"`
 	Wtotbt int32  `json:"wtotbt" bson:"wtotbt"`
 	Ftotbt int32  `json:"ftotbt" bson:"ftotbt"`
-	// Totexc int32  `json:"totexc" bson:"totexc"`
-	Ptotbt int32 `json:"ptotbt" bson:"ptotbt"`
+	Ptotbt int32  `json:"ptotbt" bson:"ptotbt"`
 	// Shopay int32  `json:"shopay" bson:"shopay"`
 	Coment string `json:"coment" bson:"coment"`
 	// Cmnstf string `json:"cmnstf" bson:"cmnstf"`

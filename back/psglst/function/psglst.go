@@ -21,12 +21,12 @@ import (
 func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist mdlApndix.MdlApndixFllistDtbase,
 	nowObjtkn mdlSbrapi.MdlSbrapiMsghdrParams, objParams mdlSbrapi.MdlSbrapiMsghdrApndix,
 	sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour,
-	sycMilege, sycErrlog, sycProvnc, sycFljoin,
+	sycMilege, sycErrlog, sycProvnc, sycFljoin, sycDstrct, sycAlltxs,
 	idcFrbase, idcFrtaxs *sync.Map,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
 	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase, errErignr, errPrmkey *string) (
-	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel,
+	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel,
 	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel) {
 	sycWgroup, sycClrpsg, sycNulpsg := &sync.WaitGroup{}, &sync.Map{}, &sync.Map{}
 	totPsgdtl := len(rspPsglst)
@@ -181,7 +181,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	mgoFrbase, mgoFrtaxs := []mongo.WriteModel{}, []mongo.WriteModel{}
 	mgoFlhour, mgoMilege := []mongo.WriteModel{}, []mongo.WriteModel{}
 	mgoPsgdtl, mgoPsgsmr := []mongo.WriteModel{}, []mongo.WriteModel{}
-	mgoProvnc := []mongo.WriteModel{}
+	mgoProvnc, mgoDstrct := []mongo.WriteModel{}, []mongo.WriteModel{}
 	fnlPsglst := []mdlPsglst.MdlPsglstPsgdtlDtbase{}
 	mapPaidbt := map[string]int{}
 	mapQntybt := map[string]int{}
@@ -521,6 +521,26 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					continue
 				}
 
+				// Looping cabin
+				slcKeytax := []string{"Y"}
+				if psglst.Bookdc != 0 {
+					slcKeytax = append(slcKeytax, "C")
+				}
+
+				// Get flight hour from API
+				if _, ist := idcFrtaxs.Load(valfst); !ist {
+					sycAlltxs.Delete(valfst)
+					for _, valscd := range slcKeytax {
+						objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
+							Airlfl: valfst[:2], Depart: valfst[2:5], Arrivl: valfst[6:], Routfl: valfst[2:]}
+						nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, valscd)
+						if err == nil {
+							mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
+							idcFrtaxs.Store(valfst, true)
+						}
+					}
+				}
+
 				// Get primary key and time book or issued
 				nowKeytax := valfst + psglst.Cbinvc
 				nowClscbn := psglst.Cbinvc
@@ -538,25 +558,6 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					}
 				}
 				intDatemc, _ := strconv.Atoi(nowDatemc)
-
-				// Looping cabin
-				slcKeytax := []string{"Y"}
-				if psglst.Bookdc != 0 {
-					slcKeytax = append(slcKeytax, "C")
-				}
-
-				// Get flight hour from API
-				if _, ist := idcFrtaxs.Load(valfst); !ist {
-					for _, valscd := range slcKeytax {
-						objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
-							Airlfl: valfst[:2], Depart: valfst[2:5], Arrivl: valfst[6:], Routfl: valfst[2:]}
-						nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, valscd)
-						if err == nil {
-							mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
-							idcFrtaxs.Store(valfst, true)
-						}
-					}
-				}
 
 				// Get farebase from sync
 				istFrtaxs, ist := sycFrtaxs.Load(nowKeytax)
@@ -613,6 +614,14 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					totMilege += float64(mtcMilege.Milege)
 				}
 				return ist
+			}
+
+			// Get new district
+			if _, istDstrct := sycDstrct.Load(slcRoutac[i]); !istDstrct {
+				sycDstrct.Store(slcRoutac[i], true)
+				mgoDstrct = append(mgoDstrct, mongo.NewUpdateOneModel().
+					SetFilter(bson.M{"depart": slcRoutac[i]}).
+					SetUpdate(bson.M{"$set": bson.M{"depart": slcRoutac[i]}}).SetUpsert(true))
 			}
 
 			// Route milege hit API Sabre if null data
@@ -731,5 +740,6 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		SetFilter(bson.M{"prmkey": totSmmary.Prmkey}).
 		SetUpdate(bson.M{"$set": totSmmary}).
 		SetUpsert(true))
-	return mgoPsgdtl, mgoPsgsmr, mgoFrbase, mgoFrtaxs, mgoFlhour, mgoMilege, mgoProvnc
+	return mgoPsgdtl, mgoPsgsmr, mgoFrbase, mgoFrtaxs,
+		mgoFlhour, mgoMilege, mgoProvnc, mgoDstrct
 }

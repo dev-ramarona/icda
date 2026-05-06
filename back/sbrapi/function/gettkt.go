@@ -202,9 +202,13 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 		// Convert YQ if not IDR and push
 		if getTaxyqf != 0 {
+			psglst.Yqtcrr = "IDR"
+			psglst.Yqtcrt = 1
 			if getTaxcur != "" && getTaxcur != "IDR" {
 				if valmap, istmap := mapCurrcv[getTaxcur]; istmap {
 					getTaxyqf = int(float64(getTaxyqf) / valmap.Crrate)
+					psglst.Yqtcrr = getTaxcur
+					psglst.Yqtcrt = valmap.Crrate
 				}
 			}
 			psglst.Srcyqf = "GETTKT"
@@ -218,7 +222,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	psglst.Segtkt = strings.Join(slcSegtkt, "|")
 	psglst.Agtdie = getTktdoc.Agent.Duty + getTktdoc.Agent.Sine
 	psglst.Frcalc = getTktdoc.Ticket.FareCalculation
-	psglst.Curncy = getTktdoc.Ticket.Amounts.Base.CurrencyCode
+	psglst.Ntacrr = getTktdoc.Ticket.Amounts.Base.CurrencyCode
 	psglst.Tourcd = getTktdoc.Ticket.Details.TourNumber
 	psglst.Staloc = getTktdoc.Agent.StationLocation
 	psglst.Stanbr = getTktdoc.Agent.StationNumber

@@ -330,7 +330,7 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 		fncFnlcek(psglst.Routvc, "ROUTVC", "MNFEST")
 		fncFnlcek(psglst.Ntaffl, "NTAFFl", "SLSRPT")
 		fncFnlcek(psglst.Ntafvc, "NTAFVC", "SLSRPT")
-		fncFnlcek(psglst.Curncy, "CURNCY", "SLSRPT")
+		fncFnlcek(psglst.Ntacrr, "CURNCY", "SLSRPT")
 		if !istStlerr && cekIsflwn {
 			for suberr := range mapSuberr {
 				if suberr == "SLSRPT" && !cekNonrev {

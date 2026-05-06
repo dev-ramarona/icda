@@ -72,6 +72,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	// Indicator done data
 	var totWorker = inpErrlog.Worker
 	var mapClslvl = fncApndix.FncApndixClssvlMapobj()
+	var sycDstrct = fncApndix.FncApndixDstrctMapobj()
 	var slcHfbalv = fncApndix.FncApndixHfbalvMapobj()
 	var sycProvnc = fncApndix.FncApndixProvncSycmap()
 	var sycFlhour = fncApndix.FncApndixFlhourSycmap()
@@ -99,6 +100,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		var idcFrtaxs = &sync.Map{}
 		var idcViehst = &sync.Map{}
 		var idcFlnbfl = &sync.Map{}
+		var sycAlltxs = fncApndix.FncApndixFrtaxsSycall(airlfl)
 
 		// Get Multiple API sessions/tokens
 		slcRspssn, err := fncSbrapi.FncSbrapiCrtssnMultpl(airlfl, int(totWorker))
@@ -126,8 +128,9 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 						&swg,
 						jobFllist,
 						mapClslvl, slcHfbalv,
-						sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
-						sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc, sycFljoin,
+						sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
+						sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
+						sycFljoin, sycAlltxs,
 						idcFlhour, idcFrbase, idcFrtaxs, idcViehst, idcFlnbfl,
 						strTimenw, &errErignr, &errPrmkey)
 					continue
@@ -189,6 +192,30 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 			}
 		}
 
+		// Update latest YQ not flight data
+		if inpErrlog.Depart == "" && inpErrlog.Flnbfl == "" {
+			mgoFrtaxs := []mongo.WriteModel{}
+			sycAlltxs.Range(func(key, val any) bool {
+				if now, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
+					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
+						Airlfl: now.Airlfl, Depart: now.Depart, Arrivl: now.Routfl[4:], Routfl: now.Routfl}
+					nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(slcRspssn[0], objParams, sycFrtaxs, now.Cbinfl)
+					if err == nil {
+						mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
+						fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+							"apndix_frtaxs": &mgoFrtaxs,
+						}, 200)
+					}
+				}
+				return true
+			})
+			if len(mgoFrtaxs) > 0 {
+				fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+					"apndix_frtaxs": &mgoFrtaxs,
+				}, 0)
+			}
+		}
+
 		// Finish
 		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
 			"apndix_fllist": &mgoFllist}, 0)
@@ -243,8 +270,9 @@ func FncPsglstPrcessWorker(
 	jobFllist <-chan mdlApndix.MdlApndixFllistDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
-	sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl, sycChrter,
-	sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc, sycFljoin,
+	sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
+	sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
+	sycFljoin, sycAlltxs,
 	idcFlhour, idcFrbase, idcFrtaxs, idcViehst, idcFlnbfl *sync.Map,
 	strTimenw string, errErignr, errPrmkey *string) {
 
@@ -255,7 +283,7 @@ func FncPsglstPrcessWorker(
 	var mgoMilege, mgoFlnbfl []mongo.WriteModel
 	var mgoPsgsmr, mgoPsgdtl []mongo.WriteModel
 	var mgoProvnc, mgoCurrcv []mongo.WriteModel
-	var mgoViehst []mongo.WriteModel
+	var mgoDstrct, mgoViehst []mongo.WriteModel
 
 	// Get currency
 	mapCurrcv := map[string]mdlApndix.MdlApndixCurrcvDtbase{}
@@ -446,6 +474,7 @@ func FncPsglstPrcessWorker(
 				if _, ist := idcFrtaxs.Load(keyFrball); !ist {
 
 					// Declare looping economy and bisnis
+					sycAlltxs.Delete(keyFrball)
 					slcClscbn := []string{"Y"}
 					if slcFllist.Autrzc != 0 {
 						slcClscbn = []string{"Y", "C"}
@@ -489,11 +518,11 @@ func FncPsglstPrcessWorker(
 			Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
 			Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
 		}, err != nil, sycErrlog, errErignr, errPrmkey)
-		tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc :=
+		tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc, tmpDstrct :=
 			FncPsglstPsglstPrcess(rspPsglst, slcFllist,
 				nowObjtkn, objParams,
 				sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour,
-				sycMilege, sycErrlog, sycProvnc, sycFljoin,
+				sycMilege, sycErrlog, sycProvnc, sycFljoin, sycDstrct, sycAlltxs,
 				idcFrbase, idcFrtaxs,
 				slcHfbalv,
 				mapCurrcv, mapClslvl, errErignr, errPrmkey)
@@ -504,6 +533,7 @@ func FncPsglstPrcessWorker(
 		mgoFrbase = append(mgoFrbase, tmpFrbase...)
 		mgoFrtaxs = append(mgoFrtaxs, tmpFrtaxs...)
 		mgoProvnc = append(mgoProvnc, tmpProvnc...)
+		mgoDstrct = append(mgoDstrct, tmpDstrct...)
 		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
 			"psglst_psgsmr": &mgoPsgsmr,
 			"psglst_psgdtl": &mgoPsgdtl,
@@ -552,6 +582,7 @@ func FncPsglstPrcessWorker(
 		"apndix_frbase": &mgoFrbase,
 		"apndix_frtaxs": &mgoFrtaxs,
 		"apndix_provnc": &mgoProvnc,
+		"apndix_dstrct": &mgoDstrct,
 		"viehst_rwdata": &mgoViehst,
 	}, 0)
 }

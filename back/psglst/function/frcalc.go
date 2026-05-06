@@ -172,7 +172,7 @@ brk:
 			// Push all currency
 			for idx := range nowFrbase {
 				if nowFrbase[idx].Routfl != "" {
-					nowFrbase[idx].Curncy = rsl[3]
+					nowFrbase[idx].Ntacrr = rsl[3]
 				}
 			}
 
@@ -185,7 +185,7 @@ brk:
 			// Push all currency
 			for idx := range nowFrbase {
 				if nowFrbase[idx].Routfl != "" {
-					nowFrbase[idx].Curncy = rsl[2]
+					nowFrbase[idx].Ntacrr = rsl[2]
 				}
 			}
 
@@ -196,7 +196,7 @@ brk:
 			// Push all currency
 			for idx := range nowFrbase {
 				if nowFrbase[idx].Routfl != "" {
-					nowFrbase[idx].Curncy = rsl[1]
+					nowFrbase[idx].Ntacrr = rsl[1]
 				}
 			}
 
@@ -212,7 +212,7 @@ brk:
 			// Push all currency
 			for idx := range nowFrbase {
 				if nowFrbase[idx].Routfl != "" {
-					nowFrbase[idx].Curncy = rsl[3]
+					nowFrbase[idx].Ntacrr = rsl[3]
 				}
 			}
 
@@ -245,7 +245,7 @@ brk:
 			if len(rsl[3]) == 3 && rsl[3] == "NUC" {
 				for idx := range nowFrbase {
 					if nowFrbase[idx].Routfl != "" {
-						nowFrbase[idx].Curncy = rsl[3]
+						nowFrbase[idx].Ntacrr = rsl[3]
 					}
 				}
 			}
@@ -372,8 +372,8 @@ brk:
 						} else {
 							for idx := range nowFrbase {
 								if nowFrbase[idx].Routfl != "" &&
-									nowFrbase[idx].Curncy == "" {
-									nowFrbase[idx].Curncy = val
+									nowFrbase[idx].Ntacrr == "" {
+									nowFrbase[idx].Ntacrr = val
 								}
 							}
 						}
@@ -516,18 +516,19 @@ brk:
 			// Change currency
 			nucNtafvc := fltFrbase
 			nucQsrcvc := totQsrcvc
-			if val.Curncy == "NUC" {
+			if val.Ntacrr == "NUC" {
 				nucNtafvc = fltFrbase * fltCrrate
 				nucQsrcvc = totQsrcvc * fltCrrate
 			}
-			val.Frbcnv = fmt.Sprintf("%v", nucNtafvc)
-			val.Qsrcnv = fmt.Sprintf("%v", nucQsrcvc)
-			if psglst.Curncy != "IDR" {
-				if vlx, ist := mapCurrcv[psglst.Curncy]; ist &&
-					nucNtafvc/vlx.Crrate < 99000000 &&
-					nucQsrcvc/vlx.Crrate < 99000000 {
-					val.Frbcnv = fmt.Sprintf("%v", nucNtafvc/vlx.Crrate)
-					val.Qsrcnv = fmt.Sprintf("%v", nucQsrcvc/vlx.Crrate)
+			val.Frbcnv = nucNtafvc
+			val.Qsrcnv = nucQsrcvc
+			if psglst.Ntacrr != "IDR" {
+				if vlx, ist := mapCurrcv[psglst.Ntacrr]; ist &&
+					(nucNtafvc/vlx.Crrate) < 99000000 &&
+					(nucQsrcvc/vlx.Crrate) < 99000000 {
+					val.Ntacrt = vlx.Crrate
+					val.Frbcnv = nucNtafvc / vlx.Crrate
+					val.Qsrcnv = nucQsrcvc / vlx.Crrate
 				} else {
 					val = mdlPsglst.MdlPsglstFrcalcFrbase{}
 				}
@@ -570,13 +571,11 @@ brk:
 
 				// Calculate prorate
 				prvPrrate = map[string]string{}
-				nowFrbcnv := val.Frbcnv
 				for keymap, milege := range mapPrrate {
 					nowFrrate := milege / totFrrate
 					if nowval, ist := mapFrcacl[keymap]; ist &&
 						(nowval.Frbase == "" || nowval.Routfl == val.Routfl) {
-						tmpFrbcnv, _ := strconv.ParseFloat(nowFrbcnv, 64)
-						nowval.Frbcnv = fmt.Sprintf("%v", nowFrrate*tmpFrbcnv)
+						nowval.Frbcnv = nowFrrate * val.Frbcnv
 						nowval.Isitpr = "PRORTE"
 						mapFrcacl[keymap] = nowval
 					}
@@ -609,8 +608,9 @@ brk:
 	}
 	if getFlsgmn, ist := mapFrcacl[hghest.key]; ist {
 		if len(getFlsgmn.Routfl) == 7 {
-			psglst.Ntafvc, _ = strconv.ParseFloat(getFlsgmn.Frbcnv, 64)
-			psglst.Qsrcvc, _ = strconv.ParseFloat(getFlsgmn.Qsrcnv, 64)
+			psglst.Ntacrt = getFlsgmn.Ntacrt
+			psglst.Ntafvc = getFlsgmn.Frbcnv
+			psglst.Qsrcvc = getFlsgmn.Qsrcnv
 			psglst.Qsrcrw = getFlsgmn.Qsrcrw
 			psglst.Routfr = getFlsgmn.Routfl
 			psglst.Airlfr = getFlsgmn.Airlfl

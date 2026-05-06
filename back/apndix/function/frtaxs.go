@@ -15,7 +15,36 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-// Get Sync map data Class level for farebase
+// Get Sync map data Class level for taxes
+func FncApndixFrtaxsSycall(airlfl string) *sync.Map {
+
+	// Inisialisasi variabel
+	fnldta := &sync.Map{}
+
+	// Select database and collection
+	tablex := Client.Database(Dbases).Collection("apndix_frtaxs")
+	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Get route data
+	datarw, err := tablex.Find(contxt, bson.M{"airlfl": airlfl})
+	if err != nil {
+		panic(err)
+	}
+	defer datarw.Close(contxt)
+
+	// Append to slice
+	for datarw.Next(contxt) {
+		var object mdlApndix.MdlApndixFrtaxsDtbase
+		datarw.Decode(&object)
+		fnldta.Store(object.Prmkey, object)
+	}
+
+	// return data
+	return fnldta
+}
+
+// Get Sync map data Class level for taxes
 func FncApndixFrtaxsSycmap() *sync.Map {
 
 	// Inisialisasi variabel

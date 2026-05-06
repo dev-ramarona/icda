@@ -23,19 +23,20 @@ type MdlPsglstErrlogDtbase struct {
 }
 
 type MdlPsglstFrcalcFrbase struct {
-	Routfl string `json:"routfl,omitempty" bson:"routfl,omitempty"`
-	Cpnbfl int32  `json:"cpnbfl,omitempty" bson:"cpnbfl,omitempty"`
-	Depart string `json:"depart,omitempty" bson:"depart,omitempty"`
-	Arrivl string `json:"arrivl,omitempty" bson:"arrivl,omitempty"`
-	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
-	Curncy string `json:"curncy,omitempty" bson:"curncy,omitempty"`
-	Frbase string `json:"frbase,omitempty" bson:"frbase,omitempty"`
-	Frbcnv string `json:"frbcnv,omitempty" bson:"frbcnv,omitempty"`
-	Qsrcrw string `json:"qsrcrw,omitempty" bson:"qsrcrw,omitempty"`
-	Qsrcnv string `json:"qsrcnv,omitempty" bson:"qsrcnv,omitempty"`
-	Crrate string `json:"crrate,omitempty" bson:"crrate,omitempty"`
-	Isitpr string `json:"isitpr,omitempty" bson:"isitpr,omitempty"`
-	Isitit string `json:"isitit,omitempty" bson:"isitit,omitempty"`
+	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
+	Cpnbfl int32   `json:"cpnbfl,omitempty" bson:"cpnbfl,omitempty"`
+	Depart string  `json:"depart,omitempty" bson:"depart,omitempty"`
+	Arrivl string  `json:"arrivl,omitempty" bson:"arrivl,omitempty"`
+	Airlfl string  `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
+	Ntacrr string  `json:"ntacrr,omitempty" bson:"ntacrr,omitempty"`
+	Ntacrt float64 `json:"ntacrt,omitempty" bson:"ntacrt,omitempty"`
+	Frbase string  `json:"frbase,omitempty" bson:"frbase,omitempty"`
+	Frbcnv float64 `json:"frbcnv,omitempty" bson:"frbcnv,omitempty"`
+	Qsrcrw string  `json:"qsrcrw,omitempty" bson:"qsrcrw,omitempty"`
+	Qsrcnv float64 `json:"qsrcnv,omitempty" bson:"qsrcnv,omitempty"`
+	Crrate string  `json:"crrate,omitempty" bson:"crrate,omitempty"`
+	Isitpr string  `json:"isitpr,omitempty" bson:"isitpr,omitempty"`
+	Isitit string  `json:"isitit,omitempty" bson:"isitit,omitempty"`
 }
 
 type MdlPsglstActlogDtbase struct {
