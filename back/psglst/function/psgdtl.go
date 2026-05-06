@@ -362,52 +362,52 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 
 	case "MNFERR":
 		writer.Write([]string{
-			"Note error",
-			"Primary key",
-			"PNR code",
-			"Seat number passenger",
-			"Name last passenger",
-			"Name first passenger",
-			"Group code",
-			"Airline Flown",
-			"Flight number flown",
-			"Route flown",
-			"Date flown",
-			"Ticket number VCR_target",
-			"Airline VCR_target",
-			"Flight number VCR_target",
-			"Route VCR_target",
-			"Coupon number VCR_target",
-			"Status VCR_target",
-			"Time issued_target",
-			"Remark user_target",
+			"Noterr",
+			"Prmkey",
+			"Pnrcde",
+			"Seatpx",
+			"Nmelst",
+			"Nmefst",
+			"Groupc",
+			"Airlfl",
+			"Flnbfl",
+			"Routfl",
+			"Datefl",
+			"Tktnvc_target",
+			"Airlvc_target",
+			"Flnbvc_target",
+			"Routvc_target",
+			"Cpnbvc_target",
+			"Statvc_target",
+			"Timeis_target",
+			"Rmkusr_target",
 		})
 	case "SLSERR":
 		writer.Write([]string{
-			"Note error",
-			"Primary key",
-			"PNR code",
-			"Airline Flown",
-			"Flight number flown",
-			"Route flown",
-			"Province",
-			"Date flown",
-			"Time PNR Create",
-			"Time issued",
-			"Ticket number VCR",
-			"Class RBD flown",
-			"Class RBD VCR",
-			"Is it non revenue?",
-			"Is it flown?",
-			"Is it charter?",
-			"Fare calculation",
-			"NTA currency_target",
-			"NTA currency rate_target",
-			"NTA  VCR_target",
+			"Noterr",
+			"Prmkey",
+			"Pnrcde",
+			"Airlfl",
+			"Flnbfl",
+			"Routfl",
+			"Provnc",
+			"Datefl",
+			"Timecr",
+			"Timeis",
+			"Tktnvc",
+			"Clssfl",
+			"Clssvc",
+			"Isitnr",
+			"Isitfl",
+			"Isitct",
+			"Frcalc",
+			"Ntacrr_target",
+			"Ntacrt_target",
+			"Ntafvc_target",
 			"Yqtcrr_target",
-			"YQ currency_target",
-			"YQ currency rate_target",
-			"Q fare number format_target",
+			"Yqtcrt_target",
+			"Yqtxvc_target",
+			"Qsrcvc_target",
 		})
 	case "EBTFMT":
 		writer.Write([]string{
@@ -1180,10 +1180,6 @@ func FncPsglstPsgdtlUpload(c *gin.Context) {
 
 				// Cek header and data
 				if len(slcDefhdr) != len(slcRowdta) {
-					r, _ := json.MarshalIndent(slcDefhdr, " ", " ")
-					fmt.Println(len(slcDefhdr), string(r))
-					a, _ := json.MarshalIndent(slcRowdta, " ", " ")
-					fmt.Println(len(slcRowdta), string(a))
 					writer.Write([]string{"Header and data mismatch"})
 					return
 				}

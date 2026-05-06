@@ -101,6 +101,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		var idcViehst = &sync.Map{}
 		var idcFlnbfl = &sync.Map{}
 		var sycAlltxs = fncApndix.FncApndixFrtaxsSycall(airlfl)
+		var sycWgroup sync.WaitGroup
 
 		// Get Multiple API sessions/tokens
 		slcRspssn, err := fncSbrapi.FncSbrapiCrtssnMultpl(airlfl, int(totWorker))
@@ -114,18 +115,16 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 			continue
 		}
 
-		// Prepare job queue
+		// Launch 10 workers using 10 tokens for fllist
+		var mgoFllist []mongo.WriteModel
 		jobFllist := make(chan mdlApndix.MdlApndixFllistDtbase, 1500)
-		var swg sync.WaitGroup
-
-		// Launch 10 workers using 10 tokens
 		for i := 0; i < int(totWorker); i++ {
 			if len(slcRspssn) >= i+1 {
 				if slcRspssn[i].Bsttkn != "" {
-					swg.Add(1)
+					sycWgroup.Add(1)
 					fmt.Println("Success Token-", i)
 					go FncPsglstPrcessWorker(slcRspssn[i],
-						&swg,
+						&sycWgroup,
 						jobFllist,
 						mapClslvl, slcHfbalv,
 						sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
@@ -140,7 +139,6 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		}
 
 		// Looping slice departures
-		var mgoFllist []mongo.WriteModel
 		for _, depart := range slcDepart {
 
 			// Get API Flight List data
@@ -191,21 +189,43 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 				}
 			}
 		}
+		close(jobFllist)
+		sycWgroup.Wait()
+
+		// Launch 10 workers using 10 tokens for fllist
+		mgoFrtaxs := []mongo.WriteModel{}
+		jobFrtaxs := make(chan mdlApndix.MdlApndixFrtaxsDtbase, 1500)
+		for i := 0; i < int(totWorker); i++ {
+			if len(slcRspssn) >= i+1 {
+				if slcRspssn[i].Bsttkn != "" {
+					sycWgroup.Add(1)
+					fmt.Println("Success Token-", i)
+					go func(nowObjtkn mdlSbrapi.MdlSbrapiMsghdrParams,
+						sycWgroup *sync.WaitGroup,
+						jobFrtaxs <-chan mdlApndix.MdlApndixFrtaxsDtbase) {
+						defer sycWgroup.Done()
+						for frtaxs := range jobFrtaxs {
+							objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
+								Airlfl: frtaxs.Airlfl, Depart: frtaxs.Depart, Arrivl: frtaxs.Routfl[4:], Routfl: frtaxs.Routfl}
+							fmt.Println("route not op:", frtaxs.Routfl)
+							nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(nowObjtkn, objParams, sycFrtaxs, frtaxs.Cbinfl)
+							if err == nil {
+								mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
+								fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{"apndix_frtaxs": &mgoFrtaxs}, 200)
+							}
+						}
+					}(slcRspssn[i], &sycWgroup, jobFrtaxs)
+					continue
+				}
+				fmt.Println("Failed Token-", i)
+			}
+		}
 
 		// Update latest YQ not flight data
 		if inpErrlog.Depart == "" && inpErrlog.Flnbfl == "" {
-			mgoFrtaxs := []mongo.WriteModel{}
 			sycAlltxs.Range(func(key, val any) bool {
-				if now, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
-					objParams := mdlSbrapi.MdlSbrapiMsghdrApndix{
-						Airlfl: now.Airlfl, Depart: now.Depart, Arrivl: now.Routfl[4:], Routfl: now.Routfl}
-					nowmgo, err := fncSbrapi.FncSbrapiFrtaxsMainob(slcRspssn[0], objParams, sycFrtaxs, now.Cbinfl)
-					if err == nil {
-						mgoFrtaxs = append(mgoFrtaxs, nowmgo...)
-						fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-							"apndix_frtaxs": &mgoFrtaxs,
-						}, 200)
-					}
+				if frtaxs, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
+					jobFrtaxs <- frtaxs
 				}
 				return true
 			})
@@ -215,12 +235,12 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 				}, 0)
 			}
 		}
+		close(jobFrtaxs)
+		sycWgroup.Wait()
 
 		// Finish
 		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
 			"apndix_fllist": &mgoFllist}, 0)
-		close(jobFllist)
-		swg.Wait()
 		fmt.Printf("Done airline:%s time:%s \n", airlfl,
 			time.Now().Format("06-Jan-02/15:04:05"))
 		fncSbrapi.FncSbrapiClsssnMultpl(slcRspssn)
@@ -266,7 +286,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 // Running process psglst
 func FncPsglstPrcessWorker(
 	nowObjtkn mdlSbrapi.MdlSbrapiMsghdrParams,
-	swg *sync.WaitGroup,
+	sycWgroup *sync.WaitGroup,
 	jobFllist <-chan mdlApndix.MdlApndixFllistDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
@@ -277,7 +297,7 @@ func FncPsglstPrcessWorker(
 	strTimenw string, errErignr, errPrmkey *string) {
 
 	// Declare global variable
-	defer swg.Done()
+	defer sycWgroup.Done()
 	var mgoFllist, mgoFlhour []mongo.WriteModel
 	var mgoFrbase, mgoFrtaxs []mongo.WriteModel
 	var mgoMilege, mgoFlnbfl []mongo.WriteModel

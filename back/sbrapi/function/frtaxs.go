@@ -153,7 +153,6 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 		strRateid := strconv.Itoa(int(taxRateid))
 		fltRateid, _ := strconv.ParseFloat(strRateid, 32)
 		fnlFrtaxs.Ftppnx = fltRateid / 100
-		fmt.Println(tmpFrtxid)
 		now.Ftppnx = fnlFrtaxs.Ftppnx
 	}
 
