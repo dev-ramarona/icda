@@ -52,6 +52,8 @@ type MdlPsglstPsgdtlDtbase struct {
 	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt,omitempty"`
 	Yqtxfl int32   `json:"yqtxfl" bson:"yqtxfl"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
+	Yrtxfl int32   `json:"yrtxfl" bson:"yrtxfl"`
+	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
 	Frrate float64 `json:"frrate" bson:"frrate,omitempty"`
 	Frbcde string  `json:"frbcde" bson:"frbcde,omitempty"`
 	Qsrcrw string  `json:"qsrcrw" bson:"qsrcrw,omitempty"`
@@ -212,6 +214,8 @@ type MdlPsglstPsgdtlDfault struct {
 	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt"`
 	Yqtxfl int32   `json:"yqtxfl" bson:"yqtxfl"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
+	Yrtxfl int32   `json:"yrtxfl" bson:"yrtxfl"`
+	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
 	Frrate float64 `json:"frrate" bson:"frrate"`
 	Frbcde string  `json:"frbcde" bson:"frbcde"`
 	Qsrcrw string  `json:"qsrcrw" bson:"qsrcrw"`
@@ -400,6 +404,7 @@ type MdlPsglstPsgdtlSlserr struct {
 	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr"`
 	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
+	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
 	Qsrcvc float64 `json:"qsrcvc" bson:"qsrcvc"`
 }
 

@@ -180,39 +180,49 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 	// Get taxes
 	if len(slcSegtkt) == 1 && psglst.Isitiv == "" && psglst.Routfx == "" {
-		getTaxyqf := 0
+		getTaxyqf, getTaxyrf := 0, 0
 		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode
 		if getTaxcur == "" {
 			getTaxcur = getTktdoc.Ticket.Amounts.Total.Amount.CurrencyCode
 		}
 		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
-			if segtax.Code == "YQ" {
-				getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
+			if segtax.Code == "YQ" || segtax.Code == "YR" {
+				if segtax.Code == "YQ" {
+					getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
+				}
+				if segtax.Code == "YR" {
+					getTaxyrf, _ = strconv.Atoi(segtax.Amount.Value)
+				}
 				if segtax.Amount.CurrencyCode != "" {
 					getTaxcur = segtax.Amount.CurrencyCode
-					break
 				}
 			}
 
 			// Get other taxes if not get
-			if segtax.Amount.CurrencyCode != "" {
+			if segtax.Amount.CurrencyCode != "" && getTaxcur == "" {
 				getTaxcur = segtax.Amount.CurrencyCode
 			}
 		}
 
 		// Convert YQ if not IDR and push
-		if getTaxyqf != 0 {
+		if getTaxyqf != 0 || getTaxyrf != 0 {
 			psglst.Yqtcrr = "IDR"
 			psglst.Yqtcrt = 1
 			if getTaxcur != "" && getTaxcur != "IDR" {
 				if valmap, istmap := mapCurrcv[getTaxcur]; istmap {
-					getTaxyqf = int(float64(getTaxyqf) / valmap.Crrate)
 					psglst.Yqtcrr = getTaxcur
 					psglst.Yqtcrt = valmap.Crrate
+
+					// Conver yq and yr
+					if getTaxyqf != 0 {
+						psglst.Yqtxvc = (float64(getTaxyqf) / valmap.Crrate)
+					}
+					if getTaxyrf != 0 {
+						psglst.Yrtxvc = (float64(getTaxyrf) / valmap.Crrate)
+					}
 				}
 			}
 			psglst.Srcyqf = "GETTKT"
-			psglst.Yqtxvc = float64(getTaxyqf)
 		}
 	}
 

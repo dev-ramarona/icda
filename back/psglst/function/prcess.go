@@ -72,6 +72,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	// Indicator done data
 	var totWorker = inpErrlog.Worker
 	var mapClslvl = fncApndix.FncApndixClssvlMapobj()
+	var mapCostph = fncApndix.FncApndixCostphMapobj()
 	var sycDstrct = fncApndix.FncApndixDstrctMapobj()
 	var slcHfbalv = fncApndix.FncApndixHfbalvMapobj()
 	var sycProvnc = fncApndix.FncApndixProvncSycmap()
@@ -126,7 +127,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 					go FncPsglstPrcessWorker(slcRspssn[i],
 						&sycWgroup,
 						jobFllist,
-						mapClslvl, slcHfbalv,
+						mapClslvl, slcHfbalv, mapCostph,
 						sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
 						sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
 						sycFljoin, sycAlltxs,
@@ -290,6 +291,7 @@ func FncPsglstPrcessWorker(
 	jobFllist <-chan mdlApndix.MdlApndixFllistDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
+	mapCostph map[string]int64,
 	sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
 	sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
 	sycFljoin, sycAlltxs,
@@ -544,7 +546,7 @@ func FncPsglstPrcessWorker(
 				sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour,
 				sycMilege, sycErrlog, sycProvnc, sycFljoin, sycDstrct, sycAlltxs,
 				idcFrbase, idcFrtaxs,
-				slcHfbalv,
+				slcHfbalv, mapCostph,
 				mapCurrcv, mapClslvl, errErignr, errPrmkey)
 		mgoPsgsmr = append(mgoPsgsmr, tmpPsgsmr...)
 		mgoPsgdtl = append(mgoPsgdtl, tmpPsgdtl...)

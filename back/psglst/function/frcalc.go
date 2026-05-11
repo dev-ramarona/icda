@@ -450,7 +450,12 @@ brk:
 			var mapDstrct = map[string][]string{
 				"JKT": {"CGK", "HLP", "JKT"},
 				"SRI": {"AAP", "SRI"},
-				"JOG": {"YIA", "JOG"}}
+				"JOG": {"YIA", "JOG"},
+				"BKK": {"DMK", "BKK"},
+				"SEL": {"ICN", "GMP", "SEL"},
+				"TYO": {"NRT", "HND", "TYO"},
+				"PAR": {"CDG", "ORY", "PAR"},
+				"NYC": {"JFK", "LGA", "EWR", "NYC"}}
 			val.Depart = func() string {
 				if slcDepart, ist := mapDstrct[val.Depart]; ist {
 					for _, v := range slcDepart {

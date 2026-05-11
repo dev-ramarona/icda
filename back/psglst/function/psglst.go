@@ -23,7 +23,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	sycPnrcde, sycChrter, sycFrbase, sycFrtaxs, sycFlhour,
 	sycMilege, sycErrlog, sycProvnc, sycFljoin, sycDstrct, sycAlltxs,
 	idcFrbase, idcFrtaxs *sync.Map,
-	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
+	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase, mapCostph map[string]int64,
 	mapCurrcv map[string]mdlApndix.MdlApndixCurrcvDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase, errErignr, errPrmkey *string) (
 	[]mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel, []mongo.WriteModel,
@@ -200,6 +200,8 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		Seatcn: fllist.Seatcn,
 		Airtyp: fllist.Airtyp,
 		Flhour: fllist.Flhour,
+		Timefl: fllist.Timefl,
+		Costph: mapCostph[objParams.Airlfl],
 	}
 
 	// Semi final loop and push to final
@@ -565,12 +567,8 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					if keyfst == "routfl" {
 						psglst.Yqtxfl = mtcFrtaxs.Ftfuel
 					} else {
-						if psglst.Prmkey == "260505SL100DMK12A" {
-							fmt.Println(mtcFrtaxs)
-							fmt.Println(nowKeytax)
-							fmt.Println(intDatemc)
-						}
 						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
+						psglst.Yrtxvc = float64(mtcFrtaxs.Ftfuel)
 						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
 						if mtcFrtaxs.Datend <= int32(intDatemc) {
 							continue
@@ -589,6 +587,9 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 											intFrtaxs, _ := strconv.Atoi(slcValfrt[1])
 											if strTaxcde == "yq" && intFrtaxs != 0 {
 												psglst.Yqtxvc = float64(intFrtaxs)
+											}
+											if strTaxcde == "yr" && intFrtaxs != 0 {
+												psglst.Yrtxvc = float64(intFrtaxs)
 											}
 										}
 										break
@@ -663,6 +664,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		if psglst.Isitfl == "F" {
 			totSmmary.Totnta += psglst.Ntafvc
 			totSmmary.Tottyq += psglst.Yqtxvc
+			totSmmary.Tottyr += psglst.Yqtxvc
 			totSmmary.Totpax += 1
 			totSmmary.Totfae += psglst.Fareae
 			totSmmary.Totqfr += psglst.Qsrcvc

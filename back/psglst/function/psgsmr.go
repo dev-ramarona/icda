@@ -196,6 +196,20 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		for rawDtaset.Next(contxt) {
 			slcDtaset := mdlPsglst.MdlPsglstPsgsmrFrtend{}
 			rawDtaset.Decode(&slcDtaset)
+
+			// Get load factor
+			totSeatcn, err := strconv.ParseFloat(slcDtaset.Seatcn, 64)
+			if err != nil {
+				slcSeatcn := strings.Split(slcDtaset.Seatcn, "/")
+				for _, v := range slcSeatcn {
+					if seatcn, err := strconv.ParseFloat(v, 64); err == nil {
+						totSeatcn += seatcn
+					}
+				}
+			}
+			slcDtaset.Loadfc = float64(slcDtaset.Totpax) / totSeatcn
+			slcDtaset.Totrev = slcDtaset.Totnta + slcDtaset.Tottyq
+			slcDtaset.Totcph = float64(slcDtaset.Costph) * slcDtaset.Flhour
 			slctmp = append(slctmp, slcDtaset)
 		}
 		slcobj = slctmp
@@ -327,17 +341,21 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		"routfl",
 		"ndayfl",
 		"datefl",
+		"timefl",
 		"mnthfl",
 		"flstat",
 		"seatcn",
 		"airtyp",
 		"flhour",
+		"loadfc",
+		"totpax",
 		"totnta",
 		"tottyq",
-		"totpax",
+		"totrev",
 		"totfae",
 		"totqfr",
 		"totrph",
+		"totcph",
 	})
 	writer.Flush()
 
@@ -406,6 +424,16 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 		strMnthfl := fncApndix.FncApndixFormatMnthot(int(slcDtaset.Mnthfl))
 		strFlhour := fncApndix.FncApndixRevrseFlhour(slcDtaset.Flhour)
+		strTimefl := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timefl))
+		totSeatcn, err := strconv.ParseFloat(slcDtaset.Seatcn, 64)
+		if err != nil {
+			slcSeatcn := strings.Split(slcDtaset.Seatcn, "/")
+			for _, v := range slcSeatcn {
+				if seatcn, err := strconv.ParseFloat(v, 64); err == nil {
+					totSeatcn += seatcn
+				}
+			}
+		}
 
 		// Write to CSV
 		writer.Write([]string{
@@ -418,17 +446,21 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 			slcDtaset.Routfl,
 			slcDtaset.Ndayfl,
 			strDatefl,
+			strTimefl,
 			strMnthfl,
 			slcDtaset.Flstat,
 			slcDtaset.Seatcn,
 			slcDtaset.Airtyp,
 			strFlhour,
+			fmt.Sprintf("%v", float64(slcDtaset.Totpax)/totSeatcn),
+			fmt.Sprintf("%v", slcDtaset.Totpax),
 			fmt.Sprintf("%v", slcDtaset.Totnta),
 			fmt.Sprintf("%v", slcDtaset.Tottyq),
-			fmt.Sprintf("%v", slcDtaset.Totpax),
+			fmt.Sprintf("%v", slcDtaset.Totnta+slcDtaset.Tottyq),
 			fmt.Sprintf("%v", slcDtaset.Totfae),
 			fmt.Sprintf("%v", slcDtaset.Totqfr),
 			fmt.Sprintf("%v", slcDtaset.Totrph),
+			fmt.Sprintf("%v", slcDtaset.Totcph),
 		})
 
 		// Flush every 1000row

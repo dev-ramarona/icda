@@ -10,17 +10,23 @@ type MdlPsglstPsgsmrDtbase struct {
 	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
 	Ndayfl string  `json:"ndayfl,omitempty" bson:"ndayfl,omitempty"`
 	Datefl int32   `json:"datefl,omitempty" bson:"datefl,omitempty"`
+	Timefl int64   `json:"timefl,omitempty" bson:"timefl,omitempty"`
 	Mnthfl int32   `json:"mnthfl,omitempty" bson:"mnthfl,omitempty"`
 	Flstat string  `json:"flstat,omitempty" bson:"flstat,omitempty"`
 	Seatcn string  `json:"seatcn,omitempty" bson:"seatcn,omitempty"`
 	Airtyp string  `json:"airtyp,omitempty" bson:"airtyp,omitempty"`
 	Flhour float64 `json:"flhour,omitempty" bson:"flhour,omitempty"`
+	Loadfc float64 `json:"loadfc,omitempty" bson:"loadfc,omitempty"`
+	Totpax int64   `json:"totpax,omitempty" bson:"totpax,omitempty"`
 	Totnta float64 `json:"totnta,omitempty" bson:"totnta,omitempty"`
 	Tottyq float64 `json:"tottyq,omitempty" bson:"tottyq,omitempty"`
-	Totpax int64   `json:"totpax,omitempty" bson:"totpax,omitempty"`
+	Tottyr float64 `json:"tottyr,omitempty" bson:"tottyr,omitempty"`
+	Totrev float64 `json:"totrev,omitempty" bson:"totrev,omitempty"`
 	Totfae float64 `json:"totfae,omitempty" bson:"totfae,omitempty"`
 	Totqfr float64 `json:"totqfr,omitempty" bson:"totqfr,omitempty"`
 	Totrph float64 `json:"totrph,omitempty" bson:"totrph,omitempty"`
+	Totcph float64 `json:"totcph,omitempty" bson:"totcph,omitempty"`
+	Costph int64   `json:"costph,omitempty" bson:"costph,omitempty"`
 }
 type MdlPsglstPsgsmrFrtend struct {
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
@@ -32,15 +38,20 @@ type MdlPsglstPsgsmrFrtend struct {
 	Routfl string  `json:"routfl" bson:"routfl"`
 	Ndayfl string  `json:"ndayfl" bson:"ndayfl"`
 	Datefl int32   `json:"datefl" bson:"datefl"`
+	Timefl int64   `json:"timefl" bson:"timefl"`
 	Mnthfl int32   `json:"mnthfl" bson:"mnthfl"`
 	Flstat string  `json:"flstat" bson:"flstat"`
 	Seatcn string  `json:"seatcn" bson:"seatcn"`
 	Airtyp string  `json:"airtyp" bson:"airtyp"`
 	Flhour float64 `json:"flhour" bson:"flhour"`
+	Loadfc float64 `json:"loadfc" bson:"loadfc"`
+	Totpax int64   `json:"totpax" bson:"totpax"`
 	Totnta float64 `json:"totnta" bson:"totnta"`
 	Tottyq float64 `json:"tottyq" bson:"tottyq"`
-	Totpax int64   `json:"totpax" bson:"totpax"`
+	Totrev float64 `json:"totrev" bson:"totrev"`
 	Totfae float64 `json:"totfae" bson:"totfae"`
 	Totqfr float64 `json:"totqfr" bson:"totqfr"`
 	Totrph float64 `json:"totrph" bson:"totrph"`
+	Totcph float64 `json:"totcph" bson:"totcph"`
+	Costph int64   `json:"costph" bson:"costph"`
 }

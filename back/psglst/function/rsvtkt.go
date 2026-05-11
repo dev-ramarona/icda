@@ -72,7 +72,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 		if pnrTimecr, err := time.Parse("2006-01-02T15:04:05", varTimecr); err == nil {
 			rawTimerw, _ := strconv.Atoi(pnrTimecr.Format("0601021504"))
 			nowAgtdcr := nowRsvpnr.BookingDetails.CreationAgentID
-			psglst.Timecr = int64(rawTimerw)
+			if int64(rawTimerw) < psglst.Timecr || psglst.Timecr == 0 {
+				psglst.Timecr = int64(rawTimerw)
+			}
 			if nowAgtdcr != "" {
 				psglst.Agtdcr = nowAgtdcr
 			}

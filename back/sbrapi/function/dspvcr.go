@@ -8,7 +8,7 @@ import (
 )
 
 // Comamand macro Sabre API Sreen
-func FncSbrapiDspvcrMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
+func FncSbrapiDspvcrMainobxx(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	apndix mdlSbrapi.MdlSbrapiMsghdrApndix) (mdlSbrapi.MdlSbrapiDspvcrRsptkt, error) {
 
 	// Isi struktur data

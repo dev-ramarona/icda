@@ -182,6 +182,19 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 	var intDatenw, _ = strconv.Atoi(time.Now().Format("060102"))
 	if val, ist := sycFrtaxs.Load(taxPrmkey); ist {
 		if prv, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
+
+			// Special treatment for taxes
+			if (float64(now.Ftfuel)-float64(prv.Ftfuel))/float64(now.Ftfuel) < 0.01 {
+				now.Ftfuel = prv.Ftfuel
+				fnlFrtaxs.Ftfuel = now.Ftfuel
+			}
+
+			// Special treatment for taxes
+			if (float64(now.Ftaxyr)-float64(prv.Ftaxyr))/float64(now.Ftaxyr) < 0.01 {
+				now.Ftaxyr = prv.Ftaxyr
+				fnlFrtaxs.Ftaxyr = now.Ftaxyr
+			}
+
 			prvTaxstr := fmt.Sprintf("yq:%v/apt:%v/p4:%v/yr:%v/id:%v",
 				prv.Ftfuel, prv.Ftaptx, prv.Ftiwjr, prv.Ftaxyr, prv.Ftppnx)
 			nowTaxstr := fmt.Sprintf("yq:%v/apt:%v/p4:%v/yr:%v/id:%v",

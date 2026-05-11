@@ -407,6 +407,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"Yqtcrr_target",
 			"Yqtcrt_target",
 			"Yqtxvc_target",
+			"Yrtxvc_target",
 			"Qsrcvc_target",
 		})
 	case "EBTFMT":
@@ -497,6 +498,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			"YQ currency rate",
 			"YQ flown",
 			"YQ VCR",
+			"YR flown",
+			"YR VCR",
 			"Fare rate proration",
 			"Fare base code",
 			"Q fare raw text",
@@ -718,6 +721,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				slcDtaset.Yqtcrr,
 				fmt.Sprintf("%v", slcDtaset.Yqtcrt),
 				fmt.Sprintf("%v", slcDtaset.Yqtxvc),
+				fmt.Sprintf("%v", slcDtaset.Yrtxvc),
 				fmt.Sprintf("%v", slcDtaset.Qsrcvc),
 			})
 		case "EBTFMT":
@@ -807,6 +811,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				fmt.Sprintf("%v", slcDtaset.Yqtcrt),
 				fmt.Sprintf("%v", slcDtaset.Yqtxfl),
 				fmt.Sprintf("%v", slcDtaset.Yqtxvc),
+				fmt.Sprintf("%v", slcDtaset.Yrtxfl),
+				fmt.Sprintf("%v", slcDtaset.Yrtxvc),
 				fmt.Sprintf("%v", slcDtaset.Frrate),
 				slcDtaset.Frbcde,
 				slcDtaset.Qsrcrw,

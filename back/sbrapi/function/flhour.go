@@ -66,6 +66,7 @@ func FncSbrapiFlhourPrcess(rawxml []byte, sycFlhour *sync.Map,
 
 		// Convert str 12.55 time to decimal
 		floFlhour, err := fncApndix.FncApndixConvrtFlhour(nowFlhour)
+		strFmhour := fncApndix.FncApndixRevrseFlhour(floFlhour)
 		if err != nil {
 			return fnlFlhour, err
 		}
@@ -107,9 +108,9 @@ func FncSbrapiFlhourPrcess(rawxml []byte, sycFlhour *sync.Map,
 		var nowDatend = int32(intDatenw)
 		var nowHstory = string("")
 		if val, ist := sycFlhour.Load(apndix.Airlfl + apndix.Flnbfl + nowRoutef); ist {
-			if get, mtc := val.(mdlApndix.MdlApndixFlhourDtbase); mtc {
-				nowDatend, nowHstory = fncApndix.FncApndixFormatHstory(get.Flhour,
-					floFlhour, get.Hstory, get.Datend, int32(intDatenw))
+			if prv, mtc := val.(mdlApndix.MdlApndixFlhourDtbase); mtc {
+				nowDatend, nowHstory = fncApndix.FncApndixFormatHstory(prv.Fmhour,
+					strFmhour, prv.Hstory, prv.Datend, int32(intDatenw))
 			}
 		}
 

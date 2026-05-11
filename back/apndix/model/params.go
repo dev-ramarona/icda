@@ -50,6 +50,13 @@ type MdlApndixDstrctDtbase struct {
 }
 
 // District data
+type MdlApndixCostphDtbase struct {
+	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
+	Costph int64  `json:"costph,omitempty" bson:"costph,omitempty"`
+	Hstory string `json:"hstory,omitempty" bson:"hstory,omitempty"`
+}
+
+// District data
 type MdlApndixFljoinDtbase struct {
 	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
 	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
@@ -80,6 +87,7 @@ type MdlApndixFlhourDtbase struct {
 	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
 	Flnbfl string  `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
 	Flhour float64 `json:"flhour,omitempty" bson:"flhour,omitempty"`
+	Fmhour string  `json:"fmhour,omitempty" bson:"fmhour,omitempty"`
 	Timefl int64   `json:"timefl,omitempty" bson:"timefl,omitempty"`
 	Timerv int64   `json:"timerv,omitempty" bson:"timerv,omitempty"`
 	Timeup int64   `json:"timeup,omitempty" bson:"timeup,omitempty"`
@@ -96,6 +104,7 @@ type MdlApndixFlhourFrntnd struct {
 	Routfl string  `json:"routfl" bson:"routfl"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
 	Flhour float64 `json:"flhour" bson:"flhour"`
+	Fmhour string  `json:"fmhour" bson:"fmhour"`
 	Timefl int64   `json:"timefl" bson:"timefl"`
 	Timerv int64   `json:"timerv" bson:"timerv"`
 	Timeup int64   `json:"timeup" bson:"timeup"`

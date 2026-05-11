@@ -114,7 +114,7 @@ func FncApndixAddfmtYearnw(daymnt string) string {
 	difFinald, strDatenw := 0, ""
 	for idx, yearvl := range []int{-1, 0, 1} {
 		strYearnw := time.Now().AddDate(yearvl, 0, 0).Format("06")
-		fmtSbrenw, _ := time.Parse("02Jan06", daymnt+strYearnw)
+		fmtSbrenw, _ := time.Parse("2Jan06", daymnt+strYearnw)
 		difDatenw := fmtDatenw.Sub(fmtSbrenw)
 		difAbslte := int(math.Abs(difDatenw.Hours() / 24))
 		if idx == 0 {
