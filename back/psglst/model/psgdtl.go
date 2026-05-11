@@ -387,6 +387,8 @@ type MdlPsglstPsgdtlSlserr struct {
 	Airlfl string  `json:"airlfl" bson:"airlfl"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
 	Routfl string  `json:"routfl" bson:"routfl"`
+	Routvc string  `json:"routvc" bson:"routvc"`
+	Routyq string  `json:"routyq" bson:"routyq"`
 	Provnc string  `json:"provnc" bson:"provnc"`
 	Datefl int32   `json:"datefl" bson:"datefl"`
 	Timecr int64   `json:"timecr" bson:"timecr"`
