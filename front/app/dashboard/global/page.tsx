@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { UixGlobalIconvcTolink } from "./ui/server/iconvc";
 import { ApiAllusrCookieGetdta } from "../allusr/api/cookie";
+import UixAllusrFormipChpass from "../allusr/ui/create/chpass";
 
 export default async function Page() {
   const cookie = await ApiAllusrCookieGetdta();
@@ -30,6 +31,11 @@ export default async function Page() {
         <div>for request Access or new User please confirm to email :</div>
         <div className="font-semibold">rama.rona@lionair.com</div>
       </div>
+      {cookie.action == "regist" && (
+        <div className="afull flexctr absolute z-30 backdrop-blur-xs">
+          <UixAllusrFormipChpass cookie={cookie} />
+        </div>
+      )}
     </div>
   );
 }

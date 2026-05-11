@@ -1,8 +1,8 @@
 import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
 import { ApiAllusrUsrlstGetall } from "../../api/user";
 import { MdlAllusrFrntndParams, MdlAllusrSearchParams } from "../../model/params";
-import UixCrtusrAllusrSearch from "./search";
-import UixCrtusrAllusrTablex from "./table";
+import ApiAllusrUsrlstSearch from "./search";
+import ApiAllusrUsrlstTablex from "./table";
 
 export default async function UixAllusrUsrlstMainpg({
   prmAllusr,
@@ -14,9 +14,9 @@ export default async function UixAllusrUsrlstMainpg({
   const totdta: number = allusr.totdta;
   return (
     <>
-      <UixCrtusrAllusrSearch prmAllusr={prmAllusr} />
+      <ApiAllusrUsrlstSearch prmAllusr={prmAllusr} />
       {arrdta.length > 0 ? (
-        <UixCrtusrAllusrTablex allusr={arrdta} />
+        <ApiAllusrUsrlstTablex allusr={arrdta} />
       ) : (
         <div className="flexctr h-fit w-full text-base font-semibold text-sky-800">
           No database Log Action

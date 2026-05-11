@@ -5,12 +5,13 @@ import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import { UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 import { MdlAllusrSearchParams } from "../../model/params";
 
-export default function UixCrtusrAllusrSearch({ prmAllusr }: { prmAllusr: MdlAllusrSearchParams }) {
+export default function ApiAllusrUsrlstSearch({ prmAllusr }: { prmAllusr: MdlAllusrSearchParams }) {
   const [params, paramsSet] = useState<MdlAllusrSearchParams>({
     usredt: prmAllusr.usredt || "",
     stfnme: prmAllusr.stfnme || "",
     usrnme: prmAllusr.usrnme || "",
     stfeml: prmAllusr.stfeml || "",
+    action: prmAllusr.action || "",
     limitp: prmAllusr.limitp || 1,
     pagenw: prmAllusr.pagenw || 15,
     update: prmAllusr.update || "",
@@ -25,6 +26,7 @@ export default function UixCrtusrAllusrSearch({ prmAllusr }: { prmAllusr: MdlAll
       stfnme: prmAllusr.stfnme || "",
       usrnme: prmAllusr.usrnme || "",
       stfeml: prmAllusr.stfeml || "",
+      action: prmAllusr.action || "",
       limitp: prmAllusr.limitp || 1,
       pagenw: prmAllusr.pagenw || 15,
       update: prmAllusr.update || "",

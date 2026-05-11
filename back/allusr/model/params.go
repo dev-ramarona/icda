@@ -27,6 +27,7 @@ type MdlAllusrFrntndFormat struct {
 	Usrnme string   `json:"usrnme" bson:"usrnme"`
 	Stfnme string   `json:"stfnme" bson:"stfnme"`
 	Stfeml string   `json:"stfeml" bson:"stfeml"`
+	Action string   `json:"action" bson:"action"`
 	Access []string `json:"access" bson:"access"`
 	Keywrd []string `json:"keywrd" bson:"keywrd"`
 }
@@ -34,6 +35,7 @@ type MdlAllusrTokensFormat struct {
 	Stfnme string   `json:"stfnme"`
 	Usrnme string   `json:"usrnme"`
 	Stfeml string   `json:"stfeml"`
+	Action string   `json:"action"`
 	Access []string `json:"access"`
 	Keywrd []string `json:"keywrd"`
 	jwt.RegisteredClaims

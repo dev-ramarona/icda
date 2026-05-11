@@ -13,6 +13,7 @@ export async function ApiAllusrCookieGetdta() {
     stfnme: "",
     usrnme: "",
     stfeml: "",
+    action: "",
     access: ["null"],
     keywrd: ["null"],
   };

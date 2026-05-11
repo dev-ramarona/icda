@@ -9,7 +9,7 @@ import UixGlobalTbodyrTablex from "../../../global/ui/tablex/tbodyr";
 import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
 import { MdlGlobalConfrmAction } from "../../../global/model/params";
 
-export default function UixCrtusrAllusrTablex({ allusr }: { allusr: MdlAllusrFrntndParams[] }) {
+export default function ApiAllusrUsrlstTablex({ allusr }: { allusr: MdlAllusrFrntndParams[] }) {
   // Hit the database and get interval status
   const rplprm = FncGlobalQuerysEdlink();
   const [usrnme, usrnmeSet] = useState("");

@@ -60,6 +60,7 @@ func FncAllusrLoginxHandle(c *gin.Context) {
 		Stfnme: usrdbs.Stfnme,
 		Stfeml: usrdbs.Stfeml,
 		Access: usrdbs.Access,
+		Action: usrdbs.Action,
 		Keywrd: usrdbs.Keywrd,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(3 * time.Hour)),

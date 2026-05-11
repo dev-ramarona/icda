@@ -3,6 +3,7 @@ export interface MdlAllusrSearchParams {
   stfnme: string;
   usrnme: string;
   stfeml: string;
+  action: string;
   limitp: number;
   pagenw: number;
   update: string;
@@ -12,6 +13,7 @@ export interface MdlAllusrFormipParams {
   stfnme: string;
   usrnme: string;
   stfeml: string;
+  action: string;
   psswrd: string;
   access: string[];
   keywrd: string[];
@@ -21,6 +23,7 @@ export interface MdlAllusrFrntndParams {
   stfnme: string;
   usrnme: string;
   stfeml: string;
+  action: string;
   psswrd: string;
   access: string[];
   keywrd: string[];
@@ -34,6 +37,7 @@ export interface mdlAllusrCookieObjson {
   stfnme: string;
   usrnme: string;
   stfeml: string;
+  action: string;
   access: string[];
   keywrd: string[];
 }
