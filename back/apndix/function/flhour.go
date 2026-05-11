@@ -294,20 +294,21 @@ func FncApndixFlhourDownld(c *gin.Context) {
 	writer := csv.NewWriter(c.Writer)
 	defer writer.Flush()
 	writer.Write([]string{
-		"prmkey",
-		"airlfl",
-		"routfl",
-		"flnbfl",
-		"flhour",
-		"timefl",
-		"timerv",
-		"timeup",
-		"dateup",
-		"datend",
-		"airtyp",
-		"airmls",
-		"hstory",
-		"updtby",
+		"Prmkey",
+		"Airlfl",
+		"Routfl",
+		"Flnbfl",
+		"Flhour",
+		"Fmhour",
+		"Timefl",
+		"Timerv",
+		"Timeup",
+		"Dateup",
+		"Datend",
+		"Airtyp",
+		"Airmls",
+		"Hstory",
+		"Updtby",
 	})
 	writer.Flush()
 
@@ -343,6 +344,7 @@ func FncApndixFlhourDownld(c *gin.Context) {
 			slcDtaset.Routfl,
 			slcDtaset.Flnbfl,
 			fmt.Sprintf("%v", slcDtaset.Flhour),
+			slcDtaset.Fmhour,
 			strTimefl,
 			strTimerv,
 			strTimeup,

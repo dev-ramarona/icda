@@ -7,6 +7,7 @@ import {
 } from "../../../global/ui/server/iconvc";
 import UixGlobalInputxFormdt from "../action/inputx";
 import { FncGlobalFormatDatefm } from "../../../global/function/format";
+import { spacemono } from "../../../../fonts";
 
 export default function UixGlobalTbodyxTablex({
   action,
@@ -126,7 +127,12 @@ export default function UixGlobalTbodyxTablex({
                     {datefm.includes(key) ? (
                       FncGlobalFormatDatefm(String(val))
                     ) : nmbrfm.includes(key) ? (
-                      <div className="text-right">{val.toLocaleString("en-US")}</div>
+                      <div className={`text-right font-mono ${spacemono.className}`}>
+                        {val.toLocaleString("en-US", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </div>
                     ) : (
                       val
                     )}

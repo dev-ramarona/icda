@@ -131,7 +131,16 @@ export default function UixSlsflwDetailTablex({
               "timeup",
               "mnthfl",
             ]}
-            nmbrfm={["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"]}
+            nmbrfm={[
+              "ntaffl",
+              "ntafvc",
+              "yqtxfl",
+              "yrtxfl",
+              "yqtxvc",
+              "yrtxvc",
+              "qsrcrw",
+              "qsrcvc",
+            ]}
             cnfupd={fmtdef ? cnfupd : null}
             okeupd={okeupd}
             cxlupd={cxlupd}

@@ -135,7 +135,7 @@ export default function UixSlsflwDetailSearch({
       <div className="flexctr relative h-10 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
           typipt={"select"}
-          length={["SLSERR"]}
+          length={["SLSERR", "ALL"]}
           queryx={"format_psgdtl"}
           params={params.format_psgdtl}
           plchdr="Format data"
