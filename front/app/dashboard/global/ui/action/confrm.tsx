@@ -40,7 +40,7 @@ export default function UixGlobalConfrmAction({
             </div>
           ))}
         </div>
-        <div className="flexctr gap-3">
+        <div className="flexctr z-30 gap-3">
           <div className="btnsbm flexctr h-8 w-10" onClick={() => goupdt()}>
             <UixGlobalIconvcCeklis bold={4} color="#53eafd" size={1.4} />
           </div>

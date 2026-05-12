@@ -208,6 +208,8 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		if getTaxyqf != 0 || getTaxyrf != 0 {
 			psglst.Yqtcrr = "IDR"
 			psglst.Yqtcrt = 1
+			psglst.Yqtxvc = float64(getTaxyqf)
+			psglst.Yrtxvc = float64(getTaxyrf)
 			if getTaxcur != "" && getTaxcur != "IDR" {
 				if valmap, istmap := mapCurrcv[getTaxcur]; istmap {
 					psglst.Yqtcrr = getTaxcur

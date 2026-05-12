@@ -1,3 +1,5 @@
+"use server";
+
 import { MdlAllusrSearchParams } from "../model/params";
 
 // Function get all user
