@@ -124,7 +124,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Isittx string  `json:"isittx" bson:"isittx,omitempty"`
 	Isitir string  `json:"isitir" bson:"isitir,omitempty"`
 	Isitct string  `json:"isitct" bson:"isitct,omitempty"`
-	Isitnr string  `json:"isitnr" bson:"isitnr,omitempty"`
+	Isitnr string  `json:"isitnr" bson:"isitnr"`
 	Isitiv string  `json:"isitiv" bson:"isitiv,omitempty"`
 	Srcfrb string  `json:"srcfrb" bson:"srcfrb,omitempty"`
 	Srcyqf string  `json:"srcyqf" bson:"srcyqf,omitempty"`

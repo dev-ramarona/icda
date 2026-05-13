@@ -47,7 +47,7 @@ func FncPsglstFrcalcSplitd(psglst *mdlPsglst.MdlPsglstPsgdtlDtbase,
 	regQschg3 := regexp.MustCompile(`Q\d+\.\d{2}|Q\d+|\d+.\d{2}|\d+|[A-Z]{3}`)
 	regQschg4 := regexp.MustCompile(`^Q$`)
 	regQsrate := regexp.MustCompile(`(^[A-Z]{6})(\d+\.\d{2}|\d+)(NUC)(\d+\.\d{2}|\d+)(ENDROE)(\d+\.\d{2}|\d+)`)
-	regNotuse := regexp.MustCompile(`^PD\d.+|^M/IT|^M/BT|^/IT|^/BT|^Q$`)
+	regNotuse := regexp.MustCompile(`^PD\d.+|^M/IT|M/BT|^/IT|^/BT|^Q$`)
 	nowDstrct := ""
 	idxCountd := 1
 	prvRateof := false
@@ -391,13 +391,12 @@ brk:
 			// Other logic check ITBT in YQ
 			if len(regNotuse.FindAllString(slc, -1)) >= 1 {
 				rsl := regNotuse.FindAllString(slc, -1)
-				fmt.Println(rsl)
+
 				if slices.Contains(rsl, "/IT") || slices.Contains(rsl, "M/IT") ||
 					slices.Contains(rsl, "/BT") || slices.Contains(rsl, "M/BT") {
 					for idx := range nowFrbase {
-						fmt.Println("Awdawdw1")
 						if nowFrbase[idx].Routfl != "" {
-							fmt.Println("Awdawdw2")
+
 							nowFrbase[idx].Isitit = "IT FARE"
 						}
 					}
@@ -428,9 +427,8 @@ brk:
 		// Logic match not use data after end
 		case len(regNotuse.FindAllString(slc, -1)) >= 1:
 			rsl := regNotuse.FindAllString(slc, -1)
-			if slices.Contains(rsl, "IT") ||
-				slices.Contains(rsl, "M/IT") ||
-				slices.Contains(rsl, "/IT") {
+			if slices.Contains(rsl, "/IT") || slices.Contains(rsl, "M/IT") ||
+				slices.Contains(rsl, "/BT") || slices.Contains(rsl, "M/BT") {
 				for idx := range nowFrbase {
 					if nowFrbase[idx].Routfl != "" {
 						nowFrbase[idx].Isitit = "IT FARE"
@@ -639,7 +637,7 @@ brk:
 			if getFlsgmn.Isitpr == "PRORTE" {
 				psglst.Srcfrb = "PRCALC"
 			}
-			cekNonrev = (getFlsgmn.Isitit == "" && allNonrev) || psglst.Ntafvc == 0
+			cekNonrev = getFlsgmn.Isitit == "" && allNonrev && psglst.Ntafvc == 0
 			psglst.Routfx = strings.ReplaceAll(strings.Join(slcRoutfr, "|"), getFlsgmn.Routfl, "")
 		}
 	}
