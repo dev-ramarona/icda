@@ -35,6 +35,7 @@ export default function UixSlsflwPsgsmrTablex({ arrdta }: { arrdta: MdlSlsflwPsg
               "flhour",
               "totnta",
               "tottyq",
+              "tottyr",
               "totpax",
               "totfae",
               "totqfr",
