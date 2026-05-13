@@ -208,6 +208,7 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 				}
 			}
 			slcDtaset.Loadfc = float64(slcDtaset.Totpax) / totSeatcn
+			slcDtaset.Totrph = (slcDtaset.Totnta + slcDtaset.Tottyq + slcDtaset.Tottyr) / slcDtaset.Flhour
 			slcDtaset.Totrev = slcDtaset.Totnta + slcDtaset.Tottyq
 			slcDtaset.Totcph = float64(slcDtaset.Costph) * slcDtaset.Flhour
 			slctmp = append(slctmp, slcDtaset)
@@ -351,6 +352,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		"totpax",
 		"totnta",
 		"tottyq",
+		"tottyr",
 		"totrev",
 		"totfae",
 		"totqfr",
@@ -456,10 +458,11 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 			fmt.Sprintf("%v", slcDtaset.Totpax),
 			fmt.Sprintf("%v", slcDtaset.Totnta),
 			fmt.Sprintf("%v", slcDtaset.Tottyq),
+			fmt.Sprintf("%v", slcDtaset.Tottyr),
 			fmt.Sprintf("%v", slcDtaset.Totnta+slcDtaset.Tottyq),
 			fmt.Sprintf("%v", slcDtaset.Totfae),
 			fmt.Sprintf("%v", slcDtaset.Totqfr),
-			fmt.Sprintf("%v", slcDtaset.Totrph),
+			fmt.Sprintf("%v", (slcDtaset.Totnta+slcDtaset.Tottyq+slcDtaset.Tottyr)/slcDtaset.Flhour),
 			fmt.Sprintf("%v", slcDtaset.Totcph),
 		})
 

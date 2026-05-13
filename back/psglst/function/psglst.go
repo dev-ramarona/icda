@@ -681,7 +681,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			totSmmary.Totpax += 1
 			totSmmary.Totfae += psglst.Fareae
 			totSmmary.Totqfr += psglst.Qsrcvc
-			totSmmary.Totrph += (psglst.Ntafvc + psglst.Yqtxvc + psglst.Yrtxvc) / fllist.Flhour
+			totSmmary.Tottyr += psglst.Yrtxvc
 		}
 
 		// Get province

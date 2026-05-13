@@ -48,6 +48,7 @@ type MdlPsglstPsgsmrFrtend struct {
 	Totpax int64   `json:"totpax" bson:"totpax"`
 	Totnta float64 `json:"totnta" bson:"totnta"`
 	Tottyq float64 `json:"tottyq" bson:"tottyq"`
+	Tottyr float64 `json:"tottyr" bson:"tottyr"`
 	Totrev float64 `json:"totrev" bson:"totrev"`
 	Totfae float64 `json:"totfae" bson:"totfae"`
 	Totqfr float64 `json:"totqfr" bson:"totqfr"`
