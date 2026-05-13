@@ -557,6 +557,18 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				if psglst.Isitiv == "INVL" {
 					if len(strconv.Itoa(int(psglst.Timecr))) == 10 {
 						nowDatemc = strconv.Itoa(int(psglst.Timecr))[:6]
+
+						// Get from old exchange invol
+						for _, tktnxc := range strings.Split(psglst.Tktnxc, "|") {
+							slcTktnxc := strings.Split(tktnxc, "-")
+							if len(slcTktnxc) == 3 && len(slcTktnxc[1]) == 6 {
+								intDatemc, _ := strconv.Atoi(nowDatemc)
+								excDateis, _ := strconv.Atoi(slcTktnxc[1])
+								if intDatemc > excDateis {
+									nowDatemc = slcTktnxc[1]
+								}
+							}
+						}
 					}
 				}
 				intDatemc, _ := strconv.Atoi(nowDatemc)
@@ -570,10 +582,6 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					} else {
 						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
 						psglst.Yrtxvc = float64(mtcFrtaxs.Ftaxyr)
-						if psglst.Tktnvc == "3102162986271" {
-							fmt.Println("1", float64(mtcFrtaxs.Ftfuel))
-							fmt.Println("1", float64(mtcFrtaxs.Ftaxyr))
-						}
 						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
 						if mtcFrtaxs.Datend <= int32(intDatemc) {
 							continue
@@ -589,21 +597,12 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 										for _, valfrt := range slcFrtaxs {
 											slcValfrt := strings.Split(valfrt, ":")
 											strTaxcde := slcValfrt[0]
-											if len(slcValfrt) == 1 {
-												fmt.Println(slcValfrt)
-											}
 											intFrtaxs, _ := strconv.Atoi(slcValfrt[1])
 											if strTaxcde == "yq" && intFrtaxs != 0 {
 												psglst.Yqtxvc = float64(intFrtaxs)
-												if psglst.Tktnvc == "3102162986271" {
-													fmt.Println("2", intFrtaxs)
-												}
 											}
 											if strTaxcde == "yr" && intFrtaxs != 0 {
 												psglst.Yrtxvc = float64(intFrtaxs)
-												if psglst.Tktnvc == "3102162986271" {
-													fmt.Println("3", intFrtaxs)
-												}
 											}
 										}
 										break

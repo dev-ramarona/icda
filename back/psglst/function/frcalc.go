@@ -47,7 +47,7 @@ func FncPsglstFrcalcSplitd(psglst *mdlPsglst.MdlPsglstPsgdtlDtbase,
 	regQschg3 := regexp.MustCompile(`Q\d+\.\d{2}|Q\d+|\d+.\d{2}|\d+|[A-Z]{3}`)
 	regQschg4 := regexp.MustCompile(`^Q$`)
 	regQsrate := regexp.MustCompile(`(^[A-Z]{6})(\d+\.\d{2}|\d+)(NUC)(\d+\.\d{2}|\d+)(ENDROE)(\d+\.\d{2}|\d+)`)
-	regNotuse := regexp.MustCompile(`^PD\d.+|^M/IT|^/IT|^/BT|^Q$`)
+	regNotuse := regexp.MustCompile(`^PD\d.+|^M/IT|^M/BT|^/IT|^/BT|^Q$`)
 	nowDstrct := ""
 	idxCountd := 1
 	prvRateof := false
@@ -385,6 +385,22 @@ brk:
 				}
 				if len(slcQsrchg) > 0 {
 					nowFrbase[idxCountd-1].Qsrcrw = strings.Join(slcQsrchg, "|")
+				}
+			}
+
+			// Other logic check ITBT in YQ
+			if len(regNotuse.FindAllString(slc, -1)) >= 1 {
+				rsl := regNotuse.FindAllString(slc, -1)
+				fmt.Println(rsl)
+				if slices.Contains(rsl, "/IT") || slices.Contains(rsl, "M/IT") ||
+					slices.Contains(rsl, "/BT") || slices.Contains(rsl, "M/BT") {
+					for idx := range nowFrbase {
+						fmt.Println("Awdawdw1")
+						if nowFrbase[idx].Routfl != "" {
+							fmt.Println("Awdawdw2")
+							nowFrbase[idx].Isitit = "IT FARE"
+						}
+					}
 				}
 			}
 

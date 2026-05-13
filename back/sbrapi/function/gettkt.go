@@ -163,7 +163,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		objTktnor := getTktdoc.Ticket.RelatedDocument.Original
 		if !strings.Contains(strTktnvc, objTktnor.Number) {
 			strDateis := fncApndix.FncApndixFormatDatein(objTktnor.IssueDate)
-			strTktnor := fmt.Sprintf("%v:%v-%v",
+			strTktnor := fmt.Sprintf("%v-%v-%v",
 				objTktnor.Number, strDateis, objTktnor.IssueCity)
 			slcTktnxc = append([]string{strTktnor}, slcTktnxc...)
 		}
