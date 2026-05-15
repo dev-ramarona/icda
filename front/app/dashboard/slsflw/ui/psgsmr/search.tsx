@@ -96,10 +96,14 @@ export default function UixSlsflwPsgsmrSearch({
     <UixGlobalWraperSearch
       chnged={chnged}
       lblupl="Upload File Join"
-      downld={{
-        lnk: `/psglst/psgsmr/downld`,
-        prm: params,
-      }}
+      downld={
+        params.keywrd_psgsmr == "REG ALL"
+          ? {
+              lnk: `/psglst/psgsmr/downld`,
+              prm: params,
+            }
+          : null
+      }
       upload={{
         lnk: `/apndix/fljoin/upload`,
         prm: filedt,

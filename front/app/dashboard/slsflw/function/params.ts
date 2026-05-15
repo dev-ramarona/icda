@@ -22,7 +22,7 @@ export function FncSlsflwPsgdtlSrcprm(
     tktnfl_psgdtl: params.tktnfl_psgdtl || "",
     nclear_psgdtl: params.nclear_psgdtl || dfault,
     format_psgdtl: params.format_psgdtl || dfault,
-    keywrd_psgdtl: params.keywrd_psgdtl || "",
+    keywrd_psgdtl: "",
     pagenw_psgdtl: Number(params.pagenw_psgdtl) || 1,
     limitp_psgdtl: Number(params.limitp_psgdtl) || 15,
   } as MdlSlsflwPsgdtlSrcprm;
@@ -39,7 +39,7 @@ export function FncSlsflwPsgsmrSrcprm(params: MdlSlsflwPsgsmrSrcprm, actdte: str
     isitjn_psgsmr: params.isitjn_psgsmr || "",
     depart_psgsmr: params.depart_psgsmr || "",
     routfl_psgsmr: params.routfl_psgsmr || "",
-    keywrd_psgsmr: params.keywrd_psgsmr || "",
+    keywrd_psgsmr: "",
     pagenw_psgsmr: Number(params.pagenw_psgsmr) || 1,
     limitp_psgsmr: Number(params.limitp_psgsmr) || 15,
   } as MdlSlsflwPsgsmrSrcprm;

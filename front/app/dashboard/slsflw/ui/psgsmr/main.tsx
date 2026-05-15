@@ -14,10 +14,8 @@ export default async function UixSlsflwPsgsmrMainpg({
   datefl: string[];
   cookie: mdlAllusrCookieObjson;
 }) {
-  const psgsmr = await ApiSlsflwPsgsmrGetall({
-    ...prmPsgsmr,
-    keywrd_psgsmr: JSON.stringify(cookie.keywrd.filter((item) => item.includes("REG "))),
-  });
+  prmPsgsmr.keywrd_psgsmr = cookie.keywrd.filter((item) => item.includes("REG ")).join("");
+  const psgsmr = await ApiSlsflwPsgsmrGetall(prmPsgsmr);
   const arrdta: MdlSlsflwPsgsmrFrntnd[] = psgsmr.arrdta;
   const totdta: number = psgsmr.totdta;
   const joinrd: boolean = psgsmr.joinrd;

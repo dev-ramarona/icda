@@ -32,7 +32,11 @@ export default async function Page(props: { searchParams: Promise<MdlPsglstGloba
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstActlogMainpg actlog={actlog} />
+            <UixPsglstActlogMainpg
+              actlog={actlog}
+              status={status}
+              update={prmPsgdtl.update_global}
+            />
           </Suspense>
         </div>
       </div>

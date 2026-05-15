@@ -18,10 +18,8 @@ export default async function UixSlsflwDetailMainpg({
   cookie: mdlAllusrCookieObjson;
   fmtdef: boolean;
 }) {
-  const psgdtl = await ApiSlsflwPsgdtlGetall({
-    ...prmPsgdtl,
-    keywrd_psgdtl: JSON.stringify(cookie.keywrd.filter((item) => item.includes("REG "))),
-  });
+  prmPsgdtl.keywrd_psgdtl = cookie.keywrd.filter((item) => item.includes("REG ")).join("");
+  const psgdtl = await ApiSlsflwPsgdtlGetall(prmPsgdtl);
   const arrdta: MdlSlsflwPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("slsrpt");

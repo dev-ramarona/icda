@@ -1,15 +1,15 @@
 import { ApiApndixGetallDtbase } from "../../api/dtbase";
 import {
   MdlApndixAcpedtDtbase,
-  MdlApndixFllistFrntnd,
+  MdlApndixChrterFrntnd,
   MdlApndixSearchQueryx,
 } from "../../model/parmas";
 import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
 import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
-import UixPsglstFllistTablex from "./table";
-import UixApndixFllistSearch from "./search";
+import UixPsglstChrtercTablex from "./table";
+import UixApndixChrtercSearch from "./search";
 
-export default async function UixApndixFllistMainpg({
+export default async function UixApndixChrtercMainpg({
   qryprm,
   cookie,
   acpedt,
@@ -21,7 +21,7 @@ export default async function UixApndixFllistMainpg({
   actdte: string[];
 }) {
   const rslobj = await ApiApndixGetallDtbase(qryprm);
-  const arrdta: MdlApndixFllistFrntnd[] = rslobj.arrdta;
+  const arrdta: MdlApndixChrterFrntnd[] = rslobj.arrdta;
   const totdta: number = rslobj.totdta;
 
   // Get h+1 day
@@ -34,15 +34,15 @@ export default async function UixApndixFllistMainpg({
   actdte.push(formtd);
   return (
     <>
-      <UixApndixFllistSearch qryprm={qryprm} datefl={actdte} />
-      <UixPsglstFllistTablex
+      <UixApndixChrtercSearch qryprm={qryprm} datefl={actdte} />
+      <UixPsglstChrtercTablex
         acpedt={acpedt}
         arrdta={arrdta}
         pagedb={qryprm.pagedb_apndix}
         cookie={cookie}
       />
       <UixGlobalPagntnMainpg
-        pgview={15}
+        pgview={5}
         pgenbr={qryprm.pagenw_apndix}
         pgestr="pagenw_apndix"
         totdta={totdta}

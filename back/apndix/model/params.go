@@ -9,6 +9,7 @@ type MdlApdnixParamsInputx struct {
 	Flnbfl_apndix string `json:"flnbfl_apndix,omitempty" bson:"flnbfl_apndix,omitempty"`
 	Routfl_apndix string `json:"routfl_apndix,omitempty" bson:"routfl_apndix,omitempty"`
 	Clssfl_apndix string `json:"clssfl_apndix,omitempty" bson:"clssfl_apndix,omitempty"`
+	Provnc_apndix string `json:"provnc_apndix,omitempty" bson:"provnc_apndix,omitempty"`
 	Pagenw_apndix int    `json:"pagenw_apndix,omitempty" bson:"pagenw_apndix,omitempty"`
 	Limitp_apndix int    `json:"limitp_apndix,omitempty" bson:"limitp_apndix,omitempty"`
 }
@@ -41,6 +42,24 @@ type MdlApndixProvncFrntnd struct {
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Routfl string `json:"routfl" bson:"routfl"`
 	Provnc string `json:"provnc" bson:"provnc"`
+	Updtby string `json:"updtby" bson:"updtby"`
+}
+
+// Charter data
+type MdlApndixChrterDtbase struct {
+	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
+	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
+	Flnbfl string `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
+	Datefl int32  `json:"datefl,omitempty" bson:"datefl,omitempty"`
+	Routfl string `json:"routfl,omitempty" bson:"routfl,omitempty"`
+	Updtby string `json:"updtby,omitempty" bson:"updtby,omitempty"`
+}
+type MdlApndixChrterFrntnd struct {
+	Prmkey string `json:"prmkey" bson:"prmkey"`
+	Airlfl string `json:"airlfl" bson:"airlfl"`
+	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
+	Datefl int32  `json:"datefl" bson:"datefl"`
+	Routfl string `json:"routfl" bson:"routfl"`
 	Updtby string `json:"updtby" bson:"updtby"`
 }
 

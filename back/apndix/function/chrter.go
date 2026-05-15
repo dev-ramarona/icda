@@ -16,18 +16,18 @@ import (
 )
 
 // Get map object
-func FncApndixProvncSycmap() *sync.Map {
+func FncApndixChrterSycmap(datefl int32) *sync.Map {
 
 	// Inisialisasi variabel
 	fnldta := &sync.Map{}
 
 	// Select database and collection
-	tablex := Client.Database(Dbases).Collection("apndix_provnc")
+	tablex := Client.Database(Dbases).Collection("apndix_chrter")
 	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	// Get route data
-	datarw, err := tablex.Find(contxt, bson.M{})
+	datarw, err := tablex.Find(contxt, bson.M{"datefl": datefl})
 	if err != nil {
 		panic(err)
 	}
@@ -35,9 +35,9 @@ func FncApndixProvncSycmap() *sync.Map {
 
 	// Append to slice
 	for datarw.Next(contxt) {
-		var object mdlApndix.MdlApndixProvncDtbase
+		var object mdlApndix.MdlApndixChrterDtbase
 		datarw.Decode(&object)
-		fnldta.Store(object.Routfl, object.Provnc)
+		fnldta.Store(object.Prmkey, true)
 	}
 
 	// return data
@@ -45,7 +45,7 @@ func FncApndixProvncSycmap() *sync.Map {
 }
 
 // Get object slice
-func FncApndixProvncGetall(c *gin.Context) {
+func FncApndixChrterGetall(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("02Jan06/15:04")}
@@ -57,13 +57,13 @@ func FncApndixProvncGetall(c *gin.Context) {
 	// Select db and context to do
 	var totidx = 0
 	var slcobj any
-	tablex := Client.Database(Dbases).Collection("apndix_provnc")
+	tablex := Client.Database(Dbases).Collection("apndix_chrter")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
 
 	// Pipeline get the data logic match
 	var mtchdt = bson.A{}
-	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "provnc", Value: 1}}}}
+	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "chrter", Value: 1}}}}
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
@@ -72,13 +72,6 @@ func FncApndixProvncGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: bson.D{{Key: "$regex",
 				Value: "^" + inputx.Routfl_apndix}}}})
-	}
-	if inputx.Provnc_apndix != "" {
-		csvFilenm = append(csvFilenm, inputx.Provnc_apndix)
-		mtchdt = append(mtchdt, bson.D{{Key: "provnc",
-			Value: bson.D{
-				{Key: "$regex", Value: "^" + inputx.Provnc_apndix},
-				{Key: "$options", Value: "i"}}}})
 	}
 
 	// Final match pipeline
@@ -139,14 +132,16 @@ func FncApndixProvncGetall(c *gin.Context) {
 		defer rawDtaset.Close(contxt)
 
 		// Store to slice from raw bson
-		var slctmp = []mdlApndix.MdlApndixProvncFrntnd{}
+		var slctmp = []mdlApndix.MdlApndixChrterFrntnd{}
 		for rawDtaset.Next(contxt) {
-			slcDtaset := mdlApndix.MdlApndixProvncDtbase{}
+			slcDtaset := mdlApndix.MdlApndixChrterDtbase{}
 			rawDtaset.Decode(&slcDtaset)
-			slctmp = append(slctmp, mdlApndix.MdlApndixProvncFrntnd{
-				Prmkey: slcDtaset.Routfl,
+			slctmp = append(slctmp, mdlApndix.MdlApndixChrterFrntnd{
+				Prmkey: slcDtaset.Prmkey,
+				Airlfl: slcDtaset.Airlfl,
+				Flnbfl: slcDtaset.Flnbfl,
+				Datefl: slcDtaset.Datefl,
 				Routfl: slcDtaset.Routfl,
-				Provnc: slcDtaset.Provnc,
 				Updtby: slcDtaset.Updtby,
 			})
 		}
@@ -161,10 +156,10 @@ func FncApndixProvncGetall(c *gin.Context) {
 }
 
 // Get Response Update database from input
-func FncApndixProvncUpdate(c *gin.Context) {
+func FncApndixChrterUpdate(c *gin.Context) {
 
 	// Bind JSON Body input to variable
-	var inputx mdlApndix.MdlApndixProvncDtbase
+	var inputx mdlApndix.MdlApndixChrterDtbase
 	if err := c.BindJSON(&inputx); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input" + err.Error()})
 		fmt.Println(err.Error())
@@ -172,8 +167,20 @@ func FncApndixProvncUpdate(c *gin.Context) {
 	}
 
 	// Get from input
-	if inputx.Provnc == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Provnc"})
+	if inputx.Prmkey == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Prmkey"})
+		return
+	}
+	if inputx.Airlfl == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Airlfl"})
+		return
+	}
+	if inputx.Flnbfl == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Flnbfl"})
+		return
+	}
+	if inputx.Datefl == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Datefl"})
 		return
 	}
 	if inputx.Routfl == "" {
@@ -181,26 +188,49 @@ func FncApndixProvncUpdate(c *gin.Context) {
 		return
 	}
 	if inputx.Updtby == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Routfl"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input Updtby"})
 		return
 	}
 
 	// Push updated data
+	inputx.Prmkey = fmt.Sprintf("%v%v%v%v", inputx.Airlfl, inputx.Flnbfl, inputx.Routfl, inputx.Datefl)
 	rsupdt := FncApndixBulkdbSingle([]mongo.WriteModel{
 		mongo.NewUpdateOneModel().
-			SetFilter(bson.M{"routfl": inputx.Routfl}).
+			SetFilter(bson.M{"prmkey": inputx.Prmkey}).
 			SetUpdate(bson.M{"$set": inputx}).
-			SetUpsert(true)}, "apndix_provnc")
+			SetUpsert(true)}, "apndix_chrter")
 	if rsupdt != nil {
 		panic("Error Insert/Update to DB:" + rsupdt.Error())
 	}
+
+	// Update psgdtl
+	mgoPsgdtl := []mongo.WriteModel{mongo.NewUpdateManyModel().
+		SetFilter(bson.M{
+			"airlfl": inputx.Airlfl,
+			"flnbfl": inputx.Flnbfl,
+			"datefl": inputx.Datefl,
+			"routfl": inputx.Routfl}).
+		SetUpdate(bson.M{"$set": bson.M{"provnc": "REG Charter"}})}
+	FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+		"psglst_psgdtl": &mgoPsgdtl}, 0)
+
+	// Update psgsmr
+	mgoPsgsmr := []mongo.WriteModel{mongo.NewUpdateManyModel().
+		SetFilter(bson.M{
+			"airlfl": inputx.Airlfl,
+			"flnbfl": inputx.Flnbfl,
+			"datefl": inputx.Datefl,
+			"routfl": inputx.Routfl}).
+		SetUpdate(bson.M{"$set": bson.M{"provnc": "REG Charter"}})}
+	FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+		"psglst_psgdtl": &mgoPsgsmr}, 0)
 
 	// Send token to frontend
 	c.JSON(200, "success")
 }
 
 // Download
-func FncApndixProvncDownld(c *gin.Context) {
+func FncApndixChrterDownld(c *gin.Context) {
 
 	// Bind JSON Body input to variable
 	csvFilenm := []string{time.Now().Format("0601021504")}
@@ -210,7 +240,7 @@ func FncApndixProvncDownld(c *gin.Context) {
 	}
 
 	// Select db and context to do
-	tablex := Client.Database(Dbases).Collection("apndix_provnc")
+	tablex := Client.Database(Dbases).Collection("apndix_chrter")
 	contxt, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
 
@@ -237,7 +267,7 @@ func FncApndixProvncDownld(c *gin.Context) {
 	// Set header untuk file CSV
 	fnlFilenm := strings.Join(csvFilenm, "_")
 	c.Header("Content-Type", "text/csv")
-	c.Header("Content-Disposition", "attachment; filename=apndix_Provnc_"+fnlFilenm+".csv")
+	c.Header("Content-Disposition", "attachment; filename=apndix_Chrter_"+fnlFilenm+".csv")
 	c.Header("Access-Control-Expose-Headers", "Content-Disposition")
 
 	// Streaming file CSV ke client
@@ -245,7 +275,7 @@ func FncApndixProvncDownld(c *gin.Context) {
 	defer writer.Flush()
 	writer.Write([]string{
 		"routfl",
-		"provnc",
+		"chrter",
 		"updtby",
 	})
 	writer.Flush()
@@ -267,13 +297,17 @@ func FncApndixProvncDownld(c *gin.Context) {
 	mxflus := 5000
 	countr := 0
 	for rawDtaset.Next(contxt) {
-		var slcDtaset mdlApndix.MdlApndixProvncDtbase
+		var slcDtaset mdlApndix.MdlApndixChrterDtbase
 		rawDtaset.Decode(&slcDtaset)
+		strDatefl := FncApndixFormatDateot(int(slcDtaset.Datefl))
 
 		// Write to CSV
 		writer.Write([]string{
+			slcDtaset.Prmkey,
+			slcDtaset.Airlfl,
+			slcDtaset.Flnbfl,
+			strDatefl,
 			slcDtaset.Routfl,
-			slcDtaset.Provnc,
 			slcDtaset.Updtby,
 		})
 

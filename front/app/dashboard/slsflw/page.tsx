@@ -12,7 +12,6 @@ import UixSlsflwActlogMainpg from "./ui/actlog/main";
 import { MdlSlsflwActlogDtbase, MdlSlsflwGlobalSrcprm } from "./model/params";
 import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
 import UixSlsflwPsgsmrMainpg from "./ui/psgsmr/main";
-import UixSlsflwSmmry1Mainpg from "./ui/smmry1/main";
 import { ApiAllusrCookieGetdta } from "../allusr/api/cookie";
 import { ApiAllusrStatusPrcess } from "../allusr/api/status";
 
@@ -37,7 +36,11 @@ export default async function Page(props: { searchParams: Promise<MdlSlsflwGloba
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixSlsflwActlogMainpg actlog={actlog} />
+            <UixSlsflwActlogMainpg
+              actlog={actlog}
+              status={status}
+              update={prmPsgdtl.update_global}
+            />
           </Suspense>
         </div>
       </div>

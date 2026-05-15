@@ -56,6 +56,9 @@ func main() {
 	r.POST("/apndix/fljoin/getall", fncApndix.FncApndixFljoinGetall)
 	r.POST("/apndix/fljoin/upload", fncApndix.FncApndixFljoinUpload)
 	r.POST("/apndix/fljoin/downld", fncApndix.FncApndixFljoinDownld)
+	r.POST("/apndix/chrter/update", fncApndix.FncApndixChrterUpdate)
+	r.POST("/apndix/chrter/getall", fncApndix.FncApndixChrterGetall)
+	r.POST("/apndix/chrter/downld", fncApndix.FncApndixChrterDownld)
 	r.POST("/apndix/currcv/getall", fncApndix.FncApndixCurrcvGetall)
 	r.POST("/apndix/currcv/downld", fncApndix.FncApndixCurrcvDownld)
 

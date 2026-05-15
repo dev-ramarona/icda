@@ -66,7 +66,7 @@ export default function UixGlobalWraperSearch({
         )}
 
         {/* upload button */}
-        {lblupl && (
+        {lblupl && downld && (
           <form
             className="flexctr relative h-20 w-full flex-col gap-1.5 rounded-md ring-2 ring-gray-200 md:h-10 md:w-59 md:flex-row"
             method="POST"

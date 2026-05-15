@@ -15,6 +15,7 @@ import { ApiGlobalActlogDtbase } from "../global/api/dtbase";
 import UixApndixMilegeMainpg from "./ui/milege/main";
 import UixApndixCurrcvMainpg from "./ui/currcv/main";
 import UixApndixFljoinMainpg from "./ui/fljoin/main";
+import UixApndixChrtercMainpg from "./ui/chrter/main";
 
 export default async function Page(props: { searchParams: Promise<MdlApndixSearchQueryx> }) {
   const cookie = await ApiAllusrCookieGetdta();
@@ -35,6 +36,9 @@ export default async function Page(props: { searchParams: Promise<MdlApndixSearc
     ),
     fllist: (
       <UixApndixFllistMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} actdte={actdte} />
+    ),
+    chrter: (
+      <UixApndixChrtercMainpg cookie={cookie} qryprm={qryprm} acpedt={acpedt} actdte={actdte} />
     ),
     // frbase: <FrbaseTable />,
     // frtaxs: <FrtaxsTable />,

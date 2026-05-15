@@ -14,6 +14,7 @@ export interface MdlApndixSearchQueryx {
   flnbfl_apndix: string;
   routfl_apndix: string;
   clssfl_apndix: string;
+  provnc_apndix: string;
   pagenw_apndix: number;
   limitp_apndix: number;
 }
@@ -36,6 +37,16 @@ export interface MdlApndixFlhourFrntnd {
   updtby: string;
 }
 
+// Chrter
+export interface MdlApndixChrterFrntnd {
+  prmkey: string;
+  airlfl: string;
+  flnbfl: string;
+  datefl: string;
+  routfl: string;
+  updtby: string;
+}
+
 // Provnc
 export interface MdlApndixProvncFrntnd {
   prmkey: string;
@@ -44,7 +55,7 @@ export interface MdlApndixProvncFrntnd {
   updtby: string;
 }
 
-// Provnc
+// Frbase
 export interface MdlApndixFrbaseFrntnd {
   prmkey: string;
   scdkey: string;

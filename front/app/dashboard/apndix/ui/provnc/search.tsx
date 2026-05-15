@@ -16,6 +16,7 @@ export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSea
     flnbfl_apndix: qryprm.flnbfl_apndix || "",
     routfl_apndix: qryprm.routfl_apndix || "",
     clssfl_apndix: qryprm.clssfl_apndix || "",
+    provnc_apndix: qryprm.provnc_apndix || "",
     pagenw_apndix: Number(qryprm.pagenw_apndix) || 1,
     limitp_apndix: Number(qryprm.limitp_apndix) || 15,
   });
@@ -33,6 +34,7 @@ export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSea
       flnbfl_apndix: qryprm.flnbfl_apndix || "",
       routfl_apndix: qryprm.routfl_apndix || "",
       clssfl_apndix: qryprm.clssfl_apndix || "",
+      provnc_apndix: qryprm.provnc_apndix || "",
       pagenw_apndix: Number(qryprm.pagenw_apndix) || 1,
       limitp_apndix: Number(qryprm.limitp_apndix) || 15,
     });
@@ -91,6 +93,17 @@ export default function UixApndixProvncSearch({ qryprm }: { qryprm: MdlApndixSea
           queryx={"routfl_apndix"}
           params={params.routfl_apndix}
           plchdr="Route"
+          repprm={repprm}
+          labelx=""
+        />
+      </div>
+      <div className="flexctr relative h-11 w-1/2 md:w-28">
+        <UixGlobalInputxFormdt
+          typipt={"text"}
+          length={null}
+          queryx={"provnc_apndix"}
+          params={params.provnc_apndix}
+          plchdr="Region"
           repprm={repprm}
           labelx=""
         />

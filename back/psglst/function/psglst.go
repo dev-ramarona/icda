@@ -360,8 +360,13 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				if len(fnlRoutac) >= len(strings.Join(slcRoutac, "-")) {
 					continue
 				}
-				fnlRoutac = strings.Join(slcRoutac, "-")
-				psglst.Routac = strings.Join(slcRoutac, "-")
+
+				if len(slcRoutac) > 1 {
+					fnlRoutac = strings.Join(slcRoutac, "-")
+					psglst.Routac = strings.Join(slcRoutac, "-")
+				} else {
+					psglst.Routac = psglst.Depart + "-" + psglst.Arrivl
+				}
 			}
 		}
 
@@ -434,6 +439,9 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					strRoutfr := strings.Join(slcRoutfr, "-")
 					if len(strRoutfr) > len(fnlRoutac) {
 						psglst.Routac = strRoutfr
+						if psglst.Prmkey == "260514IU600CGK26D" {
+							fmt.Println(strRoutfr)
+						}
 						fnlRoutac = strRoutfr
 					}
 				}

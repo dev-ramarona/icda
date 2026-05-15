@@ -10,6 +10,7 @@ export function FncApndixSearchQueryx(params: MdlApndixSearchQueryx, actdte: str
     flnbfl_apndix: params.flnbfl_apndix || "",
     routfl_apndix: params.routfl_apndix || "",
     clssfl_apndix: params.clssfl_apndix || "",
+    provnc_apndix: params.provnc_apndix || "",
     pagenw_apndix: Number(params.pagenw_apndix) || 1,
     limitp_apndix: Number(params.limitp_apndix) || 15,
   } as MdlApndixSearchQueryx;

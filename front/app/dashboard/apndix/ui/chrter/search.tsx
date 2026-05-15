@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
+import { FncGlobalFormatDfault } from "../../../global/function/format";
 import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import { MdlApndixSearchQueryx } from "../../model/parmas";
 import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
-import { FncGlobalFormatDfault } from "../../../global/function/format";
 
-export default function UixApndixFllistSearch({
+export default function UixApndixChrterSearch({
   qryprm,
   datefl,
 }: {
@@ -50,7 +50,7 @@ export default function UixApndixFllistSearch({
   const timerf = useRef<NodeJS.Timeout | null>(null);
   const rplprm = FncGlobalQuerysEdlink();
   const repprm = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const namefl = e.currentTarget.name;
+    const namefl = e.currentTarget.id;
     let valuef: string | number = e.currentTarget.value;
     valuef = FncGlobalFormatDfault(namefl, valuef);
     paramsSet({ ...params, [namefl]: valuef });
@@ -78,11 +78,12 @@ export default function UixApndixFllistSearch({
       [String(Math.random()), "", "", "", "", "", "", ""],
     );
   };
+
   return (
     <UixGlobalWraperSearch
       chnged={chnged}
       downld={{
-        lnk: `/apndix/fllist/downld`,
+        lnk: `/apndix/chrter/downld`,
         prm: params,
       }}
       upload={null}

@@ -109,10 +109,14 @@ export default function UixSlsflwDetailSearch({
     <UixGlobalWraperSearch
       chnged={chnged}
       lblupl={fmtdef ? "Upload error" : ""}
-      downld={{
-        lnk: `/psglst/psgdtl/downld`,
-        prm: params,
-      }}
+      downld={
+        params.keywrd_psgdtl == "REG ALL"
+          ? {
+              lnk: `/psglst/psgdtl/downld`,
+              prm: params,
+            }
+          : null
+      }
       upload={{
         lnk: `/psglst/psgdtl/upload`,
         prm: filedt,
@@ -135,7 +139,7 @@ export default function UixSlsflwDetailSearch({
       <div className="flexctr relative h-10 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
           typipt={"select"}
-          length={["SLSERR", "ALL"]}
+          length={["SLSERR"]}
           queryx={"format_psgdtl"}
           params={params.format_psgdtl}
           plchdr="Format data"

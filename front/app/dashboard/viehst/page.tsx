@@ -13,9 +13,6 @@ import { FncViehstPsgdtlSrcprm } from "./function/params";
 export default async function Page(props: { searchParams: Promise<MdlViehstGlobalSrcprm> }) {
   const cookie = await ApiAllusrCookieGetdta();
   const qryprm = await props.searchParams;
-  // const actobj = await ApiGlobalActlogDtbase("viehst");
-  // const actlog: MdlGlobalActlogDtbase[] = actobj.actlog;
-  // const actdte: string[] = actobj.datefl;
   const status = await ApiAllusrStatusPrcess();
   const dfault = "MNFERR";
   const prmGlobal = FncViehstPsgdtlSrcprm(qryprm);
