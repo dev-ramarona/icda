@@ -533,13 +533,13 @@ func FncPsglstPrcessWorker(
 		}
 
 		// Get passangger list
-		rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, slcFllist, mapClslvl)
+		rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, slcFllist, mapClslvl, *errPrmkey)
 		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 			Erpart: "psglst", Ersrce: "dtbase", Erdvsn: "MNFEST",
 			Dateup: int32(intDatenw), Timeup: int64(intTimenw),
-			Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
+			Datefl: int32(intDatefl), Airlfl: dbsAirlfl, Flstat: slcFllist.Flstat,
 			Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
-		}, err != nil, sycErrlog, errErignr, errPrmkey)
+		}, err != nil || (len(rspPsglst) == 0 && slcFllist.Flstat == "PDC"), sycErrlog, errErignr, errPrmkey)
 		tmpPsgdtl, tmpPsgsmr, tmpFrbase, tmpFrtaxs, tmpFlhour, tmpMilege, tmpProvnc, tmpDstrct :=
 			FncPsglstPsglstPrcess(rspPsglst, slcFllist,
 				nowObjtkn, objParams,

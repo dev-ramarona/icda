@@ -6,6 +6,7 @@ import (
 	mdlPsglst "back/psglst/model"
 	mdlSbrapi "back/sbrapi/model"
 	"encoding/xml"
+	"fmt"
 	"regexp"
 	"slices"
 	"strconv"
@@ -19,7 +20,15 @@ func FncSbrapiPsglstMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	mapcur map[string]mdlApndix.MdlApndixCurrcvDtbase,
 	fllist mdlApndix.MdlApndixFllistDtbase,
 	clslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
+	errkey string,
 ) ([]mdlPsglst.MdlPsglstPsgdtlDtbase, error) {
+	dpcode := []string{"CM", "BT", "ET", "OB", "IB",
+		"ON", "SS", "IR", "IFET", "XT", "DOCS", "XAE"}
+	errnow := fmt.Sprintf("psglst%v%v%v%v", apndix.Airlfl, apndix.Flnbfl, apndix.Routfl, apndix.Datefl)
+	if errnow == errkey {
+		dpcode = []string{"CM", "BT", "ET", "OB", "IB",
+			"ON", "SS", "IR", "XT", "DOCS", "XAE"}
+	}
 
 	// Isi struktur data
 	strDatefl := strconv.Itoa(int(apndix.Datefl))
@@ -54,9 +63,8 @@ func FncSbrapiPsglstMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 					Origin:        apndix.Depart,
 				},
 				DisplayCodeRequest: mdlSbrapi.MdlSbrapiPsglstReqdcr{
-					Condition: "OR",
-					DisplayCodes: []string{"CM", "BT", "ET", "OB", "IB",
-						"ON", "SS", "IR", "IFET", "XT", "DOCS", "XAE"},
+					Condition:    "OR",
+					DisplayCodes: dpcode,
 				},
 			},
 		},
