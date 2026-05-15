@@ -22,6 +22,7 @@ export default function UixApndixFlhourSearch({
     flnbfl_apndix: qryprm.flnbfl_apndix || "",
     routfl_apndix: qryprm.routfl_apndix || "",
     clssfl_apndix: qryprm.clssfl_apndix || "",
+    provnc_apndix: qryprm.provnc_apndix || "",
     pagenw_apndix: Number(qryprm.pagenw_apndix) || 1,
     limitp_apndix: Number(qryprm.limitp_apndix) || 15,
   });
@@ -39,6 +40,7 @@ export default function UixApndixFlhourSearch({
       flnbfl_apndix: qryprm.flnbfl_apndix || "",
       routfl_apndix: qryprm.routfl_apndix || "",
       clssfl_apndix: qryprm.clssfl_apndix || "",
+      provnc_apndix: qryprm.provnc_apndix || "",
       pagenw_apndix: Number(qryprm.pagenw_apndix) || 1,
       limitp_apndix: Number(qryprm.limitp_apndix) || 15,
     });
