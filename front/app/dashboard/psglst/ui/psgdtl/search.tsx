@@ -30,6 +30,7 @@ export default function UixPsglstDetailSearch({
     isitir_psgdtl: prmPsgdtl.isitir_psgdtl || "",
     nclear_psgdtl: prmPsgdtl.nclear_psgdtl || "",
     format_psgdtl: prmPsgdtl.format_psgdtl || "",
+    keywrd_psgdtl: prmPsgdtl.keywrd_psgdtl || "REG ALL",
     pagenw_psgdtl: prmPsgdtl.pagenw_psgdtl || 1,
     limitp_psgdtl: prmPsgdtl.limitp_psgdtl || 15,
   });
@@ -53,6 +54,7 @@ export default function UixPsglstDetailSearch({
       isitir_psgdtl: prmPsgdtl.isitir_psgdtl || "",
       nclear_psgdtl: prmPsgdtl.nclear_psgdtl || "",
       format_psgdtl: prmPsgdtl.format_psgdtl || "",
+      keywrd_psgdtl: prmPsgdtl.keywrd_psgdtl || "REG ALL",
       pagenw_psgdtl: prmPsgdtl.pagenw_psgdtl || 1,
       limitp_psgdtl: prmPsgdtl.limitp_psgdtl || 15,
     });
@@ -111,10 +113,14 @@ export default function UixPsglstDetailSearch({
     <UixGlobalWraperSearch
       chnged={chnged}
       lblupl={fmtdef ? "Upload error" : ""}
-      downld={{
-        lnk: `/psglst/psgdtl/downld`,
-        prm: params,
-      }}
+      downld={
+        params.keywrd_psgdtl == "REG ALL"
+          ? {
+              lnk: `/psglst/psgdtl/downld`,
+              prm: params,
+            }
+          : null
+      }
       upload={{
         lnk: `/psglst/psgdtl/upload`,
         prm: filedt,

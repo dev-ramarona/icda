@@ -14,6 +14,7 @@ export interface MdlPsglstGlobalSrcprm {
   isitir_psgdtl: string;
   nclear_psgdtl: string;
   format_psgdtl: string;
+  keywrd_psgdtl: string;
   pagenw_psgdtl: number;
   limitp_psgdtl: number;
   pagenw_errlog: number;
@@ -35,6 +36,7 @@ export interface MdlPsglstPsgdtlSrcprm {
   isitir_psgdtl: string;
   nclear_psgdtl: string;
   format_psgdtl: string;
+  keywrd_psgdtl: string;
   pagenw_psgdtl: number;
   limitp_psgdtl: number;
 }
