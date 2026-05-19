@@ -1,7 +1,7 @@
 import { MdlPsglstErrlogSrcprm } from "../model/params";
 
 // Function get jeddah database Errlog
-export async function ApiPsglstErrlogDtbase(prmErrlog: MdlPsglstErrlogSrcprm) {
+export async function ApiPsglstErrlogDtbase(prmErrlog: MdlPsglstErrlogSrcprm, pagenw: number) {
   // await new Promise((r) => setTimeout(r, 5000));
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/psglst/errlog/getall`, {
@@ -12,9 +12,7 @@ export async function ApiPsglstErrlogDtbase(prmErrlog: MdlPsglstErrlogSrcprm) {
       },
       next: {
         revalidate: 30,
-        tags: [
-          `errlog-${prmErrlog.pagenw_errlog}-${prmErrlog.erdvsn_errlog}-${prmErrlog.update_global}`,
-        ],
+        tags: [`errlog-${pagenw}-${prmErrlog.erdvsn_errlog}-${prmErrlog.update_global}`],
       },
     });
     if (!res.ok) throw new Error("Failed fetch errlog");

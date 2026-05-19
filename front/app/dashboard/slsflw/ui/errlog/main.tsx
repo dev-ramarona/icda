@@ -21,7 +21,7 @@ export default async function UixPsglstErrlogMainpg({
   pagest: string;
   pagenb: number;
 }) {
-  const rslobj = await ApiPsglstErrlogDtbase({ ...prmErrlog, erdvsn_errlog: viewdt });
+  const rslobj = await ApiPsglstErrlogDtbase({ ...prmErrlog, erdvsn_errlog: viewdt }, pagenb);
   const errlog: MdlPsglstErrlogDtbase[] = rslobj.arrdta;
   const totdta: number = rslobj.totdta;
   return (
