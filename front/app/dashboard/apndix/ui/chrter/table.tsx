@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { useEffect, useRef, useState } from "react";
+import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import { MdlApndixAcpedtDtbase, MdlApndixChrterFrntnd } from "../../model/parmas";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import {
@@ -15,17 +15,22 @@ import UixGlobalTbodyxTablex from "../../../global/ui/tablex/tbodyx";
 import UixGlobalTfootxTablex from "../../../global/ui/tablex/tfootx";
 import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
 import { MdlGlobalConfrmAction } from "../../../global/model/params";
+import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
 
 export default function UixPsglstChrterTablex({
   arrdta,
   pagedb,
   acpedt,
   cookie,
+  status,
+  update,
 }: {
   arrdta: MdlApndixChrterFrntnd[];
   pagedb: string;
   acpedt: MdlApndixAcpedtDtbase[];
   cookie: mdlAllusrCookieObjson;
+  status: MdlAllusrStatusPrcess;
+  update: string;
 }) {
   // Dinamis
   const exclde = ["prmkey", "hstory", "updtby"];
@@ -98,6 +103,25 @@ export default function UixPsglstChrterTablex({
     }, 1000);
   };
 
+  // Monitor process status
+  const [statfn, statfnSet] = useState(100);
+  useEffect(() => {
+    if (status.sbrapi == 0) statfnSet(0);
+    const gtstat = async () => {
+      if (status.sbrapi != 0) {
+        const intrvl = setInterval(async () => {
+          const instat = await ApiAllusrStatusPrcess();
+          if (instat.sbrapi == 0) {
+            statfnSet(0);
+            rplprm(["update_global"], String(Math.random()));
+            clearInterval(intrvl);
+          } else statfnSet(instat.sbrapi);
+        }, 5000);
+      }
+    };
+    gtstat();
+  }, [update]);
+
   return (
     <>
       <UixGlobalConfrmAction
@@ -136,7 +160,7 @@ export default function UixPsglstChrterTablex({
             cxlupd={cxlupd}
           />
           <UixGlobalTfootxTablex
-            actadd={actedt}
+            actadd={statfn == 0 ? actedt : null}
             objdef={rawobj}
             objdta={objdta}
             objset={objdtaSet}

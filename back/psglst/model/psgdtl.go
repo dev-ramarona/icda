@@ -17,7 +17,8 @@ type MdlPsglstParamsInputx struct {
 	Keywrd_psgdtl string `json:"keywrd_psgdtl,omitempty" bson:"keywrd_psgdtl,omitempty"`
 	Pagenw_psgdtl int    `json:"pagenw_psgdtl,omitempty" bson:"pagenw_psgdtl,omitempty"`
 	Limitp_psgdtl int    `json:"limitp_psgdtl,omitempty" bson:"limitp_psgdtl,omitempty"`
-	Pagenw_errlog int    `json:"pagenw_errlog,omitempty" bson:"pagenw_errlog,omitempty"`
+	Pagenw_mnfest int    `json:"pagenw_mnfest,omitempty" bson:"pagenw_mnfest,omitempty"`
+	Pagenw_slsrpt int    `json:"pagenw_slsrpt,omitempty" bson:"pagenw_slsrpt,omitempty"`
 	Limitp_errlog int    `json:"limitp_errlog,omitempty" bson:"limitp_errlog,omitempty"`
 	Erdvsn_errlog string `json:"erdvsn_errlog,omitempty" bson:"erdvsn_errlog,omitempty"`
 	Mnthfl_psgsmr string `json:"mnthfl_psgsmr,omitempty" bson:"mnthfl_psgsmr,omitempty"`

@@ -8,28 +8,33 @@ export default async function UixPsglstErrlogMainpg({
   prmErrlog,
   status,
   cookie,
+  viewdt,
+  showdt,
+  pagest,
+  pagenb,
 }: {
   prmErrlog: MdlPsglstErrlogSrcprm;
   status: MdlAllusrStatusPrcess;
   cookie: mdlAllusrCookieObjson;
+  viewdt: string;
+  showdt: boolean;
+  pagest: string;
+  pagenb: number;
 }) {
-  const rslobj = await ApiPsglstErrlogDtbase({
-    ...prmErrlog,
-    erdvsn_errlog: prmErrlog.erdvsn_errlog == "" ? "SLSRPT" : prmErrlog.erdvsn_errlog,
-  });
+  const rslobj = await ApiPsglstErrlogDtbase({ ...prmErrlog, erdvsn_errlog: viewdt });
   const errlog: MdlPsglstErrlogDtbase[] = rslobj.arrdta;
   const totdta: number = rslobj.totdta;
   return (
     <>
       {errlog.length > 0 ? (
         <>
-          <UixPsglstErrlogTablex errlog={errlog} update={prmErrlog.update_global} status={status} />
-          <UixGlobalPagntnMainpg
-            pgview={5}
-            pgenbr={prmErrlog.pagenw_errlog}
-            pgestr="pagenw_errlog"
-            totdta={totdta}
+          <UixPsglstErrlogTablex
+            errlog={errlog}
+            update={prmErrlog.update_global}
+            status={status}
+            showdt={showdt}
           />
+          <UixGlobalPagntnMainpg pgview={5} pgenbr={pagenb} pgestr={pagest} totdta={totdta} />
         </>
       ) : (
         <div className="flexctr h-fit w-full text-base font-semibold text-sky-800">

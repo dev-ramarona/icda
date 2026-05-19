@@ -194,36 +194,42 @@ func FncApndixChrterUpdate(c *gin.Context) {
 
 	// Push updated data
 	inputx.Prmkey = fmt.Sprintf("%v%v%v%v", inputx.Airlfl, inputx.Flnbfl, inputx.Routfl, inputx.Datefl)
-	rsupdt := FncApndixBulkdbSingle([]mongo.WriteModel{
+	rslChrter := FncApndixBulkdbSingle([]mongo.WriteModel{
 		mongo.NewUpdateOneModel().
 			SetFilter(bson.M{"prmkey": inputx.Prmkey}).
 			SetUpdate(bson.M{"$set": inputx}).
 			SetUpsert(true)}, "apndix_chrter")
-	if rsupdt != nil {
-		panic("Error Insert/Update to DB:" + rsupdt.Error())
+	if rslChrter != nil {
+		panic("Error Insert/Update to DB:" + rslChrter.Error())
 	}
 
 	// Update psgdtl
-	mgoPsgdtl := []mongo.WriteModel{mongo.NewUpdateManyModel().
-		SetFilter(bson.M{
-			"airlfl": inputx.Airlfl,
-			"flnbfl": inputx.Flnbfl,
-			"datefl": inputx.Datefl,
-			"routfl": inputx.Routfl}).
-		SetUpdate(bson.M{"$set": bson.M{"provnc": "REG Charter"}})}
-	FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-		"psglst_psgdtl": &mgoPsgdtl}, 0)
+	rplPsgdtl := bson.M{"provnc": "REG Charter", "isitct": "CT"}
+	rslPsgdtl := FncApndixBulkdbSingle([]mongo.WriteModel{
+		mongo.NewUpdateManyModel().
+			SetFilter(bson.M{
+				"airlfl": inputx.Airlfl,
+				"flnbfl": inputx.Flnbfl,
+				"datefl": inputx.Datefl,
+				"routfl": inputx.Routfl}).
+			SetUpdate(bson.M{"$set": rplPsgdtl})}, "psglst_psgdtl")
+	if rslPsgdtl != nil {
+		panic("Error Insert/Update to DB:" + rslPsgdtl.Error())
+	}
 
 	// Update psgsmr
-	mgoPsgsmr := []mongo.WriteModel{mongo.NewUpdateManyModel().
-		SetFilter(bson.M{
-			"airlfl": inputx.Airlfl,
-			"flnbfl": inputx.Flnbfl,
-			"datefl": inputx.Datefl,
-			"routfl": inputx.Routfl}).
-		SetUpdate(bson.M{"$set": bson.M{"provnc": "REG Charter"}})}
-	FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
-		"psglst_psgdtl": &mgoPsgsmr}, 0)
+	rplPsgsmr := bson.M{"provnc": "REG Charter"}
+	rslPsgsmr := FncApndixBulkdbSingle([]mongo.WriteModel{
+		mongo.NewUpdateManyModel().
+			SetFilter(bson.M{
+				"airlfl": inputx.Airlfl,
+				"flnbfl": inputx.Flnbfl,
+				"datefl": inputx.Datefl,
+				"routfl": inputx.Routfl}).
+			SetUpdate(bson.M{"$set": rplPsgsmr})}, "psglst_psgsmr")
+	if rslPsgsmr != nil {
+		panic("Error Insert/Update to DB:" + rslPsgsmr.Error())
+	}
 
 	// Send token to frontend
 	c.JSON(200, "success")

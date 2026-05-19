@@ -4,7 +4,7 @@ import {
   MdlApndixChrterFrntnd,
   MdlApndixSearchQueryx,
 } from "../../model/parmas";
-import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
 import UixPsglstChrtercTablex from "./table";
 import UixApndixChrtercSearch from "./search";
@@ -14,11 +14,15 @@ export default async function UixApndixChrtercMainpg({
   cookie,
   acpedt,
   actdte,
+  status,
+  update,
 }: {
   qryprm: MdlApndixSearchQueryx;
   cookie: mdlAllusrCookieObjson;
   acpedt: MdlApndixAcpedtDtbase[];
   actdte: string[];
+  status: MdlAllusrStatusPrcess;
+  update: string;
 }) {
   const rslobj = await ApiApndixGetallDtbase(qryprm);
   const arrdta: MdlApndixChrterFrntnd[] = rslobj.arrdta;
@@ -40,6 +44,8 @@ export default async function UixApndixChrtercMainpg({
         arrdta={arrdta}
         pagedb={qryprm.pagedb_apndix}
         cookie={cookie}
+        status={status}
+        update={update}
       />
       <UixGlobalPagntnMainpg
         pgview={5}

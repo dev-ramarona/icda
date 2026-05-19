@@ -9,6 +9,8 @@ import { FncGlobalFormatDatefm } from "../../../global/function/format";
 import { UixGlobalIconvcRfresh } from "../../../global/ui/server/iconvc";
 import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
+import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
+import { MdlGlobalConfrmAction } from "../../../global/model/params";
 
 export default function UixPsglstPrcessManual({
   cookie,
@@ -58,22 +60,41 @@ export default function UixPsglstPrcessManual({
     });
   };
 
+  // Confirm process
+  const [confrm, confrmSet] = useState<boolean>(false);
+  const [confdt, confdtSet] = useState<MdlGlobalConfrmAction[]>([]);
+  const prcess = async (datefl: number) => {
+    confrmSet(true);
+    if (cookie.keywrd && cookie.keywrd.includes("psglst")) {
+      let nowWorker = 1;
+      if (status.sbrapi == 0 && params.flnbfl == "") {
+        nowWorker = 3;
+        if (params.depart == "") {
+          nowWorker = 5;
+          if (params.airlfl == "") nowWorker = 8;
+        }
+      }
+      const confst = [];
+      paramsSet({ ...params, datefl: datefl, worker: nowWorker });
+      Object.entries(params).map(([k, v]) => {
+        if (v != "" && v != 0) {
+          if (k == "datefl") {
+            confst.push({ paramx: k, valuex: FncGlobalFormatDatefm(String(datefl)) });
+          } else confst.push({ paramx: k, valuex: v });
+        }
+      });
+      confdtSet(confst);
+    }
+  };
+
   // Process function
-  const prcess = async (params: MdlPsglstErrlogDtbase) => {
+  const goupdt = async () => {
+    confrmSet(false);
     rplprm(["update_global"], String(Math.random()));
     statfnSet("Wait");
     const nowprm = { ...params };
     if ((cookie.keywrd && cookie.keywrd.includes("psglst")) || nowprm.worker == 1)
       if (status.sbrapi == 0) {
-        if (params.flnbfl == "") {
-          nowprm.worker = 3;
-          if (params.depart == "") {
-            nowprm.worker = 5;
-            if (params.airlfl == "") nowprm.worker = 8;
-          }
-        }
-
-        // Set interval to check status
         const rsp = ApiPsglstPrcessManual(nowprm);
         setTimeout(() => {
           rplprm(["update_global"], String(Math.random()));
@@ -103,8 +124,17 @@ export default function UixPsglstPrcessManual({
 
   return (
     <div className="flexctr relative h-24 min-h-fit w-full py-3">
+      <UixGlobalConfrmAction
+        confrm={confrm}
+        confdt={confdt}
+        action={"Process"}
+        goupdt={goupdt}
+        confrmSet={confrmSet}
+      />
       <div
-        className={`${statfn != "" ? "h-10 w-16 translate-y-0" : "h-0 w-0 -translate-y-10 opacity-0"} flexctr absolute z-10 rounded-xl bg-white px-5 py-2 ring-2 ring-sky-300 duration-300`}
+        className={`flexctr absolute z-10 rounded-xl bg-white px-5 py-2 ring-2 ring-sky-300 duration-300 ${
+          statfn != "" ? "h-10 w-16 translate-y-0" : "h-0 w-0 -translate-y-10 opacity-0"
+        }`}
       >
         <div>Wait</div>
         <div className="animate-spin">
@@ -112,7 +142,7 @@ export default function UixPsglstPrcessManual({
         </div>
       </div>
       <div
-        className={`afull flexstr flex-wrap gap-y-3 ${statfn != "" ? "animate-pulse select-none" : ""} duration-300`}
+        className={`afull flexstr flex-wrap gap-y-3 duration-300 ${statfn != "" ? "animate-pulse select-none" : ""}`}
       >
         <div className="flexctr relative h-10 w-full md:w-28">
           <UixGlobalInputxFormdt
@@ -155,7 +185,7 @@ export default function UixPsglstPrcessManual({
           <div className="flexctr relative h-12 w-full md:w-40" key={idx}>
             <button
               className={`afull flexctr ${nwhour > 11 && idx == hminfr.length - 1 ? "btnoff pointer-events-none select-none" : "btnsbm"} ${statfn.includes("admin") ? "shkeit btncxl" : ""}`}
-              onClick={() => prcess({ ...params, datefl: val })}
+              onClick={() => prcess(val)}
             >
               {statfn == "" ? `Process Manual ${FncGlobalFormatDatefm(String(val))}` : statfn}
             </button>

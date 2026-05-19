@@ -87,10 +87,14 @@ func FncPsglstErrlogGetall(c *gin.Context) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		pagenw := max(inputx.Pagenw_mnfest, 1) - 1
+		if inputx.Erdvsn_errlog == "SLSRPT" {
+			pagenw = max(inputx.Pagenw_slsrpt, 1) - 1
+		}
 		pipeln := mongo.Pipeline{
 			mtchfn,
 			sortdt,
-			bson.D{{Key: "$skip", Value: (max(inputx.Pagenw_errlog, 1) - 1) * inputx.Limitp_errlog}},
+			bson.D{{Key: "$skip", Value: pagenw * inputx.Limitp_errlog}},
 			bson.D{{Key: "$limit", Value: inputx.Limitp_errlog}},
 		}
 

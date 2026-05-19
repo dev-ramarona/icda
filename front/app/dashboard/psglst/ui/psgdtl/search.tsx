@@ -5,15 +5,21 @@ import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { FncGlobalFormatDfault } from "../../../global/function/format";
 import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
+import { MdlAllusrStatusPrcess } from "../../../allusr/model/params";
+import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
 
 export default function UixPsglstDetailSearch({
   prmPsgdtl,
   datefl,
   fmtdef,
+  status,
+  update,
 }: {
   prmPsgdtl: MdlPsglstPsgdtlSrcprm;
   datefl: string[];
   fmtdef: boolean;
+  status: MdlAllusrStatusPrcess;
+  update: string;
 }) {
   const [params, paramsSet] = useState<MdlPsglstPsgdtlSrcprm>({
     update_global: prmPsgdtl.update_global || "",
@@ -109,6 +115,26 @@ export default function UixPsglstDetailSearch({
       filenmSet(e.target.files[0].name);
     } else filenmSet("");
   };
+
+  // Monitor process status
+  const [statfn, statfnSet] = useState(100);
+  useEffect(() => {
+    if (status.sbrapi == 0) statfnSet(0);
+    const gtstat = async () => {
+      if (status.sbrapi != 0) {
+        const intrvl = setInterval(async () => {
+          const instat = await ApiAllusrStatusPrcess();
+          if (instat.sbrapi == 0) {
+            statfnSet(0);
+            rplprm(["update_global"], String(Math.random()));
+            clearInterval(intrvl);
+          } else statfnSet(instat.sbrapi);
+        }, 5000);
+      }
+    };
+    gtstat();
+  }, [update]);
+
   return (
     <UixGlobalWraperSearch
       chnged={chnged}
@@ -121,10 +147,14 @@ export default function UixPsglstDetailSearch({
             }
           : null
       }
-      upload={{
-        lnk: `/psglst/psgdtl/upload`,
-        prm: filedt,
-      }}
+      upload={
+        statfn == 0
+          ? {
+              lnk: `/psglst/psgdtl/upload`,
+              prm: filedt,
+            }
+          : null
+      }
       resetx={resetx}
       updtfl={filefn}
       namefl={filenm}

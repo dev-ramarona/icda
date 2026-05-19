@@ -1,4 +1,4 @@
-import { mdlAllusrCookieObjson } from "../../../allusr/model/params";
+import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 import { ApiApndixAcpedtDtbase } from "../../../apndix/api/dtbase";
 import { MdlApndixAcpedtDtbase } from "../../../apndix/model/parmas";
 import UixGlobalPagntnMainpg from "../../../global/ui/action/pagntn";
@@ -12,11 +12,15 @@ export default async function UixPsglstDetailMainpg({
   datefl,
   cookie,
   fmtdef,
+  status,
+  update,
 }: {
   prmPsgdtl: MdlPsglstPsgdtlSrcprm;
   datefl: string[];
   cookie: mdlAllusrCookieObjson;
   fmtdef: boolean;
+  status: MdlAllusrStatusPrcess;
+  update: string;
 }) {
   const psgdtl = await ApiPsglstPsgdtlGetall({
     ...prmPsgdtl,
@@ -27,7 +31,13 @@ export default async function UixPsglstDetailMainpg({
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("mnfest");
   return (
     <>
-      <UixPsglstDetailSearch prmPsgdtl={prmPsgdtl} datefl={datefl} fmtdef={fmtdef} />
+      <UixPsglstDetailSearch
+        prmPsgdtl={prmPsgdtl}
+        datefl={datefl}
+        fmtdef={fmtdef}
+        status={status}
+        update={update}
+      />
       <UixPsglstDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} fmtdef={fmtdef} />
       <UixGlobalPagntnMainpg
         pgview={15}

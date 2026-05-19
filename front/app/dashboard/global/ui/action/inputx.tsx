@@ -53,7 +53,7 @@ export default function UixGlobalInputxFormdt({
             onChange={(e) => (repprm ? repprm(e) : "")}
           />
           <label
-            className={`afull flex cursor-pointer items-center rounded-md bg-white p-3 ring-2 ring-gray-200 ${
+            className={`afull flex cursor-pointer items-center rounded-md ${queryx ? "bg-white" : "bg-gray-200"} p-3 ring-2 ring-gray-200 ${
               params != ""
                 ? "overflow-hidden text-left text-[0.5rem] whitespace-nowrap text-slate-700"
                 : "text-white peer-focus:text-slate-500"
@@ -71,7 +71,11 @@ export default function UixGlobalInputxFormdt({
             htmlFor={queryx}
           >
             <div className="flexctr">
-              <div className="cursor-pointer rounded-md bg-white px-1">{plchdr}</div>
+              <div
+                className={`cursor-pointer rounded-md ${queryx ? "bg-white" : "bg-gray-200"} px-1`}
+              >
+                {plchdr}
+              </div>
             </div>
           </label>
         </>

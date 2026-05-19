@@ -76,7 +76,7 @@ export default function UixGlobalWraperSearch({
             <input
               type="hidden"
               name="link"
-              value={`${process.env.NEXT_PUBLIC_URL_SERVER}${upload.lnk}`}
+              value={`${process.env.NEXT_PUBLIC_URL_SERVER}${upload ? upload.lnk : ""}`}
             />
             <input type="hidden" name="data" value={JSON.stringify(downld.prm)} />
             <div className="flexctr h-1/2 w-full px-1.5 md:h-full md:w-2/3">
@@ -85,14 +85,17 @@ export default function UixGlobalWraperSearch({
                 length={13}
                 params={namefl}
                 plchdr={lblupl}
-                queryx={upload.lnk}
+                queryx={upload ? upload.lnk : ""}
                 repprm={updtfl}
                 typipt="file"
               />
             </div>
             <div className="h-1/2 w-full p-1 md:h-full md:w-1/3">
-              <button className="btnsbm flexctr afull" type="submit">
-                Update
+              <button
+                className={`${upload ? "btnsbm" : "btnoff pointer-events-none"} flexctr afull`}
+                type="submit"
+              >
+                {upload ? "Update" : "Waiting"}
               </button>
             </div>
           </form>

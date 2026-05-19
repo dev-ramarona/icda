@@ -1,19 +1,25 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MdlSlsflwPsgsmrSrcprm } from "../../model/params";
 import { FncGlobalQuerysEdlink } from "../../../global/function/querys";
 import { FncGlobalFormatDfault } from "../../../global/function/format";
 import UixGlobalInputxFormdt from "../../../global/ui/action/inputx";
 import UixGlobalWraperSearch from "../../../global/ui/search/wraper";
+import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
+import { MdlAllusrStatusPrcess } from "../../../allusr/model/params";
 
 export default function UixSlsflwPsgsmrSearch({
   prmPsgsmr,
   datefl,
   joinar,
+  status,
+  update,
 }: {
   prmPsgsmr: MdlSlsflwPsgsmrSrcprm;
   datefl: string[];
   joinar: string[];
+  status: MdlAllusrStatusPrcess;
+  update: string;
 }) {
   const [params, paramsSet] = useState<MdlSlsflwPsgsmrSrcprm>({
     update_global: prmPsgsmr.update_global || "",
@@ -92,6 +98,26 @@ export default function UixSlsflwPsgsmrSearch({
       filenmSet(e.target.files[0].name);
     } else filenmSet("");
   };
+
+  // Monitor process status
+  const [statfn, statfnSet] = useState(100);
+  useEffect(() => {
+    if (status.sbrapi == 0) statfnSet(0);
+    const gtstat = async () => {
+      if (status.sbrapi != 0) {
+        const intrvl = setInterval(async () => {
+          const instat = await ApiAllusrStatusPrcess();
+          if (instat.sbrapi == 0) {
+            statfnSet(0);
+            rplprm(["update_global"], String(Math.random()));
+            clearInterval(intrvl);
+          } else statfnSet(instat.sbrapi);
+        }, 5000);
+      }
+    };
+    gtstat();
+  }, [update]);
+
   return (
     <UixGlobalWraperSearch
       chnged={chnged}
@@ -104,10 +130,14 @@ export default function UixSlsflwPsgsmrSearch({
             }
           : null
       }
-      upload={{
-        lnk: `/apndix/fljoin/upload`,
-        prm: filedt,
-      }}
+      upload={
+        statfn == 0
+          ? {
+              lnk: `/apndix/fljoin/upload`,
+              prm: filedt,
+            }
+          : null
+      }
       resetx={resetx}
       updtfl={filefn}
       namefl={filenm}

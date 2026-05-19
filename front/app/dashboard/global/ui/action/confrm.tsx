@@ -10,14 +10,14 @@ export default function UixGlobalConfrmAction({
   confrmSet,
 }: {
   confrm: boolean;
-  confdt: MdlGlobalConfrmAction[];
+  confdt: MdlGlobalConfrmAction[] | null;
   action: string;
   goupdt: () => Promise<void>;
   confrmSet: (value: SetStateAction<boolean>) => void;
 }) {
   return (
     <div
-      className={`flexctr absolute z-30 h-full w-full ${
+      className={`flexctr absolute z-30 h-full max-h-full w-full ${
         confrm ? "backdrop-blur-[2px]" : "pointer-events-none"
       }`}
     >
@@ -31,15 +31,17 @@ export default function UixGlobalConfrmAction({
           <span className="font-bold text-red-600"> {action} </span>
           <span>this data?</span>
         </div>
-        <div className="w-full overflow-y-auto">
-          {confdt.map((val, idx) => (
-            <div className="flexctr gap-1.5" key={idx}>
-              <div className="w-20 font-bold whitespace-nowrap text-gray-600">{val.paramx}</div>
-              <div className="flexctr w-3">:</div>
-              <div className="w-full overflow-x-auto whitespace-nowrap">{val.valuex}</div>
-            </div>
-          ))}
-        </div>
+        {confdt && (
+          <div className="w-full overflow-y-auto">
+            {confdt.map((val, idx) => (
+              <div className="flexctr gap-1.5" key={idx}>
+                <div className="w-20 font-bold whitespace-nowrap text-gray-600">{val.paramx}</div>
+                <div className="flexctr w-3">:</div>
+                <div className="w-full overflow-x-auto whitespace-nowrap">{val.valuex}</div>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="flexctr z-30 gap-3">
           <div className="btnsbm flexctr h-8 w-10" onClick={() => goupdt()}>
             <UixGlobalIconvcCeklis bold={4} color="#53eafd" size={1.4} />

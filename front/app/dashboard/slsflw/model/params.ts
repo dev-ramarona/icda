@@ -14,7 +14,8 @@ export interface MdlSlsflwGlobalSrcprm {
   keywrd_psgdtl: string;
   pagenw_psgdtl: number;
   limitp_psgdtl: number;
-  pagenw_errlog: number;
+  pagenw_mnfest: number;
+  pagenw_slsrpt: number;
   limitp_errlog: number;
   erdvsn_errlog: string;
   mnthfl_psgsmr: string;
@@ -47,7 +48,8 @@ export interface MdlSlsflwAcpedtDtbase {
 // error Log
 export interface MdlSlsflwErrlogDtbase {
   update_global: string;
-  pagenw_errlog: number;
+  pagenw_mnfest: number;
+  pagenw_slsrpt: number;
   limitp_errlog: number;
   erdvsn_errlog: string;
 }

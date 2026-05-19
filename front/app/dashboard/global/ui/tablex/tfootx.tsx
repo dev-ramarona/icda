@@ -4,6 +4,7 @@ import {
   UixGlobalIconvcAddpls,
   UixGlobalIconvcCancel,
   UixGlobalIconvcCeklis,
+  UixGlobalIconvcRfresh,
 } from "../../../global/ui/server/iconvc";
 
 export default function UixGlobalTfootxTablex({
@@ -17,7 +18,7 @@ export default function UixGlobalTfootxTablex({
   okeupd,
   cxlupd,
 }: {
-  actadd: (e: React.ChangeEvent<HTMLInputElement>, actmod: "add" | "add") => void;
+  actadd: (e: React.ChangeEvent<HTMLInputElement>, actmod: "add" | "add") => void | null;
   objdef: any;
   objdta: any;
   objset: Dispatch<SetStateAction<any>>;
@@ -64,16 +65,28 @@ export default function UixGlobalTfootxTablex({
             >
               <UixGlobalIconvcCancel bold={4} color="#fff" size={1.4} />
             </div>
-            <div
-              className={`flexctr btnstb absolute cursor-pointer duration-300 ${
-                objdta?.prmkey === "add"
-                  ? "pointer-events-none opacity-0 select-none"
-                  : "opacity-100"
-              }`}
-              onClick={() => objset({ ...objdef, prmkey: "add" })}
-            >
-              <UixGlobalIconvcAddpls bold={2.7} color="#0092b8" size={1.4} />
-            </div>
+
+            {/* Add button and loading if waiting */}
+            {actadd ? (
+              <div
+                className={`flexctr btnstb absolute cursor-pointer duration-300 ${
+                  objdta?.prmkey === "add"
+                    ? "pointer-events-none opacity-0 select-none"
+                    : "opacity-100"
+                }`}
+                onClick={() => objset({ ...objdef, prmkey: "add" })}
+              >
+                <UixGlobalIconvcAddpls bold={2.7} color="#0092b8" size={1.4} />
+              </div>
+            ) : (
+              <div
+                className={`flexctr btnstb pointer-events-none absolute cursor-pointer duration-300`}
+              >
+                <div className="animate-spin">
+                  <UixGlobalIconvcRfresh bold={2.7} color="#0092b8" size={1.4} />
+                </div>
+              </div>
+            )}
           </div>
         </td>
         {Object.keys(objdef).map((val, key) => (

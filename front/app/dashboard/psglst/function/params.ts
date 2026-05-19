@@ -31,7 +31,8 @@ export function FncPsglstErrlogSrcprm(params: MdlPsglstErrlogSrcprm) {
   return {
     update_global: params.update_global || "",
     erdvsn_errlog: params.erdvsn_errlog || "",
-    pagenw_errlog: Number(params.pagenw_errlog) || 1,
+    pagenw_mnfest: Number(params.pagenw_mnfest) || 1,
+    pagenw_slsrpt: Number(params.pagenw_slsrpt) || 1,
     limitp_errlog: Number(params.limitp_errlog) || 5,
   } as MdlPsglstErrlogSrcprm;
 }

@@ -40,14 +40,41 @@ export default async function Page(props: { searchParams: Promise<MdlPsglstGloba
           </Suspense>
         </div>
       </div>
-      <div className="h-120 max-h-fit w-full min-w-4/5 p-3 md:h-80 md:w-60">
+      <div className="h-120 max-h-fit w-full min-w-3/5 p-3 md:h-80 md:w-60">
         <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
           <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
-            Log error
+            Log error Manifest
             <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
           </div>
           <Suspense fallback={<UixGlobalLoadngAnmate />}>
-            <UixPsglstErrlogMainpg prmErrlog={prmErrlog} status={status} />
+            <UixPsglstErrlogMainpg
+              prmErrlog={prmErrlog}
+              status={status}
+              cookie={cookie}
+              viewdt="MNFEST"
+              showdt={true}
+              pagest={"pagenw_mnfest"}
+              pagenb={prmErrlog.pagenw_mnfest}
+            />
+          </Suspense>
+        </div>
+      </div>
+      <div className="h-60 max-h-fit w-full min-w-1/5 p-3 md:h-80 md:w-40">
+        <div className="afull flexstr relative max-h-fit flex-col rounded-xl px-3 py-1.5 ring-2 ring-gray-200">
+          <div className="flexstr w-full py-1.5 text-base font-semibold text-slate-800">
+            Log error Sales report
+            <UixGlobalIconvcSeting color="gray" size={1.3} bold={3} />
+          </div>
+          <Suspense fallback={<UixGlobalLoadngAnmate />}>
+            <UixPsglstErrlogMainpg
+              prmErrlog={prmErrlog}
+              status={status}
+              cookie={cookie}
+              viewdt="SLSRPT"
+              showdt={false}
+              pagest={"pagenw_slsrpt"}
+              pagenb={prmErrlog.pagenw_slsrpt}
+            />
           </Suspense>
         </div>
       </div>
@@ -63,6 +90,8 @@ export default async function Page(props: { searchParams: Promise<MdlPsglstGloba
               datefl={actdte}
               cookie={cookie}
               fmtdef={fmtdef}
+              status={status}
+              update={prmPsgdtl.update_global}
             />
           </Suspense>
         </div>

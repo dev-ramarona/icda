@@ -17,7 +17,8 @@ export interface MdlPsglstGlobalSrcprm {
   keywrd_psgdtl: string;
   pagenw_psgdtl: number;
   limitp_psgdtl: number;
-  pagenw_errlog: number;
+  pagenw_mnfest: number;
+  pagenw_slsrpt: number;
   limitp_errlog: number;
   erdvsn_errlog: string;
 }
@@ -42,7 +43,8 @@ export interface MdlPsglstPsgdtlSrcprm {
 }
 export interface MdlPsglstErrlogSrcprm {
   update_global: string;
-  pagenw_errlog: number;
+  pagenw_mnfest: number;
+  pagenw_slsrpt: number;
   limitp_errlog: number;
   erdvsn_errlog: string;
 }

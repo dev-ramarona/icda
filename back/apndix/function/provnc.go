@@ -77,7 +77,7 @@ func FncApndixProvncGetall(c *gin.Context) {
 		csvFilenm = append(csvFilenm, inputx.Provnc_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "provnc",
 			Value: bson.D{
-				{Key: "$regex", Value: "^" + inputx.Provnc_apndix},
+				{Key: "$regex", Value: inputx.Provnc_apndix},
 				{Key: "$options", Value: "i"}}}})
 	}
 

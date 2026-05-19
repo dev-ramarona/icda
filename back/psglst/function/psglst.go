@@ -680,6 +680,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 		psglst.Ntafvc = psglst.Ntafvc * psglst.Frrate * valChrter
 		psglst.Yqtxvc = psglst.Yqtxvc * psglst.Frrate * valChrter
 		psglst.Yrtxvc = psglst.Yrtxvc * psglst.Frrate * valChrter
+		psglst.Yrtxvc = psglst.Yrtxvc * psglst.Frrate * valChrter
 		if psglst.Prmkey == "260514IU600CGK26D" {
 			fmt.Println(psglst.Yrtxvc)
 		}

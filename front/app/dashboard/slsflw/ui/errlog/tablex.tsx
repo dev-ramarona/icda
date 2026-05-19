@@ -12,10 +12,12 @@ export default function UixPsglstErrlogTablex({
   errlog,
   update,
   status,
+  showdt,
 }: {
   errlog: MdlPsglstErrlogDtbase[];
   update: string;
   status: MdlAllusrStatusPrcess;
+  showdt: boolean;
 }) {
   // Dinamis
   const [random, randomSet] = useState("");
@@ -118,7 +120,7 @@ export default function UixPsglstErrlogTablex({
     <>
       <div className="ctable">
         <table>
-          <UixGlobalTheadxTablex firsth="action" mainhd={Object.keys(rawobj)} />
+          <UixGlobalTheadxTablex firsth={showdt ? "action" : ""} mainhd={Object.keys(rawobj)} />
           <UixGlobalTbodyrTablex
             arrdta={errlog}
             objdta={objdta}
@@ -138,9 +140,9 @@ export default function UixPsglstErrlogTablex({
             ]}
             nmbrfm={["ntaffl", "ntafvc", "yqtxfl", "yqtxvc", "qsrcrw", "qsrcvc"]}
             spclfm={[""]}
-            rfresh={rfresh}
+            rfresh={showdt ? rfresh : null}
             ignore={null}
-            tolink={tolink}
+            tolink={showdt ? tolink : null}
             editdt={null}
             trashx={null}
             okeupd={okeupd}
