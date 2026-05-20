@@ -64,7 +64,6 @@ export default function UixPsglstPrcessManual({
   const [confrm, confrmSet] = useState<boolean>(false);
   const [confdt, confdtSet] = useState<MdlGlobalConfrmAction[]>([]);
   const prcess = async (datefl: number) => {
-    confrmSet(true);
     if (cookie.keywrd && cookie.keywrd.includes("psglst")) {
       let nowWorker = 1;
       if (status.sbrapi == 0 && params.flnbfl == "") {
@@ -75,15 +74,19 @@ export default function UixPsglstPrcessManual({
         }
       }
       const confst = [];
-      paramsSet({ ...params, datefl: datefl, worker: nowWorker });
-      Object.entries(params).map(([k, v]) => {
+      paramsSet((prev) => ({ ...prev, datefl: datefl, worker: nowWorker }));
+      const newdta = { ...params, datefl: datefl, worker: nowWorker };
+      Object.entries(newdta).map(([k, v]) => {
         if (v != "" && v != 0) {
           if (k == "datefl") {
             confst.push({ paramx: k, valuex: FncGlobalFormatDatefm(String(datefl)) });
+            console.log(k, v);
           } else confst.push({ paramx: k, valuex: v });
         }
       });
+      console.log(confst, datefl);
       confdtSet(confst);
+      confrmSet(true);
     }
   };
 
