@@ -136,7 +136,7 @@ export default function UixSlsflwDetailSearch({
       chnged={chnged}
       lblupl={fmtdef ? "Upload error" : ""}
       downld={
-        params.keywrd_psgdtl == "REG ALL"
+        params.keywrd_psgdtl.includes("regall")
           ? {
               lnk: `/psglst/psgdtl/downld`,
               prm: params,

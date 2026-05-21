@@ -123,7 +123,7 @@ export default function UixSlsflwPsgsmrSearch({
       chnged={chnged}
       lblupl="Upload File Join"
       downld={
-        params.keywrd_psgsmr == "REG ALL"
+        params.keywrd_psgsmr.includes("regall")
           ? {
               lnk: `/psglst/psgsmr/downld`,
               prm: params,

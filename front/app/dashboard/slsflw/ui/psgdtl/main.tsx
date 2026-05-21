@@ -22,7 +22,7 @@ export default async function UixSlsflwDetailMainpg({
   status: MdlAllusrStatusPrcess;
   update: string;
 }) {
-  prmPsgdtl.keywrd_psgdtl = cookie.keywrd.filter((item) => item.includes("REG ")).join("");
+  prmPsgdtl.keywrd_psgdtl = JSON.stringify(cookie.keywrd);
   const psgdtl = await ApiSlsflwPsgdtlGetall(prmPsgdtl);
   const arrdta: MdlSlsflwPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;

@@ -46,6 +46,7 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 
 	// Pipeline get the data logic match
 	var mtchdt = bson.A{}
+	var keywrd = fncApndix.FncApndixKeywrdMapobj("provnc")
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
 	var wg sync.WaitGroup
 
@@ -80,16 +81,21 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: inputx.Routfl_psgsmr}})
 	}
-	if inputx.Keywrd_psgsmr != "" && !strings.Contains(inputx.Keywrd_psgsmr, "REG ALL") {
+	fmt.Println(inputx.Keywrd_psgsmr)
+	if inputx.Keywrd_psgsmr != "" {
 		var slcKeywrd []string
-		fmt.Println(inputx.Keywrd_psgsmr)
 		if err := json.Unmarshal([]byte(inputx.Keywrd_psgsmr), &slcKeywrd); err == nil {
-			fmt.Println(slcKeywrd)
-			csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
-			mtchdt = append(mtchdt, bson.D{{Key: "provnc",
-				Value: bson.D{{Key: "$in", Value: slcKeywrd}}}})
+			for _, key := range slcKeywrd {
+				fmt.Println("xxxxx", key)
+				if val, ist := keywrd[key]; ist && val != "ALL" {
+					fmt.Println("adwaw", key)
+					csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
+					mtchdt = append(mtchdt, bson.D{{Key: "provnc",
+						Value: val}})
+				}
+			}
 		} else {
-			fmt.Println("error:", err)
+			fmt.Println(err)
 		}
 	}
 
@@ -265,6 +271,7 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 
 	// Pipeline get the data logic match
 	var mtchdt = bson.A{}
+	var keywrd = fncApndix.FncApndixKeywrdMapobj("provnc")
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
 
 	// Check if data Route all is isset
@@ -298,12 +305,21 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: inputx.Routfl_psgsmr}})
 	}
-	if inputx.Keywrd_psgsmr != "" && !strings.Contains(inputx.Keywrd_psgsmr, "REG ALL") {
+	fmt.Println(inputx.Keywrd_psgsmr)
+	if inputx.Keywrd_psgsmr != "" {
 		var slcKeywrd []string
 		if err := json.Unmarshal([]byte(inputx.Keywrd_psgsmr), &slcKeywrd); err == nil {
-			csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
-			mtchdt = append(mtchdt, bson.D{{Key: "provnc",
-				Value: bson.D{{Key: "$in", Value: slcKeywrd}}}})
+			for _, key := range slcKeywrd {
+				fmt.Println("xxxxx", key)
+				if val, ist := keywrd[key]; ist && val != "ALL" {
+					fmt.Println("adwaw", key)
+					csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
+					mtchdt = append(mtchdt, bson.D{{Key: "provnc",
+						Value: val}})
+				}
+			}
+		} else {
+			fmt.Println(err)
 		}
 	}
 

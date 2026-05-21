@@ -1,26 +1,30 @@
 package fncApndix
 
 import (
-	mdlApndix "back/apndix/model"
+	mdlAllusr "back/allusr/model"
 	"context"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// Get Sync map data Cost per hour
-func FncApndixCostphMapobj() map[string]int64 {
+// Get Sync map data keyword
+func FncApndixKeywrdMapobj(sction string) map[string]string {
 
 	// Inisialisasi variabel
-	fnldta := make(map[string]int64)
+	fnldta := make(map[string]string)
 
 	// Select database and collection
-	tablex := Client.Database(Dbases).Collection("apndix_costph")
+	tablex := Client.Database(Dbases).Collection("apndix_keywrd")
 	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	// Get route data
-	datarw, err := tablex.Find(contxt, bson.M{})
+	matchd := bson.M{}
+	if sction != "" {
+		matchd = bson.M{"sction": sction}
+	}
+	datarw, err := tablex.Find(contxt, matchd)
 	if err != nil {
 		panic(err)
 	}
@@ -28,9 +32,9 @@ func FncApndixCostphMapobj() map[string]int64 {
 
 	// Append to slice
 	for datarw.Next(contxt) {
-		var object mdlApndix.MdlApndixCostphDtbase
+		var object mdlAllusr.MdlAllusrKeywrdDtbase
 		datarw.Decode(&object)
-		fnldta[object.Airlfl] = object.Costph
+		fnldta[object.Keywrd] = object.Detail
 	}
 
 	// return data

@@ -22,10 +22,8 @@ export default async function UixPsglstDetailMainpg({
   status: MdlAllusrStatusPrcess;
   update: string;
 }) {
-  const psgdtl = await ApiPsglstPsgdtlGetall({
-    ...prmPsgdtl,
-    nclear_psgdtl: prmPsgdtl.nclear_psgdtl == "" ? "MNFEST" : prmPsgdtl.nclear_psgdtl,
-  });
+  prmPsgdtl.keywrd_psgdtl = JSON.stringify(cookie.keywrd);
+  const psgdtl = await ApiPsglstPsgdtlGetall(prmPsgdtl);
   const arrdta: MdlPsglstPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("mnfest");

@@ -40,6 +40,8 @@ var Client *mongo.Client
 var Jwtkey []byte
 var Ipalow []string
 var Secure = false
+
+// var keywrd = fncAllusr.FncAllusrGetallMapobj()
 var Dbases, Urlmgo, Pcckey, Usrnme,
 	Psswrd, Ptgolg, Ipadrs, Usrcok, Tknnme string
 

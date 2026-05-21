@@ -45,3 +45,8 @@ type MdlAllusrApplstDtbase struct {
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Detail string `json:"detail" bson:"detail"`
 }
+type MdlAllusrKeywrdDtbase struct {
+	Keywrd string `json:"keywrd" bson:"keywrd"`
+	Sction string `json:"sction" bson:"sction"`
+	Detail string `json:"detail" bson:"detail"`
+}

@@ -3,6 +3,7 @@ package fncAllusr
 import (
 	mdlAllusr "back/allusr/model"
 	fncApndix "back/apndix/function"
+
 	"context"
 	"fmt"
 	"net/http"
