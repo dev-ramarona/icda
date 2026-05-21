@@ -111,7 +111,7 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 		if err := json.Unmarshal([]byte(inputx.Keywrd_psgdtl), &slcKeywrd); err == nil {
 			for _, key := range slcKeywrd {
 				if val, ist := keywrd[key]; ist && val != "ALL" {
-					csvFilenm = append(csvFilenm, inputx.Keywrd_psgdtl)
+					csvFilenm = append(csvFilenm, val)
 					mtchdt = append(mtchdt, bson.D{{Key: "provnc",
 						Value: val}})
 				}
@@ -328,7 +328,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			if err := json.Unmarshal([]byte(inputx.Keywrd_psgdtl), &slcKeywrd); err == nil {
 				for _, key := range slcKeywrd {
 					if val, ist := keywrd[key]; ist && val != "ALL" {
-						csvFilenm = append(csvFilenm, inputx.Keywrd_psgdtl)
+						csvFilenm = append(csvFilenm, val)
 						mtchdt = append(mtchdt, bson.D{{Key: "provnc",
 							Value: val}})
 					}
