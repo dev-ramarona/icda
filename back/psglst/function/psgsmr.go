@@ -81,21 +81,16 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: inputx.Routfl_psgsmr}})
 	}
-	fmt.Println(inputx.Keywrd_psgsmr)
 	if inputx.Keywrd_psgsmr != "" {
 		var slcKeywrd []string
 		if err := json.Unmarshal([]byte(inputx.Keywrd_psgsmr), &slcKeywrd); err == nil {
 			for _, key := range slcKeywrd {
-				fmt.Println("xxxxx", key)
 				if val, ist := keywrd[key]; ist && val != "ALL" {
-					fmt.Println("adwaw", key)
 					csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
 					mtchdt = append(mtchdt, bson.D{{Key: "provnc",
 						Value: val}})
 				}
 			}
-		} else {
-			fmt.Println(err)
 		}
 	}
 

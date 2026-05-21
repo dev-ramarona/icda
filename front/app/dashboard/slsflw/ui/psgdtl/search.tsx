@@ -136,7 +136,7 @@ export default function UixSlsflwDetailSearch({
       chnged={chnged}
       lblupl={fmtdef ? "Upload error" : ""}
       downld={
-        params.keywrd_psgdtl.includes("regall")
+        params.keywrd_psgdtl.includes("dwlsls")
           ? {
               lnk: `/psglst/psgdtl/downld`,
               prm: params,
@@ -144,7 +144,7 @@ export default function UixSlsflwDetailSearch({
           : null
       }
       upload={
-        statfn == 0
+        statfn == 0 && params.keywrd_psgdtl.includes("regall")
           ? {
               lnk: `/psglst/psgdtl/upload`,
               prm: filedt,

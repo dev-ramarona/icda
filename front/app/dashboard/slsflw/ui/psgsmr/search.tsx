@@ -123,7 +123,7 @@ export default function UixSlsflwPsgsmrSearch({
       chnged={chnged}
       lblupl="Upload File Join"
       downld={
-        params.keywrd_psgsmr.includes("regall")
+        params.keywrd_psgsmr.includes("dwlsls")
           ? {
               lnk: `/psglst/psgsmr/downld`,
               prm: params,
@@ -131,7 +131,7 @@ export default function UixSlsflwPsgsmrSearch({
           : null
       }
       upload={
-        statfn == 0
+        statfn == 0 && params.keywrd_psgsmr.includes("regall")
           ? {
               lnk: `/apndix/fljoin/upload`,
               prm: filedt,
