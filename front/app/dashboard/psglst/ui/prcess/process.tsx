@@ -84,7 +84,6 @@ export default function UixPsglstPrcessManual({
           } else confst.push({ paramx: k, valuex: v });
         }
       });
-      console.log(confst, datefl);
       confdtSet(confst);
       confrmSet(true);
     }

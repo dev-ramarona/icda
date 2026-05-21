@@ -740,12 +740,14 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 
 			// Cek data IR
 			if psglst.Isitir == "IR" {
-				if !((strings.Contains(psglst.Routac, psglst.Routvc[:3]) &&
-					strings.Contains(psglst.Routac, psglst.Routvc[4:])) ||
-					(strings.Contains(psglst.Routsg, psglst.Routfl[:3]) &&
-						strings.Contains(psglst.Routsg, psglst.Routfl[4:]))) {
-					psglst.Mnfest = "NOT CLEAR"
-					fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, "CHECK COUPON")
+				if len(psglst.Routvc) > 7 {
+					if !((strings.Contains(psglst.Routac, psglst.Routvc[:3]) &&
+						strings.Contains(psglst.Routac, psglst.Routvc[4:])) ||
+						(strings.Contains(psglst.Routsg, psglst.Routfl[:3]) &&
+							strings.Contains(psglst.Routsg, psglst.Routfl[4:]))) {
+						psglst.Mnfest = "NOT CLEAR"
+						fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, "CHECK COUPON")
+					}
 				}
 			}
 		}

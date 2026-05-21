@@ -82,10 +82,14 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 	}
 	if inputx.Keywrd_psgsmr != "" && !strings.Contains(inputx.Keywrd_psgsmr, "REG ALL") {
 		var slcKeywrd []string
+		fmt.Println(inputx.Keywrd_psgsmr)
 		if err := json.Unmarshal([]byte(inputx.Keywrd_psgsmr), &slcKeywrd); err == nil {
+			fmt.Println(slcKeywrd)
 			csvFilenm = append(csvFilenm, inputx.Keywrd_psgsmr)
 			mtchdt = append(mtchdt, bson.D{{Key: "provnc",
 				Value: bson.D{{Key: "$in", Value: slcKeywrd}}}})
+		} else {
+			fmt.Println("error:", err)
 		}
 	}
 
