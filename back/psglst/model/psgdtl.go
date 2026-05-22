@@ -111,6 +111,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Emplid string  `json:"emplid" bson:"emplid,omitempty"`
 	Nmefst string  `json:"nmefst" bson:"nmefst,omitempty"`
 	Nmelst string  `json:"nmelst" bson:"nmelst,omitempty"`
+	Nmemax string  `json:"nmemax" bson:"nmemax,omitempty"`
 	Cpnbfl int32   `json:"cpnbfl" bson:"cpnbfl,omitempty"`
 	Cpnbvc int32   `json:"cpnbvc" bson:"cpnbvc,omitempty"`
 	Clssfl string  `json:"clssfl" bson:"clssfl,omitempty"`
@@ -273,6 +274,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Emplid string  `json:"emplid" bson:"emplid"`
 	Nmefst string  `json:"nmefst" bson:"nmefst"`
 	Nmelst string  `json:"nmelst" bson:"nmelst"`
+	Nmemax string  `json:"nmemax" bson:"nmemax"`
 	Cpnbfl int32   `json:"cpnbfl" bson:"cpnbfl"`
 	Cpnbvc int32   `json:"cpnbvc" bson:"cpnbvc"`
 	Clssfl string  `json:"clssfl" bson:"clssfl"`

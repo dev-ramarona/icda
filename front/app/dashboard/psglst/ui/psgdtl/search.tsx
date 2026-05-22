@@ -140,7 +140,7 @@ export default function UixPsglstDetailSearch({
       chnged={chnged}
       lblupl={fmtdef ? "Upload error" : ""}
       downld={
-        params.keywrd_psgdtl.includes("psglst")
+        params.keywrd_psgdtl.includes("dwlsls")
           ? {
               lnk: `/psglst/psgdtl/downld`,
               prm: params,
