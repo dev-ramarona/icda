@@ -128,6 +128,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Isitct string  `json:"isitct" bson:"isitct,omitempty"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
 	Isitiv string  `json:"isitiv" bson:"isitiv,omitempty"`
+	Isitof string  `json:"isitof" bson:"isitof,omitempty"`
 	Srcfrb string  `json:"srcfrb" bson:"srcfrb,omitempty"`
 	Srcyqf string  `json:"srcyqf" bson:"srcyqf,omitempty"`
 	Noteup string  `json:"noteup" bson:"noteup,omitempty"`
@@ -291,6 +292,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Isitct string  `json:"isitct" bson:"isitct"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
 	Isitiv string  `json:"isitiv" bson:"isitiv"`
+	Isitof string  `json:"isitof" bson:"isitof"`
 	Srcfrb string  `json:"srcfrb" bson:"srcfrb"`
 	Srcyqf string  `json:"srcyqf" bson:"srcyqf"`
 	Noteup string  `json:"noteup" bson:"noteup"`

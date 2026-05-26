@@ -532,6 +532,20 @@ func FncPsglstPrcessWorker(
 			idcFlnbfl.Store(prmkey, true)
 		}
 
+		// Check data offload and Update psgdtl
+		if *errPrmkey == fmt.Sprintf("fllist%v%v%v%v", dbsAirlfl, dbsFlnbfl, dbsRoutfl, intDatefl) {
+			updPsgdtl := []mongo.WriteModel{
+				mongo.NewUpdateManyModel().
+					SetFilter(bson.M{
+						"flnbfl": dbsFlnbfl,
+						"depart": dbsDepart,
+						"datefl": intDatefl,
+						"airlfl": dbsAirlfl}).
+					SetUpdate(bson.M{"$set": bson.M{"isitof": "OFL"}})}
+			fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
+				"psglst_psgdtl": &updPsgdtl}, 0)
+		}
+
 		// Get passangger list
 		rspPsglst, err := fncSbrapi.FncSbrapiPsglstMainob(nowObjtkn, objParams, mapCurrcv, slcFllist, mapClslvl, *errPrmkey)
 		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{

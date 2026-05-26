@@ -122,6 +122,7 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 
 	// Declare global variable
 	tmpPsglst := mdlPsglst.MdlPsglstPsgdtlDtbase{
+		Isitof: "",
 		Datefl: apndix.Datefl,
 		Daterv: int32(intDaterv),
 		Mnthfl: apndix.Mnthfl,
