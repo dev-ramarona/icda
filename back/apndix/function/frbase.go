@@ -236,9 +236,10 @@ func FncApndixFrbaseDownld(c *gin.Context) {
 
 	// Check if data Route all is isset
 	if inputx.Airlfl_apndix != "" {
+		slcAirlfl := strings.Split(inputx.Airlfl_apndix, "-")
 		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl_apndix}})
+			Value: bson.M{"$in": slcAirlfl}}})
 	}
 	if inputx.Clssfl_apndix != "" {
 		csvFilenm = append(csvFilenm, inputx.Clssfl_apndix)

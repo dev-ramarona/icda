@@ -61,9 +61,10 @@ func FncPsglstPsgsmrGetall(c *gin.Context) {
 			Value: intDatefl}})
 	}
 	if inputx.Airlfl_psgsmr != "" {
+		slcAirlfl := strings.Split(inputx.Airlfl_psgsmr, "-")
 		csvFilenm = append(csvFilenm, inputx.Airlfl_psgsmr)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl_psgsmr}})
+			Value: bson.M{"$in": slcAirlfl}}})
 	}
 	if inputx.Flnbfl_psgsmr != "" {
 		csvFilenm = append(csvFilenm, inputx.Flnbfl_psgsmr)
@@ -280,9 +281,10 @@ func FncPsglstPsgsmrDownld(c *gin.Context) {
 			Value: intDatefl}})
 	}
 	if inputx.Airlfl_psgsmr != "" {
+		slcAirlfl := strings.Split(inputx.Airlfl_psgsmr, "-")
 		csvFilenm = append(csvFilenm, inputx.Airlfl_psgsmr)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl_psgsmr}})
+			Value: bson.M{"$in": slcAirlfl}}})
 	}
 	if inputx.Flnbfl_psgsmr != "" {
 		csvFilenm = append(csvFilenm, inputx.Flnbfl_psgsmr)

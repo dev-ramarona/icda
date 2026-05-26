@@ -271,9 +271,10 @@ func FncApndixFljoinGetall(c *gin.Context) {
 			Value: intDatefl}})
 	}
 	if inputx.Airlfl_apndix != "" {
+		slcAirlfl := strings.Split(inputx.Airlfl_apndix, "-")
 		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl_apndix}})
+			Value: bson.M{"$in": slcAirlfl}}})
 	}
 	if inputx.Flnbfl_apndix != "" {
 		csvFilenm = append(csvFilenm, inputx.Flnbfl_apndix)
@@ -388,9 +389,10 @@ func FncApndixFljoinDownld(c *gin.Context) {
 			Value: intDatefl}})
 	}
 	if inputx.Airlfl_apndix != "" {
+		slcAirlfl := strings.Split(inputx.Airlfl_apndix, "-")
 		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
-			Value: inputx.Airlfl_apndix}})
+			Value: bson.M{"$in": slcAirlfl}}})
 	}
 	if inputx.Flnbfl_apndix != "" {
 		csvFilenm = append(csvFilenm, inputx.Flnbfl_apndix)

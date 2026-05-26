@@ -4,13 +4,14 @@ export function FncGlobalFormatDfault(key: string, val: string): string | number
   let now: string | number = "";
   const actkey = key.substring(0, 6);
   if (["routvc", "routfl"].includes(actkey)) {
-    now = FncGlobalFormatRoutfl(val).substring(0, 7);
+    now = FncGlobalFormatRoutfl(val, 3).substring(0, 7);
+  } else if (["airlfl", "airlvc"].includes(actkey)) {
+    now = FncGlobalFormatRoutfl(val, 2).substring(0, 11);
   } else if (
     ["airlfl", "airlvc", "depart", "curncy", "clssfl", "frbcde", "statvc"].includes(actkey)
   ) {
     const tmp = val.toUpperCase().replace(/[^A-Z]/g, "");
     if (["clssfl"].includes(actkey)) now = tmp.substring(0, 1);
-    else if (["airlfl", "airlvc"].includes(actkey)) now = tmp.substring(0, 2);
     else if (["depart", "curncy"].includes(actkey)) now = tmp.substring(0, 3);
     else now = tmp;
   } else if (["flnbfl"].includes(actkey)) {
@@ -108,12 +109,12 @@ export function FncGlobalIntialObject<o extends Record<string, any>>(obj: o): o 
 // }
 
 // Function change format routef to 3-3 characters
-export function FncGlobalFormatRoutfl(routef: string) {
+export function FncGlobalFormatRoutfl(routef: string, lenval: number) {
   let raw = routef.toUpperCase().replace(/[^A-Z]/g, "");
   let rsl = "";
-  for (let i = 0; i < raw.length; i += 3) {
+  for (let i = 0; i < raw.length; i += lenval) {
     if (i > 0) rsl += "-";
-    rsl += raw.slice(i, i + 3);
+    rsl += raw.slice(i, i + lenval);
   }
   return rsl;
 }
