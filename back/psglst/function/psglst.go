@@ -754,7 +754,12 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 
 		// Push final to database
 		mgoPsgdtl = append(mgoPsgdtl, mongo.NewUpdateOneModel().
-			SetFilter(bson.M{"prmkey": psglst.Prmkey}).
+			SetFilter(bson.M{"$or": bson.A{
+				bson.M{"prmkey": psglst.Prmkey},
+				bson.M{"psgrid": psglst.Psgrid,
+					"flnbfl": psglst.Flnbfl,
+					"depart": psglst.Depart},
+			}}).
 			SetUpdate(bson.M{"$set": psglst}).
 			SetUpsert(true))
 		totClrpsg++
