@@ -1,11 +1,7 @@
 "use client";
 import UixGlobalWaitngAction from "./waitng";
 import { FncGlobalQuerysEdlink } from "../../function/querys";
-import {
-  UixGlobalIconvcNextpg,
-  UixGlobalIconvcPrevpg,
-  UixGlobalIconvcRfresh,
-} from "../server/iconvc";
+import { UixGlobalIconvcNextpg, UixGlobalIconvcPrevpg } from "../server/iconvc";
 import { useEffect, useState } from "react";
 
 export default function UixGlobalPagntnMainpg({
@@ -32,6 +28,7 @@ export default function UixGlobalPagntnMainpg({
   useEffect(() => {
     chngedSet(false);
   }, [pgenbr]);
+
   return (
     <div className="flexctr relative h-16 w-full pt-1.5">
       <UixGlobalWaitngAction chnged={chnged} />

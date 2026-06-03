@@ -156,7 +156,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Fbavbt int32  `json:"fbavbt" bson:"fbavbt,omitempty"`
 	Hfbabt int32  `json:"hfbabt" bson:"hfbabt,omitempty"`
 	Qtotbt int32  `json:"qtotbt" bson:"qtotbt,omitempty"`
-	Wtotbt int32  `json:"wtotbt" bson:"wtotbt,omitempty"`
+	Wtotbt int32  `json:"wtotbt" bson:"wtotbt"`
 	Ptotbt int32  `json:"ptotbt" bson:"ptotbt,omitempty"`
 	Ftotbt int32  `json:"ftotbt" bson:"ftotbt,omitempty"`
 	Typebt string `json:"typebt" bson:"typebt,omitempty"`

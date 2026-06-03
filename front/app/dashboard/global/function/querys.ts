@@ -11,9 +11,7 @@ export function FncGlobalQuerysEdlink() {
   return function (qry: string | string[], prm: string | string[]) {
     const fltprm = new URLSearchParams(searchParams);
     if (Array.isArray(qry) && Array.isArray(prm)) {
-      qry.forEach((q, n) =>
-        prm[n] == "" ? fltprm.delete(q) : fltprm.set(q, prm[n]),
-      );
+      qry.forEach((q, n) => (prm[n] == "" ? fltprm.delete(q) : fltprm.set(q, prm[n])));
     } else if (!Array.isArray(qry) && !Array.isArray(prm)) {
       if (prm === "") fltprm.delete(qry);
       else fltprm.set(qry, prm);
