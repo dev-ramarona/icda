@@ -3,6 +3,7 @@ package main
 import (
 	fncAllusr "back/allusr/function"
 	fncApndix "back/apndix/function"
+	fncJeddah "back/jeddah/function"
 	fncPsglst "back/psglst/function"
 	"context"
 	"time"
@@ -71,6 +72,11 @@ func main() {
 	r.POST("/allusr/regist", fncAllusr.FncAllusrRegistHandle)
 	r.POST("/allusr/getall", fncAllusr.FncAllusrUsrlstGetall)
 	r.GET("/allusr/delete/:usrnme", fncAllusr.FncAllusrDeleteHandle)
+
+	// Handle web link API Jeddah
+	r.POST("/jeddah/prcess", fncJeddah.FncJeddahPrcessMainpg)
+	r.POST("/jeddah/pnrsmr/downld", fncJeddah.FncJeddahPnrsmrDownld)
+	r.POST("/jeddah/pnrsmr/getall", fncJeddah.FncJeddahPnrsmrGetall)
 
 	// Handle web link API Passangger list
 	r.POST("/psglst/prcess", fncPsglst.FncPsglstPrcessMainpg)

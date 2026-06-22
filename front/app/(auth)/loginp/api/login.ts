@@ -4,10 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 // import { cookies } from "next/headers";
-export async function apiLoginpFormpgLoginx(
-  prevState: any,
-  formData: FormData,
-) {
+export async function apiLoginpFormpgLoginx(prevState: any, formData: FormData) {
   const usrnme = formData.get("usrnme") as string;
   const psswrd = formData.get("psswrd") as string;
   const errobj = { rspnse: "", dfault: usrnme };

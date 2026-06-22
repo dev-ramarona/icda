@@ -6,6 +6,7 @@ import (
 	mdlPsglst "back/psglst/model"
 	fncSbrapi "back/sbrapi/function"
 	mdlSbrapi "back/sbrapi/model"
+	"encoding/xml"
 	"fmt"
 	"math"
 	"regexp"
@@ -147,8 +148,9 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 				strLstnme := (psglst.Nmefst + " ")[:1]
 				cncFulln1 := strFmtnme + "/" + strLstnme
 				cncFulln2 := psglst.Nmelst + "/" + strLstnme
-				if cncFulln1 == tcktng.PassengerName ||
-					cncFulln2 == tcktng.PassengerName {
+				if (cncFulln1 == tcktng.PassengerName ||
+					cncFulln2 == tcktng.PassengerName) &&
+					len(tcktng.TicketNumber) >= 13 {
 
 					// Get ticket number blank and emd
 					if tcktng.TicketNumber[3:4] != "4" {
@@ -181,6 +183,10 @@ func FncPslgstRsvpnrMainpg(psglst mdlPsglst.MdlPsglstPsgdtlDtbase,
 		}
 
 		// Get ancillary
+		if psglst.Psgrid == "0D44B6220001" {
+			b, _ := xml.MarshalIndent(nowRsvpnr, " ", " ")
+			fmt.Println(string(b))
+		}
 		if len(nowRsvpnr.OpenReservationElements) > 0 {
 			for _, elm := range nowRsvpnr.OpenReservationElements {
 				delete(mapEmdnae, psglst.Emdnae)

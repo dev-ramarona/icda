@@ -34,9 +34,9 @@ type MdlSbrapiRsvpnrReqrsv struct {
 	ReturnOptions MdlSbrapiRsvpnrReqopt `xml:"ReturnOptions"`
 }
 type MdlSbrapiRsvpnrReqopt struct {
-	SubjectAreas   MdlSbrapiRsvpnrReqsbj `xml:"SubjectAreas"`
-	ViewName       string                `xml:"ViewName"`
-	ResponseFormat string                `xml:"ResponseFormat"`
+	SubjectAreas   *MdlSbrapiRsvpnrReqsbj `xml:"SubjectAreas,omitempty"`
+	ViewName       string                 `xml:"ViewName"`
+	ResponseFormat string                 `xml:"ResponseFormat"`
 }
 type MdlSbrapiRsvpnrReqsbj struct {
 	SubjectArea []string `xml:"SubjectArea"`
@@ -58,6 +58,7 @@ type MdlSbrapiRsvpnrRsprsv struct {
 	PassengerReservation    MdlSbrapiRsvpnrRsppsg   `xml:"PassengerReservation"`
 	Remarks                 MdlSbrapiRsvpnrRsprmk   `xml:"Remarks>Remark"`
 	POS                     MdlSbrapiRsvpnrRsppos   `xml:"POS"`
+	History                 []MdlSbrapiRsvpnrRsphst `xml:"History>HistoryTransaction"`
 	OpenReservationElements []MdlSbrapiRsvpnrRspore `xml:"OpenReservationElements>OpenReservationElement>AncillaryProduct>XmlData>AncillaryServiceData"`
 }
 
@@ -229,7 +230,31 @@ type MdlSbrapiRsvpnrRsptps struct {
 	Price                 string `xml:"Price"`
 }
 
-// type MdlSbrapiRsvpnrRspbgw struct {
-// 	Unit  string `xml:"Unit,attr"`
-// 	Value int    `xml:",chardata"`
-// }
+// HISTORY
+type MdlSbrapiRsvpnrRsphst struct {
+	ItineraryHistory []MdlSbrapiRsvpnrRspith `xml:"ItineraryHistory>AirSegment"`
+	Signature        MdlSbrapiRsvpnrRspsig   `xml:"Signature"`
+}
+type MdlSbrapiRsvpnrRspith struct {
+	DepartureAirport      string `xml:"DepartureAirport"`
+	ArrivalAirport        string `xml:"ArrivalAirport"`
+	OperatingAirlineCode  string `xml:"OperatingAirlineCode"`
+	EquipmentType         string `xml:"EquipmentType"`
+	MarketingAirlineCode  string `xml:"MarketingAirlineCode"`
+	MarketingFlightNumber string `xml:"MarketingFlightNumber"`
+	DepartureDateTime     string `xml:"DepartureDateTime"`
+	ArrivalDateTime       string `xml:"ArrivalDateTime"`
+	FlightNumber          string `xml:"FlightNumber"`
+	ClassOfService        string `xml:"ClassOfService"`
+	ActionCode            string `xml:"ActionCode"`
+	NumberInParty         string `xml:"NumberInParty"`
+	HistoryAction         string `xml:"HistoryAction"`
+}
+type MdlSbrapiRsvpnrRspsig struct {
+	HistoryTimestamp string `xml:"HistoryTimestamp"`
+	DutyCode         string `xml:"DutyCode"`
+	AgentSine        string `xml:"AgentSine"`
+	HomePCC          string `xml:"HomePCC"`
+	AgencyPCC        string `xml:"AgencyPCC"`
+	HistoryFrom      string `xml:"HistoryFrom"`
+}

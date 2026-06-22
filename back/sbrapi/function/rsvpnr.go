@@ -10,6 +10,19 @@ import (
 func FncSbrapiRsvpnrMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	pnrcde string, sbarea []string) (
 	mdlSbrapi.MdlSbrapiRsvpnrRsprsv, error) {
+	rtrOption := mdlSbrapi.MdlSbrapiRsvpnrReqopt{}
+	if len(sbarea) > 0 {
+		rtrOption = mdlSbrapi.MdlSbrapiRsvpnrReqopt{
+			SubjectAreas:   &mdlSbrapi.MdlSbrapiRsvpnrReqsbj{SubjectArea: sbarea},
+			ViewName:       "Simple",
+			ResponseFormat: "STL",
+		}
+	} else {
+		rtrOption = mdlSbrapi.MdlSbrapiRsvpnrReqopt{
+			ViewName:       "Full",
+			ResponseFormat: "STL",
+		}
+	}
 
 	// Isi struktur data
 	rspRsvpnr := mdlSbrapi.MdlSbrapiRsvpnrRsprsv{}
@@ -27,15 +40,11 @@ func FncSbrapiRsvpnrMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 		},
 		Body: mdlSbrapi.MdlSbrapiRsvpnrReqbdy{
 			GetReservationRQ: mdlSbrapi.MdlSbrapiRsvpnrReqrsv{
-				Xmlns:       "http://webservices.sabre.com/pnrbuilder/v1_19",
-				Version:     "1.19.0",
-				Locator:     pnrcde,
-				RequestType: "Stateless",
-				ReturnOptions: mdlSbrapi.MdlSbrapiRsvpnrReqopt{
-					SubjectAreas:   mdlSbrapi.MdlSbrapiRsvpnrReqsbj{SubjectArea: sbarea},
-					ViewName:       "Simple",
-					ResponseFormat: "STL",
-				},
+				Xmlns:         "http://webservices.sabre.com/pnrbuilder/v1_19",
+				Version:       "1.19.0",
+				Locator:       pnrcde,
+				RequestType:   "Stateless",
+				ReturnOptions: rtrOption,
 			},
 		},
 	}
