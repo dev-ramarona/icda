@@ -8,6 +8,7 @@ type MdlJeddahPramsInputx struct {
 	Pnrcde_jeddah string `json:"pnrcde_jeddah,omitempty" bson:"pnrcde_jeddah,omitempty"`
 	Pagenw_jeddah int    `json:"pagenw_jeddah,omitempty" bson:"pagenw_jeddah,omitempty"`
 	Limitp_jeddah int    `json:"limitp_jeddah,omitempty" bson:"limitp_jeddah,omitempty"`
+	Worker_jeddah int    `json:"worker_jeddah,omitempty" bson:"worker_jeddah,omitempty"`
 }
 
 type MdlJeddahFlnblsDtbase struct {

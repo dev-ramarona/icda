@@ -58,11 +58,15 @@ export default function UixJeddahPrcessManual({
       let nowWorker = 1;
       if (status.sbrapi == 0 && params.flnbfl_jeddah == "") {
         nowWorker = 3;
+        if (params.depart_jeddah == "") {
+          nowWorker = 5;
+          if (params.airlfl_jeddah == "") nowWorker = 7;
+        }
       }
 
       const confst = [];
-      paramsSet((prev) => ({ ...prev, datefl: datefl, worker: nowWorker }));
-      const newdta = { ...params, datefl: datefl, worker: nowWorker };
+      paramsSet((prev) => ({ ...prev, worker_jeddah: nowWorker }));
+      const newdta = { ...params, worker_jeddah: nowWorker };
       Object.entries(newdta).map(([k, v]) => {
         if (v != "" && v != 0) {
           if (k == "datefl") {

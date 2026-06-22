@@ -34,7 +34,7 @@ func FncJeddahPrcessMainpg(c *gin.Context) {
 	var prvPnrobj = FncJeddahPnrobjMapobj()
 	var sycFlnbls = &sync.Map{}
 	for airlfl, slices := range mapFlnbls {
-		totWorker := 1
+		totWorker := inpErrlog.Worker_jeddah
 		var sycPnrcde = &sync.Map{}
 		var sycWgroup sync.WaitGroup
 		slcRspssn, err := fncSbrapi.FncSbrapiCrtssnMultpl(airlfl, int(totWorker))
@@ -82,6 +82,7 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 		var objParams = mdlSbrapi.MdlSbrapiMsghdrApndix{
 			Airlfl: slcPnrtrc.Airlfl, Datefl: slcPnrtrc.Datefl, Depart: slcPnrtrc.Depart,
 			Flnbfl: slcPnrtrc.Flnbfl}
+		fmt.Println(slcPnrtrc.Airlfl, slcPnrtrc.Flnbfl, slcPnrtrc.Depart, slcPnrtrc.Datefl)
 		var mapPnrtrc = map[string]mdlJeddah.MdlJeddahPnrsmrDtbase{}
 		rspIssued, errIssued := fncSbrapi.FncSbrapiPnrtrcMainob("LC", nowObjtkn, objParams)
 		if errIssued == nil {
@@ -202,7 +203,7 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 
 								// Get for database flight number list
 								if _, istsyc := sycFlnbls.Load(strFlnbsg + strDepart); !istsyc {
-									if _, istslc := slices[strFlnbsg+strDepart]; !istslc {
+									if _, istslc := slices[strFlnbsg+strDepart]; !istslc && strings.Contains(strDepart+"-"+strArrivl, "JED") {
 										sycFlnbls.Store(strFlnbsg+strDepart, true)
 										nowPrmkey := fmt.Sprintf("%v%v%v%v", strAirlsg, strFlnbsg, strDepart, intDatefl)
 										mgoFlnbls = append(mgoFlnbls, mongo.NewUpdateOneModel().
@@ -230,20 +231,25 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 						// If cancel data
 						if pnrObject.Totcxl > 0 {
 							slcClssbk, slcFlnbsg, slcRoutsg, slcTimefl := []string{}, []string{}, []string{}, []int64{}
-							for _, itnrxs := range getRsvpnr.History[0].ItineraryHistory {
-								strAirlsg := itnrxs.MarketingAirlineCode
-								strDepart := itnrxs.DepartureAirport
-								strArrivl := itnrxs.ArrivalAirport
-								rawFlnbsg := itnrxs.MarketingFlightNumber
-								intFlnbsg, _ := strconv.Atoi(rawFlnbsg)
-								strFlnbsg := strconv.Itoa(intFlnbsg)
-								rawTimefl := itnrxs.DepartureDateTime
-								fmtTimefl, _ := time.Parse("2006-01-02T15:04:05", rawTimefl)
-								intTimefl, _ := strconv.Atoi(fmtTimefl.Format("0601021504"))
-								slcTimefl = append(slcTimefl, int64(intTimefl))
-								slcFlnbsg = append(slcFlnbsg, strAirlsg+"-"+strFlnbsg)
-								slcClssbk = append(slcClssbk, itnrxs.ClassOfService)
-								slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
+							for _, hstory := range getRsvpnr.History {
+								for _, itnrxs := range hstory.ItineraryHistory {
+									strAirlsg := itnrxs.MarketingAirlineCode
+									strDepart := itnrxs.DepartureAirport
+									strArrivl := itnrxs.ArrivalAirport
+									rawFlnbsg := itnrxs.MarketingFlightNumber
+									intFlnbsg, _ := strconv.Atoi(rawFlnbsg)
+									strFlnbsg := strconv.Itoa(intFlnbsg)
+									rawTimefl := itnrxs.DepartureDateTime
+									fmtTimefl, _ := time.Parse("2006-01-02T15:04:05", rawTimefl)
+									intTimefl, _ := strconv.Atoi(fmtTimefl.Format("0601021504"))
+									slcTimefl = append(slcTimefl, int64(intTimefl))
+									slcFlnbsg = append(slcFlnbsg, strAirlsg+"-"+strFlnbsg)
+									slcClssbk = append(slcClssbk, itnrxs.ClassOfService)
+									slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
+								}
+								if len(slcTimefl) > 0 {
+									break
+								}
 							}
 							pnrObject.Clssbk = strings.Join(slcClssbk, "|")
 							pnrObject.Flnbsg = strings.Join(slcFlnbsg, "|")
@@ -270,5 +276,6 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 			"jeddah_pnrsmr": &mgoPnrtrc,
 			"jeddah_flnbls": &mgoFlnbls,
 		}, 0)
+		fmt.Println("Done:", slcPnrtrc.Airlfl, slcPnrtrc.Flnbfl, slcPnrtrc.Depart, slcPnrtrc.Datefl)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	fncApndix "back/apndix/function"
 	mdlJeddah "back/jeddah/model"
 	"context"
+	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -34,7 +35,8 @@ func FncJeddahFlnblsMapobj() map[string]map[string]mdlJeddah.MdlJeddahFlnblsDtba
 		if _, ist := fnldta[object.Airlfl]; !ist {
 			fnldta[object.Airlfl] = map[string]mdlJeddah.MdlJeddahFlnblsDtbase{}
 		}
-		fnldta[object.Airlfl][object.Flnbfl+object.Depart] = object
+		prmkey := fmt.Sprintf("%v%v%v%v", object.Airlfl, object.Flnbfl, object.Depart, object.Datefl)
+		fnldta[object.Airlfl][prmkey] = object
 	}
 
 	// return data
