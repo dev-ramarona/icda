@@ -7,6 +7,7 @@ export interface MdlJeddahGlobalSrcprm {
   pnrcde_jeddah: string;
   pagenw_jeddah: number;
   limitp_jeddah: number;
+  worker_jeddah: number;
 }
 
 export interface MdlJeddahPrcessDtbase {

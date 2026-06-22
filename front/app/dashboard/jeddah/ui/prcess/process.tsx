@@ -9,7 +9,7 @@ import { mdlAllusrCookieObjson, MdlAllusrStatusPrcess } from "../../../allusr/mo
 import { ApiAllusrStatusPrcess } from "../../../allusr/api/status";
 import UixGlobalConfrmAction from "../../../global/ui/action/confrm";
 import { MdlGlobalConfrmAction } from "../../../global/model/params";
-import { MdlJeddahPrcessDtbase } from "../../model/params";
+import { MdlJeddahGlobalSrcprm } from "../../model/params";
 import { ApiJeddahPrcessManual } from "../../api/prcess";
 
 export default function UixJeddahPrcessManual({
@@ -24,29 +24,19 @@ export default function UixJeddahPrcessManual({
   // Get status first
   const rplprm = FncGlobalQuerysEdlink();
   const hminfr = FncGlobalParamsHminfr(0);
-  const dfault: MdlJeddahPrcessDtbase = {
-    prmkey: "",
-    erstat: "",
-    erpart: "",
-    ersrce: "",
-    erdtil: "",
-    erdvsn: "",
-    erignr: "",
-    dateup: 0,
-    timeup: 0,
-    datefl: 0,
-    airlfl: "",
-    depart: "",
-    flnbfl: "",
-    Paxdif: "",
-    flstat: "",
-    flhour: 0,
-    routfl: "",
-    updtby: "",
-    worker: 1,
+  const dfault: MdlJeddahGlobalSrcprm = {
+    update_global: "",
+    airlfl_jeddah: "",
+    flnbfl_jeddah: "",
+    depart_jeddah: "",
+    routfl_jeddah: "",
+    pnrcde_jeddah: "",
+    pagenw_jeddah: 0,
+    limitp_jeddah: 0,
+    worker_jeddah: 1,
   };
   const nwhour = Number(new Date().getHours().toString().padStart(2, "0"));
-  const [params, paramsSet] = useState<MdlJeddahPrcessDtbase>(dfault);
+  const [params, paramsSet] = useState<MdlJeddahGlobalSrcprm>(dfault);
   const [statfn, statfnSet] = useState("Wait");
 
   // Edit parameter
@@ -66,13 +56,10 @@ export default function UixJeddahPrcessManual({
   const prcess = async (datefl: number) => {
     if (cookie.keywrd && cookie.keywrd.includes("psglst")) {
       let nowWorker = 1;
-      if (status.sbrapi == 0 && params.flnbfl == "") {
+      if (status.sbrapi == 0 && params.flnbfl_jeddah == "") {
         nowWorker = 3;
-        if (params.depart == "") {
-          nowWorker = 5;
-          if (params.airlfl == "") nowWorker = 8;
-        }
       }
+
       const confst = [];
       paramsSet((prev) => ({ ...prev, datefl: datefl, worker: nowWorker }));
       const newdta = { ...params, datefl: datefl, worker: nowWorker };
@@ -95,7 +82,7 @@ export default function UixJeddahPrcessManual({
     rplprm(["update_global"], String(Math.random()));
     statfnSet("Wait");
     const nowprm = { ...params };
-    if ((cookie.keywrd && cookie.keywrd.includes("psglst")) || nowprm.worker == 1)
+    if ((cookie.keywrd && cookie.keywrd.includes("psglst")) || nowprm.worker_jeddah == 1)
       if (status.sbrapi == 0) {
         const rsp = ApiJeddahPrcessManual(nowprm);
         setTimeout(() => {
@@ -150,8 +137,8 @@ export default function UixJeddahPrcessManual({
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={2}
-            queryx={"airlfl"}
-            params={params.airlfl}
+            queryx={"airlfl_jeddah"}
+            params={params.airlfl_jeddah}
             plchdr="Airline"
             repprm={onchge}
             labelx=""
@@ -161,8 +148,8 @@ export default function UixJeddahPrcessManual({
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={3}
-            queryx={"depart"}
-            params={params.depart}
+            queryx={"depart_jeddah"}
+            params={params.depart_jeddah}
             plchdr="Departure"
             repprm={onchge}
             labelx=""
@@ -172,8 +159,8 @@ export default function UixJeddahPrcessManual({
           <UixGlobalInputxFormdt
             typipt={"text"}
             length={4}
-            queryx={"flnbfl"}
-            params={params.flnbfl}
+            queryx={"flnbfl_jeddah"}
+            params={params.flnbfl_jeddah}
             plchdr="Flight Number"
             repprm={onchge}
             labelx=""

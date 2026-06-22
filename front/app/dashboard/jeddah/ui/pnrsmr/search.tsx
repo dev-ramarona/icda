@@ -26,6 +26,7 @@ export default function UixJeddahPnrsmrSearch({
     pnrcde_jeddah: prmPnrsmr.pnrcde_jeddah || "",
     pagenw_jeddah: prmPnrsmr.pagenw_jeddah || 1,
     limitp_jeddah: prmPnrsmr.limitp_jeddah || 15,
+    worker_jeddah: prmPnrsmr.worker_jeddah || 1,
   });
 
   // Monitor change
@@ -41,6 +42,7 @@ export default function UixJeddahPnrsmrSearch({
       pnrcde_jeddah: prmPnrsmr.pnrcde_jeddah || "",
       pagenw_jeddah: prmPnrsmr.pagenw_jeddah || 1,
       limitp_jeddah: prmPnrsmr.limitp_jeddah || 15,
+      worker_jeddah: prmPnrsmr.worker_jeddah || 1,
     });
   }, [prmPnrsmr]);
 

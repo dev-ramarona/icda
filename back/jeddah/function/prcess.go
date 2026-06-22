@@ -3,7 +3,6 @@ package fncJeddah
 import (
 	fncApndix "back/apndix/function"
 	mdlJeddah "back/jeddah/model"
-	mdlPsglst "back/psglst/model"
 	fncSbrapi "back/sbrapi/function"
 	mdlSbrapi "back/sbrapi/model"
 	"fmt"
@@ -26,7 +25,7 @@ func FncJeddahPrcessMainpg(c *gin.Context) {
 	}
 
 	// Bind JSON Body input to variable
-	inpErrlog := mdlPsglst.MdlPsglstErrlogDtbase{} //save
+	inpErrlog := mdlJeddah.MdlJeddahPramsInputx{} //save
 	if err := c.BindJSON(&inpErrlog); err != nil {
 		panic(err)
 	}
@@ -58,7 +57,7 @@ func FncJeddahPrcessMainpg(c *gin.Context) {
 		}
 
 		for _, object := range slices {
-			if inpErrlog.Flnbfl == "" || inpErrlog.Flnbfl == object.Flnbfl {
+			if inpErrlog.Flnbfl_jeddah == "" || inpErrlog.Flnbfl_jeddah == object.Flnbfl {
 				jobPnrtrc <- object
 			}
 		}

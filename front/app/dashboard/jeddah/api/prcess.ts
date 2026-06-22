@@ -1,8 +1,8 @@
 "use server";
 
-import { MdlJeddahGlobalSrcprm, MdlJeddahPrcessDtbase } from "../model/params";
+import { MdlJeddahGlobalSrcprm } from "../model/params";
 
-export async function ApiJeddahPrcessManual(params: MdlJeddahPrcessDtbase) {
+export async function ApiJeddahPrcessManual(params: MdlJeddahGlobalSrcprm) {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_URL_SERVER}/jeddah/prcess`, {
       method: "POST",
