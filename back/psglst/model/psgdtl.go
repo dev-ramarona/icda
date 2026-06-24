@@ -49,12 +49,14 @@ type MdlPsglstPsgdtlDtbase struct {
 	Ntacrt float64 `json:"ntacrt" bson:"ntacrt,omitempty"`
 	Ntaffl int32   `json:"ntaffl" bson:"ntaffl"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
-	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr,omitempty"`
-	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt,omitempty"`
+	Taxcrr string  `json:"taxcrr" bson:"taxcrr,omitempty"`
+	Taxcrt float64 `json:"taxcrt" bson:"taxcrt,omitempty"`
 	Yqtxfl int32   `json:"yqtxfl" bson:"yqtxfl"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Yrtxfl int32   `json:"yrtxfl" bson:"yrtxfl"`
 	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
+	Aptxvc float64 `json:"aptxvc" bson:"aptxvc"`
+	Rwtxvc string  `json:"rwtxvc" bson:"rwtxvc"`
 	Frrate float64 `json:"frrate" bson:"frrate,omitempty"`
 	Frbcde string  `json:"frbcde" bson:"frbcde,omitempty"`
 	Qsrcrw string  `json:"qsrcrw" bson:"qsrcrw,omitempty"`
@@ -213,12 +215,14 @@ type MdlPsglstPsgdtlDfault struct {
 	Ntacrt float64 `json:"ntacrt" bson:"ntacrt"`
 	Ntaffl int32   `json:"ntaffl" bson:"ntaffl"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
-	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr"`
-	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt"`
+	Taxcrr string  `json:"taxcrr" bson:"taxcrr"`
+	Taxcrt float64 `json:"taxcrt" bson:"taxcrt"`
 	Yqtxfl int32   `json:"yqtxfl" bson:"yqtxfl"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Yrtxfl int32   `json:"yrtxfl" bson:"yrtxfl"`
 	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
+	Aptxvc float64 `json:"aptxvc" bson:"aptxvc"`
+	Rwtxvc string  `json:"rwtxvc" bson:"rwtxvc"`
 	Frrate float64 `json:"frrate" bson:"frrate"`
 	Frbcde string  `json:"frbcde" bson:"frbcde"`
 	Qsrcrw string  `json:"qsrcrw" bson:"qsrcrw"`
@@ -408,11 +412,45 @@ type MdlPsglstPsgdtlSlserr struct {
 	Ntacrr string  `json:"ntacrr" bson:"ntacrr"`
 	Ntacrt float64 `json:"ntacrt" bson:"ntacrt"`
 	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
-	Yqtcrr string  `json:"yqtcrr" bson:"yqtcrr"`
-	Yqtcrt float64 `json:"yqtcrt" bson:"yqtcrt"`
+	Taxcrr string  `json:"taxcrr" bson:"taxcrr"`
+	Taxcrt float64 `json:"taxcrt" bson:"taxcrt"`
 	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
 	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
 	Qsrcvc float64 `json:"qsrcvc" bson:"qsrcvc"`
+}
+
+type MdlPsglstPsgdtlFmthai struct {
+	Noterr string  `json:"noterr" bson:"noterr"`
+	Prmkey string  `json:"prmkey" bson:"prmkey"`
+	Pnrcde string  `json:"pnrcde" bson:"pnrcde"`
+	Airlfl string  `json:"airlfl" bson:"airlfl"`
+	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
+	Routfl string  `json:"routfl" bson:"routfl"`
+	Routvc string  `json:"routvc" bson:"routvc"`
+	Routac string  `json:"routac" bson:"routac"`
+	Provnc string  `json:"provnc" bson:"provnc"`
+	Datefl int32   `json:"datefl" bson:"datefl"`
+	Timecr int64   `json:"timecr" bson:"timecr"`
+	Timeis int64   `json:"timeis" bson:"timeis"`
+	Tktnvc string  `json:"tktnvc" bson:"tktnvc"`
+	Nmefst string  `json:"nmefst" bson:"nmefst"`
+	Nmelst string  `json:"nmelst" bson:"nmelst"`
+	Clssfl string  `json:"clssfl" bson:"clssfl"`
+	Clssvc string  `json:"clssvc" bson:"clssvc"`
+	Isitnr string  `json:"isitnr" bson:"isitnr"`
+	Isitfl string  `json:"isitfl" bson:"isitfl"`
+	Isitct string  `json:"isitct" bson:"isitct"`
+	Frcalc string  `json:"frcalc" bson:"frcalc"`
+	Ntacrr string  `json:"ntacrr" bson:"ntacrr"`
+	Ntacrt float64 `json:"ntacrt" bson:"ntacrt"`
+	Ntafvc float64 `json:"ntafvc" bson:"ntafvc"`
+	Taxcrr string  `json:"taxcrr" bson:"taxcrr"`
+	Taxcrt float64 `json:"taxcrt" bson:"taxcrt"`
+	Yqtxvc float64 `json:"yqtxvc" bson:"yqtxvc"`
+	Yrtxvc float64 `json:"yrtxvc" bson:"yrtxvc"`
+	Qsrcvc float64 `json:"qsrcvc" bson:"qsrcvc"`
+	Aptxvc float64 `json:"aptxvc" bson:"aptxvc"`
+	Rwtxvc string  `json:"rwtxvc" bson:"rwtxvc"`
 }
 
 type MdlPsglstPsgdtlEbtfmt struct {

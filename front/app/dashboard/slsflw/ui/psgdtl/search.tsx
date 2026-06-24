@@ -14,12 +14,14 @@ export default function UixSlsflwDetailSearch({
   fmtdef,
   status,
   update,
+  ftrfmt,
 }: {
   prmPsgdtl: MdlSlsflwPsgdtlSrcprm;
   datefl: string[];
   fmtdef: boolean;
   status: MdlAllusrStatusPrcess;
   update: string;
+  ftrfmt: string[];
 }) {
   const [params, paramsSet] = useState<MdlSlsflwPsgdtlSrcprm>({
     update_global: prmPsgdtl.update_global || "",
@@ -169,7 +171,7 @@ export default function UixSlsflwDetailSearch({
       <div className="flexctr relative h-10 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
           typipt={"select"}
-          length={["SLSERR"]}
+          length={ftrfmt}
           queryx={"format_psgdtl"}
           params={params.format_psgdtl}
           plchdr="Format data"

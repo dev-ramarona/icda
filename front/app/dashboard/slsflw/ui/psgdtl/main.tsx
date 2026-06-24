@@ -27,6 +27,9 @@ export default async function UixSlsflwDetailMainpg({
   const arrdta: MdlSlsflwPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("slsrpt");
+  const ftrtru: string[] = ["regall", "regthl"];
+  const ftricl = ftrtru.some((item) => cookie.keywrd.includes(item));
+  const ftrfmt: string[] = ftricl ? ["SLSERR", "FMTHAI"] : ["SLSERR"];
   return (
     <>
       <UixSlsflwDetailSearch
@@ -35,6 +38,7 @@ export default async function UixSlsflwDetailMainpg({
         fmtdef={fmtdef}
         status={status}
         update={update}
+        ftrfmt={ftrfmt}
       />
       {arrdta.length > 0 ? (
         <UixSlsflwDetailTablex arrdta={arrdta} acpedt={acpedt} cookie={cookie} fmtdef={fmtdef} />

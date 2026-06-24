@@ -19,7 +19,9 @@ export function FncGlobalFormatDfault(key: string, val: string): string | number
   } else if (["tktnfl", "tktnvc"].includes(actkey)) {
     now = val.replace(/[^0-9]/g, "").substring(0, 13);
   } else if (
-    ["airmls", "ntafvc", "ntaffl", "cpnbvc", "frbnta", "frbsbr", "milege"].includes(actkey)
+    ["airmls", "ntafvc", "ntaffl", "cpnbvc", "frbnta", "frbsbr", "milege", "aptxvc"].includes(
+      actkey,
+    )
   ) {
     now = Number(val.replace(/[^0-9]/g, ""));
   } else now = val;

@@ -70,6 +70,7 @@ type MdlSbrapiGettktRsptkt struct {
 	Details         MdlSbrapiGettktRspdtl   `xml:"Details"`
 	ServiceCoupon   []MdlSbrapiGettktRspsvc `xml:"ServiceCoupon"`
 	Amounts         MdlSbrapiGettktRspamt   `xml:"Amounts>New"`
+	Taxes           MdlSbrapiGettktRspamt   `xml:"Taxes>New"`
 	FareCalculation string                  `xml:"FareCalculation>New"`
 	Remark          MdlSbrapiGettktRsprmk   `xml:"Remark"`
 	RelatedDocument MdlSbrapiGettktRsprld   `xml:"RelatedDocument"`

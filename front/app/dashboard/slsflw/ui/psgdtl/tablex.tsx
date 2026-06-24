@@ -140,6 +140,7 @@ export default function UixSlsflwDetailTablex({
               "yrtxvc",
               "qsrcrw",
               "qsrcvc",
+              "aptxvc",
             ]}
             cnfupd={fmtdef ? cnfupd : null}
             okeupd={okeupd}

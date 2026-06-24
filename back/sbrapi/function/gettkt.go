@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"time"
@@ -47,6 +48,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 						"ServiceCoupon",
 						"FareCalculation",
 						"Amounts",
+						"Taxes",
 						"RelatedDocument",
 						"Remark",
 					},
@@ -179,52 +181,94 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	}
 
 	// Get taxes
-	if len(slcSegtkt) == 1 && psglst.Isitiv == "" && psglst.Routfx == "" {
-		getTaxyqf, getTaxyrf := 0, 0
-		getTaxcur := getTktdoc.Ticket.Amounts.TotalTax.CurrencyCode
-		if getTaxcur == "" {
-			getTaxcur = getTktdoc.Ticket.Amounts.Total.Amount.CurrencyCode
-		}
-		for _, segtax := range getTktdoc.Ticket.Amounts.Tax {
-			if segtax.Code == "YQ" || segtax.Code == "YR" {
-				if segtax.Code == "YQ" {
-					getTaxyqf, _ = strconv.Atoi(segtax.Amount.Value)
-				}
-				if segtax.Code == "YR" {
-					getTaxyrf, _ = strconv.Atoi(segtax.Amount.Value)
-				}
-				if segtax.Amount.CurrencyCode != "" {
-					getTaxcur = segtax.Amount.CurrencyCode
-				}
+	getTaxyqf, getTaxyrf, getAptxvc := 0.0, 0.0, 0.0
+	mapAptxvc := map[string]float64{}
+	rawTaxstr := []string{}
+	getTaxcur := getTktdoc.Ticket.Taxes.TotalTax.CurrencyCode
+	if getTaxcur == "" {
+		getTaxcur = getTktdoc.Ticket.Taxes.Total.Amount.CurrencyCode
+	}
+	for _, segtax := range getTktdoc.Ticket.Taxes.Tax {
+		rawTaxval, _ := strconv.ParseFloat(segtax.Amount.Value, 64)
+		strTaxcde := strings.TrimSpace(segtax.Code)
+		if strTaxcde == "YQ" || strTaxcde == "YR" {
+			if strTaxcde == "YQ" {
+				getTaxyqf = rawTaxval
 			}
-
-			// Get other taxes if not get
-			if segtax.Amount.CurrencyCode != "" && getTaxcur == "" {
+			if strTaxcde == "YR" {
+				getTaxyrf = rawTaxval
+			}
+			if segtax.Amount.CurrencyCode != "" {
 				getTaxcur = segtax.Amount.CurrencyCode
 			}
 		}
+		if slices.Contains([]string{"WY", "ZY", "ZO", "QW", "QX", "RD", "RA", "QZ", "D5",
+			"MJ", "SW", "RB", "NC", "LI", "YP", "RJ", "ZA", "TJ", "TS", "UB"}, strTaxcde) {
+			if _, istAptxvc := mapAptxvc[strTaxcde]; !istAptxvc {
+				mapAptxvc[strTaxcde] = rawTaxval
+			}
+		}
 
-		// Convert YQ if not IDR and push
-		if getTaxyqf != 0 || getTaxyrf != 0 {
-			psglst.Yqtcrr = "IDR"
-			psglst.Yqtcrt = 1
-			psglst.Yqtxvc = float64(getTaxyqf)
-			psglst.Yrtxvc = float64(getTaxyrf)
+		// Get other taxes if not get
+		if strings.TrimSpace(strTaxcde) != "" {
+			nowTaxcur := segtax.Amount.CurrencyCode
+			if nowTaxcur == "" {
+				nowTaxcur = getTaxcur
+			}
+			nowTaxstr := fmt.Sprintf("%v:%v:%v", nowTaxcur, strTaxcde, rawTaxval)
+			rawTaxstr = append(rawTaxstr, nowTaxstr)
+		}
+		if segtax.Amount.CurrencyCode != "" && getTaxcur == "" {
+			getTaxcur = segtax.Amount.CurrencyCode
+		}
+	}
+
+	// Push raw taxes
+	psglst.Rwtxvc = strings.Join(rawTaxstr, "|")
+
+	// Convert YQ if not IDR and push
+	if getTaxyqf != 0 || getTaxyrf != 0 {
+		if len(slcSegtkt) == 1 && psglst.Isitiv == "" && psglst.Routfx == "" {
+			psglst.Taxcrr = "IDR"
+			psglst.Taxcrt = 1
+			psglst.Yqtxvc = getTaxyqf
+			psglst.Yrtxvc = getTaxyrf
 			if getTaxcur != "" && getTaxcur != "IDR" {
 				if valmap, istmap := mapCurrcv[getTaxcur]; istmap {
-					psglst.Yqtcrr = getTaxcur
-					psglst.Yqtcrt = valmap.Crrate
+					psglst.Taxcrr = getTaxcur
+					psglst.Taxcrt = valmap.Crrate
 
 					// Conver yq and yr
 					if getTaxyqf != 0 {
-						psglst.Yqtxvc = (float64(getTaxyqf) / valmap.Crrate)
+						psglst.Yqtxvc = (getTaxyqf / valmap.Crrate)
 					}
 					if getTaxyrf != 0 {
-						psglst.Yrtxvc = (float64(getTaxyrf) / valmap.Crrate)
+						psglst.Yrtxvc = (getTaxyrf / valmap.Crrate)
 					}
 				}
 			}
 			psglst.Srcyqf = "GETTKT"
+		}
+	}
+
+	// Get airport tax VCR
+	if len(mapAptxvc) != 0 {
+		if psglst.Taxcrr == "" {
+			psglst.Taxcrr = "IDR"
+			psglst.Taxcrt = 1
+		}
+		for _, aptxvc := range mapAptxvc {
+			getAptxvc += aptxvc
+		}
+		psglst.Aptxvc = getAptxvc
+		if getTaxcur != "" && getTaxcur != "IDR" {
+			if valmap, istmap := mapCurrcv[getTaxcur]; istmap {
+				psglst.Aptxvc = (getAptxvc / valmap.Crrate)
+				if psglst.Taxcrr == "" || psglst.Taxcrr == "IDR" {
+					psglst.Taxcrr = getTaxcur
+					psglst.Taxcrt = valmap.Crrate
+				}
+			}
 		}
 	}
 

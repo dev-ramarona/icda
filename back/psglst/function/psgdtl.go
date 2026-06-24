@@ -209,6 +209,14 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 				slctmp = append(slctmp, slcDtaset)
 			}
 			slcobj = slctmp
+		case "FMTHAI":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlFmthai{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlFmthai{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
 		case "EBTFMT":
 			var slctmp = []mdlPsglst.MdlPsglstPsgdtlEbtfmt{}
 			for rawDtaset.Next(contxt) {
@@ -425,11 +433,45 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Ntacrr_target",
 				"Ntacrt_target",
 				"Ntafvc_target",
-				"Yqtcrr_target",
-				"Yqtcrt_target",
+				"Taxcrr_target",
+				"Taxcrt_target",
 				"Yqtxvc_target",
 				"Yrtxvc_target",
 				"Qsrcvc_target",
+			})
+		case "FMTHAI":
+			writer.Write([]string{
+				"Noterr",
+				"Prmkey",
+				"Pnrcde",
+				"Airlfl",
+				"Flnbfl",
+				"Routfl",
+				"Routvc",
+				"Routac",
+				"Provnc",
+				"Datefl",
+				"Timecr",
+				"Timeis",
+				"Tktnvc",
+				"Nmefst",
+				"Nmelst",
+				"Clssfl",
+				"Clssvc",
+				"Isitnr",
+				"Isitfl",
+				"Isitct",
+				"Frcalc",
+				"Ntacrr_target",
+				"Ntacrt_target",
+				"Ntafvc_target",
+				"Taxcrr_target",
+				"Taxcrt_target",
+				"Yqtxvc_target",
+				"Yrtxvc_target",
+				"Qsrcvc_target",
+				"Aptxvc",
+				"Rwtxvc",
 			})
 		case "EBTFMT":
 			writer.Write([]string{
@@ -515,12 +557,14 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"NTA currency rate",
 				"NTA flown",
 				"NTA  VCR",
-				"YQ currency",
-				"YQ currency rate",
+				"Tax currency",
+				"Tax currency rate",
 				"YQ flown",
 				"YQ VCR",
 				"YR flown",
 				"YR VCR",
+				"Airport tax VCR",
+				"Raw all tax VCR",
 				"Fare rate proration",
 				"Fare base code",
 				"Q fare raw text",
@@ -741,11 +785,45 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Ntacrr,
 					fmt.Sprintf("%v", slcDtaset.Ntacrt),
 					fmt.Sprintf("%v", slcDtaset.Ntafvc),
-					slcDtaset.Yqtcrr,
-					fmt.Sprintf("%v", slcDtaset.Yqtcrt),
+					slcDtaset.Taxcrr,
+					fmt.Sprintf("%v", slcDtaset.Taxcrt),
 					fmt.Sprintf("%v", slcDtaset.Yqtxvc),
 					fmt.Sprintf("%v", slcDtaset.Yrtxvc),
 					fmt.Sprintf("%v", slcDtaset.Qsrcvc),
+				})
+			case "FMTHAI":
+				writer.Write([]string{
+					slcDtaset.Noterr,
+					slcDtaset.Prmkey,
+					slcDtaset.Pnrcde,
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					slcDtaset.Routfl,
+					slcDtaset.Routvc,
+					slcDtaset.Routac,
+					slcDtaset.Provnc,
+					fmt.Sprintf("%v", slcDtaset.Datefl),
+					fmt.Sprintf("%v", slcDtaset.Timeis),
+					fmt.Sprintf("%v", slcDtaset.Timecr),
+					slcDtaset.Tktnvc,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					slcDtaset.Clssfl,
+					slcDtaset.Clssvc,
+					slcDtaset.Isitnr,
+					slcDtaset.Isitfl,
+					slcDtaset.Isitct,
+					slcDtaset.Frcalc,
+					slcDtaset.Ntacrr,
+					fmt.Sprintf("%v", slcDtaset.Ntacrt),
+					fmt.Sprintf("%v", slcDtaset.Ntafvc),
+					slcDtaset.Taxcrr,
+					fmt.Sprintf("%v", slcDtaset.Taxcrt),
+					fmt.Sprintf("%v", slcDtaset.Yqtxvc),
+					fmt.Sprintf("%v", slcDtaset.Yrtxvc),
+					fmt.Sprintf("%v", slcDtaset.Qsrcvc),
+					fmt.Sprintf("%v", slcDtaset.Aptxvc),
+					slcDtaset.Rwtxvc,
 				})
 			case "EBTFMT":
 				writer.Write([]string{
@@ -830,12 +908,14 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					fmt.Sprintf("%v", slcDtaset.Ntacrt),
 					fmt.Sprintf("%v", slcDtaset.Ntaffl),
 					fmt.Sprintf("%v", slcDtaset.Ntafvc),
-					slcDtaset.Yqtcrr,
-					fmt.Sprintf("%v", slcDtaset.Yqtcrt),
+					slcDtaset.Taxcrr,
+					fmt.Sprintf("%v", slcDtaset.Taxcrt),
 					fmt.Sprintf("%v", slcDtaset.Yqtxfl),
 					fmt.Sprintf("%v", slcDtaset.Yqtxvc),
 					fmt.Sprintf("%v", slcDtaset.Yrtxfl),
 					fmt.Sprintf("%v", slcDtaset.Yrtxvc),
+					fmt.Sprintf("%v", slcDtaset.Aptxvc),
+					slcDtaset.Rwtxvc,
 					fmt.Sprintf("%v", slcDtaset.Frrate),
 					slcDtaset.Frbcde,
 					slcDtaset.Qsrcrw,

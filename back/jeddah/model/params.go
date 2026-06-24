@@ -29,6 +29,8 @@ type MdlJeddahPnrsmrDtbase struct {
 	Clssbk string `json:"clssbk" bson:"clssbk,omitempty"`
 	Timefl int64  `json:"timefl" bson:"timefl,omitempty"`
 	Timerv int64  `json:"timerv" bson:"timerv,omitempty"`
+	Timecx int64  `json:"timecx" bson:"timecx,omitempty"`
+	Routpv int64  `json:"routpv" bson:"routpv,omitempty"`
 	Drtion int32  `json:"drtion" bson:"drtion,omitempty"`
 	Spltfr string `json:"spltfr" bson:"spltfr,omitempty"`
 	Spltto string `json:"spltto" bson:"spltto,omitempty"`
