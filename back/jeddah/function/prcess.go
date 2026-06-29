@@ -267,9 +267,6 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 							slcClsssg, slcFlnbsg, slcRoutsg, slcTimefl, slcTimest, slcPrmkey :=
 								[]string{}, []string{}, []string{}, []int64{}, []string{}, []string{}
 							for _, hstory := range getRsvpnr.History {
-								fmtDatecx, _ := time.Parse("2006-01-02T15:04:05", hstory.Signature.HistoryTimestamp)
-								intTimecx, _ := strconv.Atoi(fmtDatecx.Format("0601021504"))
-								pnrObject.Totcxl = int32(intTimecx)
 								for _, itnrxs := range hstory.ItineraryHistory {
 									strAirlsg := itnrxs.MarketingAirlineCode
 									strDepart := itnrxs.DepartureAirport
@@ -291,6 +288,9 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 								if len(slcTimefl) > 0 {
 									break
 								}
+								fmtDatecx, _ := time.Parse("2006-01-02T15:04:05", hstory.Signature.HistoryTimestamp)
+								intTimecx, _ := strconv.Atoi(fmtDatecx.Format("0601021504"))
+								pnrObject.Timecx = int64(intTimecx)
 							}
 							pnrObject.Clsssg = strings.Join(slcClsssg, "|")
 							if valprv, istprv := prvPnrobj[pnrcde]; istprv {

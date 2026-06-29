@@ -107,6 +107,16 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "isittx",
 			Value: inputx.Isittx_psgdtl}})
 	}
+	if inputx.Isitif_psgdtl != "" {
+		csvFilenm = append(csvFilenm, inputx.Isitif_psgdtl)
+		mtchdt = append(mtchdt, bson.D{{Key: "isitif",
+			Value: inputx.Isitif_psgdtl}})
+	}
+	if inputx.Isitwc_psgdtl != "" {
+		csvFilenm = append(csvFilenm, inputx.Isitwc_psgdtl)
+		mtchdt = append(mtchdt, bson.D{{Key: "isitwc",
+			Value: inputx.Isitwc_psgdtl}})
+	}
 	if inputx.Keywrd_psgdtl != "" {
 		var slcKeywrd []string
 		if err := json.Unmarshal([]byte(inputx.Keywrd_psgdtl), &slcKeywrd); err == nil {
@@ -348,6 +358,16 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			csvFilenm = append(csvFilenm, inputx.Isittx_psgdtl)
 			mtchdt = append(mtchdt, bson.D{{Key: "isittx",
 				Value: inputx.Isittx_psgdtl}})
+		}
+		if inputx.Isitif_psgdtl != "" {
+			csvFilenm = append(csvFilenm, inputx.Isitif_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "isitif",
+				Value: inputx.Isitif_psgdtl}})
+		}
+		if inputx.Isitwc_psgdtl != "" {
+			csvFilenm = append(csvFilenm, inputx.Isitwc_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "isitwc",
+				Value: inputx.Isitwc_psgdtl}})
 		}
 		if inputx.Keywrd_psgdtl != "" {
 			var slcKeywrd []string

@@ -12,6 +12,8 @@ type MdlPsglstParamsInputx struct {
 	Isitfl_psgdtl string `json:"isitfl_psgdtl,omitempty" bson:"isitfl_psgdtl,omitempty"`
 	Isittx_psgdtl string `json:"isittx_psgdtl,omitempty" bson:"isittx_psgdtl,omitempty"`
 	Isitir_psgdtl string `json:"isitir_psgdtl,omitempty" bson:"isitir_psgdtl,omitempty"`
+	Isitif_psgdtl string `json:"isitif_psgdtl,omitempty" bson:"isitif_psgdtl,omitempty"`
+	Isitwc_psgdtl string `json:"isitwc_psgdtl,omitempty" bson:"isitwc_psgdtl,omitempty"`
 	Nclear_psgdtl string `json:"nclear_psgdtl,omitempty" bson:"nclear_psgdtl,omitempty"`
 	Format_psgdtl string `json:"format_psgdtl,omitempty" bson:"format_psgdtl,omitempty"`
 	Keywrd_psgdtl string `json:"keywrd_psgdtl,omitempty" bson:"keywrd_psgdtl,omitempty"`
