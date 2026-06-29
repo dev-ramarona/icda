@@ -126,6 +126,8 @@ type MdlPsglstPsgdtlDtbase struct {
 	Codels string  `json:"codels" bson:"codels,omitempty"`
 	Isitfl string  `json:"isitfl" bson:"isitfl,omitempty"`
 	Isittx string  `json:"isittx" bson:"isittx,omitempty"`
+	Isitif string  `json:"isitif" bson:"isitif,omitempty"`
+	Isitwc string  `json:"isitwc" bson:"isitwc,omitempty"`
 	Isitir string  `json:"isitir" bson:"isitir,omitempty"`
 	Isitct string  `json:"isitct" bson:"isitct,omitempty"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
@@ -292,6 +294,8 @@ type MdlPsglstPsgdtlDfault struct {
 	Codels string  `json:"codels" bson:"codels"`
 	Isitfl string  `json:"isitfl" bson:"isitfl"`
 	Isittx string  `json:"isittx" bson:"isittx"`
+	Isitif string  `json:"isitif" bson:"isitif"`
+	Isitwc string  `json:"isitwc" bson:"isitwc"`
 	Isitir string  `json:"isitir" bson:"isitir"`
 	Isitct string  `json:"isitct" bson:"isitct"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
@@ -453,6 +457,61 @@ type MdlPsglstPsgdtlFmthai struct {
 	Rwtxvc string  `json:"rwtxvc" bson:"rwtxvc"`
 }
 
+type MdlPsglstPsgdtlFmwchr struct {
+	Airlfl string `json:"airlfl" bson:"airlfl"`
+	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
+	Datefl int32  `json:"datefl" bson:"datefl"`
+	Depart string `json:"depart" bson:"depart"`
+	Arrivl string `json:"arrivl" bson:"arrivl"`
+	Nmefst string `json:"nmefst" bson:"nmefst"`
+	Nmelst string `json:"nmelst" bson:"nmelst"`
+	Groupc string `json:"groupc" bson:"groupc"`
+	Totpax int32  `json:"totpax" bson:"totpax"`
+	Seatpx string `json:"seatpx" bson:"seatpx"`
+	Tktnfl string `json:"tktnfl" bson:"tktnfl"`
+	Cpnbvc int32  `json:"cpnbvc" bson:"cpnbvc"`
+	Clssvc string `json:"clssvc" bson:"clssvc"`
+	Pnrcde string `json:"pnrcde" bson:"pnrcde"`
+	Pnritl string `json:"pnritl" bson:"pnritl"`
+	Coment string `json:"coment" bson:"coment"`
+	Emdnae string `json:"emdnae" bson:"emdnae"`
+	Gpcdae string `json:"gpcdae" bson:"gpcdae"`
+	Descae string `json:"descae" bson:"descae"`
+	Routae string `json:"routae" bson:"routae"`
+	Currae string `json:"currae" bson:"currae"`
+	Fareae string `json:"fareae" bson:"fareae"`
+	Isittx string `json:"isittx" bson:"isittx"`
+	Codels string `json:"codels" bson:"codels"`
+	Status string `json:"status" bson:"status"`
+}
+
+type MdlPsglstPsgdtlFmtinf struct {
+	Airlfl string `json:"airlfl" bson:"airlfl"`
+	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
+	Datefl int32  `json:"datefl" bson:"datefl"`
+	Depart string `json:"depart" bson:"depart"`
+	Arrivl string `json:"arrivl" bson:"arrivl"`
+	Tktnif string `json:"tktnif" bson:"tktnif"`
+	Cpnbif string `json:"cpnbif" bson:"cpnbif"`
+	Dateif string `json:"dateif" bson:"dateif"`
+	Clssif string `json:"clssif" bson:"clssif"`
+	Routif int32  `json:"routif" bson:"routif"`
+	Statif int64  `json:"statif" bson:"statif"`
+	Nmefst int64  `json:"nmefst" bson:"nmefst"`
+	Nmelst string `json:"nmelst" bson:"nmelst"`
+	Isittx string `json:"isittx" bson:"isittx"`
+	Isitif string `json:"isitif" bson:"isitif"`
+	Isitwc string `json:"isitwc" bson:"isitwc"`
+	Cpnbvc string `json:"cpnbvc" bson:"cpnbvc"`
+	Clssvc string `json:"clssvc" bson:"clssvc"`
+	Routvc string `json:"routvc" bson:"routvc"`
+	Statvc string `json:"statvc" bson:"statvc"`
+	Notedt string `json:"notedt" bson:"notedt"`
+	Paxsif string `json:"paxsif" bson:"paxsif"`
+	Pnrcde string `json:"pnrcde" bson:"pnrcde"`
+	Codels string `json:"codels" bson:"codels"`
+}
+
 type MdlPsglstPsgdtlEbtfmt struct {
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Mnthfl int32  `json:"mnthfl" bson:"mnthfl"`
@@ -491,6 +550,8 @@ type MdlPsglstPsgdtlEbtfmt struct {
 	// categr string `json:"categr" bson:"categr"`
 	Isitfl string `json:"isitfl" bson:"isitfl"`
 	Isittx string `json:"isittx" bson:"isittx"`
+	Isitif string `json:"isitif" bson:"isitif"`
+	Isitwc string `json:"isitwc" bson:"isitwc"`
 }
 
 type MdlPsglstPsgdtlTktfmt struct {
@@ -511,6 +572,8 @@ type MdlPsglstPsgdtlTktfmt struct {
 	Routvc string `json:"routvc" bson:"routvc"`
 	Statvc string `json:"statvc" bson:"statvc"`
 	Isittx string `json:"isittx" bson:"isittx"`
+	Isitif string `json:"isitif" bson:"isitif"`
+	Isitwc string `json:"isitwc" bson:"isitwc"`
 	Noteup string `json:"noteup" bson:"noteup"`
 	Gender string `json:"gender" bson:"gender"`
 	Routfl string `json:"routfl" bson:"routfl"`

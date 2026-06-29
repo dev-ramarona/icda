@@ -215,7 +215,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 			if nowTaxcur == "" {
 				nowTaxcur = getTaxcur
 			}
-			nowTaxstr := fmt.Sprintf("%v:%v:%v", nowTaxcur, strTaxcde, rawTaxval)
+			nowTaxstr := fmt.Sprintf("%v:%v:%.2f", nowTaxcur, strTaxcde, rawTaxval)
 			rawTaxstr = append(rawTaxstr, nowTaxstr)
 		}
 		if segtax.Amount.CurrencyCode != "" && getTaxcur == "" {

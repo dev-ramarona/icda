@@ -213,6 +213,15 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 		if slices.Contains(psglst.EditCodeList, "IR") {
 			objPsglst.Isitir = "IR"
 		}
+		if slices.Contains(psglst.EditCodeList, "INF") {
+			objPsglst.Isitif = "INF"
+		}
+		for _, wchrcd := range []string{"WCDB", "WCBW", "WCHC", "WCHR", "WCHS", "WCMP", "WCOB"} {
+			if slices.Contains(psglst.EditCodeList, wchrcd) {
+				objPsglst.Isitwc = "INF"
+				break
+			}
+		}
 		if objPsglst.Nmefst == "XXDHC" || objPsglst.Nmelst == "XXDHC" {
 			objPsglst.Isitnr = "CREW"
 		}

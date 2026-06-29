@@ -25,13 +25,17 @@ type MdlJeddahPnrsmrDtbase struct {
 	Pnrsrc string `json:"pnrsrc" bson:"pnrsrc,omitempty"`
 	Agtnme string `json:"agtnme" bson:"agtnme,omitempty"`
 	Flnbsg string `json:"flnbsg" bson:"flnbsg,omitempty"`
+	Flnbpv string `json:"flnbpv" bson:"flnbpv,omitempty"`
 	Routsg string `json:"routsg" bson:"routsg,omitempty"`
-	Clssbk string `json:"clssbk" bson:"clssbk,omitempty"`
-	Timefl int64  `json:"timefl" bson:"timefl,omitempty"`
-	Timerv int64  `json:"timerv" bson:"timerv,omitempty"`
-	Timecx int64  `json:"timecx" bson:"timecx,omitempty"`
-	Routpv int64  `json:"routpv" bson:"routpv,omitempty"`
+	Routpv string `json:"routpv" bson:"routpv,omitempty"`
+	Clsssg string `json:"clsssg" bson:"clsssg,omitempty"`
+	Clsspv string `json:"clsspv" bson:"clsspv,omitempty"`
+	Timesg string `json:"timesg" bson:"timesg,omitempty"`
+	Timepv string `json:"timepv" bson:"timepv,omitempty"`
+	Timefs int64  `json:"timefs" bson:"timefs,omitempty"`
+	Timels int64  `json:"timels" bson:"timels,omitempty"`
 	Drtion int32  `json:"drtion" bson:"drtion,omitempty"`
+	Timecx int64  `json:"timecx" bson:"timecx,omitempty"`
 	Spltfr string `json:"spltfr" bson:"spltfr,omitempty"`
 	Spltto string `json:"spltto" bson:"spltto,omitempty"`
 	Totpax int32  `json:"totpax" bson:"totpax"`
@@ -40,10 +44,15 @@ type MdlJeddahPnrsmrDtbase struct {
 	Totisd int32  `json:"totisd" bson:"totisd"`
 	Totori int32  `json:"totori" bson:"totori,omitempty"`
 	Frbase int32  `json:"frbase" bson:"frbase"`
+	Soruce string `json:"soruce" bson:"soruce,omitempty"`
 }
 
 type MdlJeddahPnrsmrCmpare struct {
-	Totisd int32 `json:"totisd" bson:"totisd"`
-	Totbok int32 `json:"totbok" bson:"totbok"`
-	Totcxl int32 `json:"totcxl" bson:"totcxl"`
+	Flnbsg string `json:"flnbsg" bson:"flnbsg,omitempty"`
+	Routsg string `json:"routsg" bson:"routsg,omitempty"`
+	Clsssg string `json:"clsssg" bson:"clsssg,omitempty"`
+	Timesg string `json:"timesg" bson:"timesg,omitempty"`
+	Totisd int32  `json:"totisd" bson:"totisd"`
+	Totbok int32  `json:"totbok" bson:"totbok"`
+	Totcxl int32  `json:"totcxl" bson:"totcxl"`
 }

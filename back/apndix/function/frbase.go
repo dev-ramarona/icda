@@ -67,6 +67,17 @@ func FncApndixFrbaseGetall(c *gin.Context) {
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
+	if inputx.Airlfl_apndix != "" {
+		slcAirlfl := strings.Split(inputx.Airlfl_apndix, "-")
+		csvFilenm = append(csvFilenm, inputx.Airlfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "airlfl",
+			Value: bson.M{"$in": slcAirlfl}}})
+	}
+	if inputx.Clssfl_apndix != "" {
+		csvFilenm = append(csvFilenm, inputx.Clssfl_apndix)
+		mtchdt = append(mtchdt, bson.D{{Key: "clssfl",
+			Value: inputx.Clssfl_apndix}})
+	}
 	if inputx.Routfl_apndix != "" {
 		csvFilenm = append(csvFilenm, inputx.Routfl_apndix)
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",

@@ -9,7 +9,7 @@ type MdlSbrapiPnrtrcDtbase struct {
 	Timefl int64  `json:"timefl" bson:"timefl,omitempty"`
 	Timenw int64  `json:"timenw" bson:"timenw,omitempty"`
 	Pnrcde string `json:"pnrcde" bson:"pnrcde,omitempty"`
-	Clssbk string `json:"clssbk" bson:"clssbk,omitempty"`
+	Clsssg string `json:"clsssg" bson:"clsssg,omitempty"`
 	Issued string `json:"issued" bson:"issued,omitempty"`
 	Totpax int32  `json:"totpax" bson:"totpax,omitempty"`
 }

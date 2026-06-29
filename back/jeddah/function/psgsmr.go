@@ -66,6 +66,12 @@ func FncJeddahPnrsmrGetall(c *gin.Context) {
 		mtchdt = append(mtchdt, bson.D{{Key: "routfl",
 			Value: inputx.Routfl_jeddah}})
 	}
+	if inputx.Pnrcde_jeddah != "" {
+		csvFilenm = append(csvFilenm, inputx.Pnrcde_jeddah)
+		mtchdt = append(mtchdt, bson.D{{Key: "$or", Value: bson.A{
+			bson.D{{Key: "pnrcde", Value: inputx.Pnrcde_jeddah}},
+			bson.D{{Key: "pnrsrc", Value: inputx.Pnrcde_jeddah}}}}})
+	}
 
 	// Final match pipeline
 	var mtchfn bson.D
@@ -217,21 +223,31 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 
 	// Streaming file CSV ke client
 	writer.Write([]string{
-		"pnrcde",
-		"pnrsrc",
-		"agtnme",
-		"flnbsg",
-		"routsg",
-		"clssbk",
-		"timefl",
-		"timerv",
-		"spltfr",
-		"spltto",
-		"totpax",
-		"totbok",
-		"totcxl",
-		"totisd",
-		"totori",
+		"Primary key",
+		"PNR Code",
+		"PNR Mother",
+		"Agent name",
+		"Flight segment",
+		"Flight segment Prev",
+		"Route segment",
+		"Route segment Prev",
+		"Class segment",
+		"Class segment Prev",
+		"Time segment",
+		"Time segment Prev",
+		"Time first flown",
+		"Time last flown",
+		"Duration",
+		"Time cancel PNR",
+		"Split from",
+		"Split to",
+		"Total pax All",
+		"Total pax Book",
+		"Total pax Cancel",
+		"Total pax Issued",
+		"Total pax original",
+		"Farebase",
+		"Source data",
 	})
 	writer.Flush()
 
@@ -251,19 +267,28 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 	for rawDtaset.Next(contxt) {
 		var slcDtaset mdlJeddah.MdlJeddahPnrsmrDtbase
 		rawDtaset.Decode(&slcDtaset)
-		strTimefl := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timefl))
-		strTimerv := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timerv))
+		strTimefs := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timefs))
+		strTimels := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timels))
+		strTimecx := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timecx))
 
 		// Write to CSV
 		writer.Write([]string{
+			slcDtaset.Prmkey,
 			slcDtaset.Pnrcde,
 			slcDtaset.Pnrsrc,
 			slcDtaset.Agtnme,
 			slcDtaset.Flnbsg,
+			slcDtaset.Flnbpv,
 			slcDtaset.Routsg,
-			slcDtaset.Clssbk,
-			strTimefl,
-			strTimerv,
+			slcDtaset.Routpv,
+			slcDtaset.Clsssg,
+			slcDtaset.Clsspv,
+			slcDtaset.Timesg,
+			slcDtaset.Timepv,
+			strTimefs,
+			strTimels,
+			"",
+			strTimecx,
 			slcDtaset.Spltfr,
 			slcDtaset.Spltto,
 			fmt.Sprintf("%v", slcDtaset.Totpax),
@@ -271,6 +296,8 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 			fmt.Sprintf("%v", slcDtaset.Totcxl),
 			fmt.Sprintf("%v", slcDtaset.Totisd),
 			fmt.Sprintf("%v", slcDtaset.Totori),
+			"",
+			slcDtaset.Soruce,
 		})
 
 		// Flush every 1000row

@@ -64,13 +64,13 @@ func FncSbrapiPnrtrcPrcess(actcde, output string, params mdlSbrapi.MdlSbrapiMsgh
 		if len(clnrow) >= 3 {
 			getPnrcde := clnrow[3]
 			getTotpax, _ := strconv.Atoi(strings.TrimSpace(clnrow[0][3:6]))
-			getClssbk := clnrow[2]
+			getClsssg := clnrow[2]
 			getAgtnme := strings.TrimSpace(clnrow[0][6:])
 			cekIssued := ""
 			if actcde == "LC" && strings.Contains(clnrow[1], "/") {
 				cekIssued = "issued"
 			} else if actcde == "LX" {
-				getClssbk = clnrow[1]
+				getClsssg = clnrow[1]
 			}
 
 			fnlResult[getPnrcde] = mdlSbrapi.MdlSbrapiPnrtrcDtbase{
@@ -83,7 +83,7 @@ func FncSbrapiPnrtrcPrcess(actcde, output string, params mdlSbrapi.MdlSbrapiMsgh
 				Pnrcde: getPnrcde,
 				Issued: cekIssued,
 				Totpax: int32(getTotpax),
-				Clssbk: getClssbk,
+				Clsssg: getClsssg,
 			}
 		}
 	}

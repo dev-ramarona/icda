@@ -35,6 +35,10 @@ func FncJeddahPnrobjMapobj() map[string]mdlJeddah.MdlJeddahPnrsmrCmpare {
 			fnldta[object.Pnrcde] = mdlJeddah.MdlJeddahPnrsmrCmpare{}
 		}
 		fnldta[object.Pnrcde] = mdlJeddah.MdlJeddahPnrsmrCmpare{
+			Flnbsg: object.Flnbsg,
+			Routsg: object.Routsg,
+			Clsssg: object.Clsssg,
+			Timesg: object.Timesg,
 			Totisd: object.Totisd,
 			Totbok: object.Totbok,
 			Totcxl: object.Totcxl,

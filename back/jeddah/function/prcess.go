@@ -97,23 +97,26 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 							Pnrsrc: val.Pnrcde,
 							Totpax: val.Totpax}
 					}
+					fmtSource := fmt.Sprintf("%v%v%v%v", objParams.Airlfl, objParams.Flnbfl, objParams.Depart, objParams.Datefl)
 					if _, ist := rspBooked[pnrcde]; !ist && val.Issued != "" {
 						objPnrtrc := mapPnrtrc[val.Pnrcde]
-						objPnrtrc.Timefl = val.Timefl
+						objPnrtrc.Timesg = strconv.Itoa(int(val.Timefl))
 						objPnrtrc.Routsg = val.Routfl
 						objPnrtrc.Flnbsg = objParams.Airlfl + "-" + val.Flnbfl
-						objPnrtrc.Clssbk = val.Clssbk
+						objPnrtrc.Clsssg = val.Clsssg
 						objPnrtrc.Agtnme = val.Agtnme
 						objPnrtrc.Totisd = val.Totpax
+						objPnrtrc.Soruce = "LC" + fmtSource
 						mapPnrtrc[val.Pnrcde] = objPnrtrc
 					} else {
 						objPnrtrc := mapPnrtrc[val.Pnrcde]
-						objPnrtrc.Timefl = val.Timefl
+						objPnrtrc.Timesg = strconv.Itoa(int(val.Timefl))
 						objPnrtrc.Routsg = val.Routfl
 						objPnrtrc.Flnbsg = objParams.Airlfl + "-" + val.Flnbfl
-						objPnrtrc.Clssbk = val.Clssbk
+						objPnrtrc.Clsssg = val.Clsssg
 						objPnrtrc.Agtnme = val.Agtnme
 						objPnrtrc.Totbok = val.Totpax
+						objPnrtrc.Soruce = "PUN" + fmtSource
 						mapPnrtrc[val.Pnrcde] = objPnrtrc
 					}
 				}
@@ -128,14 +131,16 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 							Pnrsrc: val.Pnrcde,
 							Totpax: val.Totpax}
 					}
+					fmtSource := fmt.Sprintf("%v%v%v%v", objParams.Airlfl, objParams.Flnbfl, objParams.Depart, objParams.Datefl)
 					if _, ist := rspIssued[pnrcde]; !ist {
 						objPnrtrc := mapPnrtrc[val.Pnrcde]
-						objPnrtrc.Timefl = val.Timefl
+						objPnrtrc.Timesg = strconv.Itoa(int(val.Timefl))
 						objPnrtrc.Routsg = val.Routfl
 						objPnrtrc.Flnbsg = objParams.Airlfl + "-" + val.Flnbfl
-						objPnrtrc.Clssbk = val.Clssbk
+						objPnrtrc.Clsssg = val.Clsssg
 						objPnrtrc.Agtnme = val.Agtnme
 						objPnrtrc.Totcxl = val.Totpax
+						objPnrtrc.Soruce = "LX" + fmtSource
 						mapPnrtrc[val.Pnrcde] = objPnrtrc
 					}
 				}
@@ -149,13 +154,13 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 				nowswg.Add(1)
 				go func() {
 					defer nowswg.Done()
-					sycPnrcde.Store(pnrcde, true)
 					slcSbarea, idx := []string{"ITINERARY", "REMARKS"}, 0
 					if pnrObject.Totcxl > 0 {
 						slcSbarea = []string{}
 					}
 					getRsvpnr, err := fncSbrapi.FncSbrapiRsvpnrMainob(nowObjtkn, pnrcde, slcSbarea)
 					if err == nil {
+						slcSegmnt := getRsvpnr.PassengerReservation.Segments.Segment
 
 						// Get divided
 						pnrTotori := pnrObject.Totpax
@@ -183,8 +188,9 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 						pnrObject.Totori = pnrTotori
 
 						// Get segment
-						if len(getRsvpnr.PassengerReservation.Segments.Segment) > 0 {
-							slcClssbk, slcFlnbsg, slcRoutsg, slcTimefl := []string{}, []string{}, []string{}, []int64{}
+						if len(slcSegmnt) > 0 {
+							slcClsssg, slcFlnbsg, slcRoutsg, slcTimefl, slcTimest, slcPrmkey :=
+								[]string{}, []string{}, []string{}, []int64{}, []string{}, []string{}
 							for _, segmnt := range getRsvpnr.PassengerReservation.Segments.Segment {
 								strAirlsg := segmnt.Air.MarketingAirlineCode
 								rawFlnbsg := segmnt.Air.MarketingFlightNumber
@@ -197,15 +203,19 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 								intTimefl, _ := strconv.Atoi(fmtTimefl.Format("0601021504"))
 								intDatefl, _ := strconv.Atoi(fmtTimefl.Format("060102"))
 								slcTimefl = append(slcTimefl, int64(intTimefl))
+								slcTimest = append(slcTimest, strconv.Itoa(intTimefl))
 								slcFlnbsg = append(slcFlnbsg, strAirlsg+"-"+strFlnbsg)
-								slcClssbk = append(slcClssbk, segmnt.Air.MarketingClassOfService)
+								slcClsssg = append(slcClsssg, segmnt.Air.MarketingClassOfService)
 								slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
+								slcPrmkey = append(slcPrmkey, strconv.Itoa(intTimefl)+
+									strAirlsg+"-"+strFlnbsg+strAirlsg+strDepart+"-"+strArrivl)
 
 								// Get for database flight number list
-								if _, istsyc := sycFlnbls.Load(strFlnbsg + strDepart); !istsyc {
-									if _, istslc := slices[strFlnbsg+strDepart]; !istslc && strings.Contains(strDepart+"-"+strArrivl, "JED") {
-										sycFlnbls.Store(strFlnbsg+strDepart, true)
-										nowPrmkey := fmt.Sprintf("%v%v%v%v", strAirlsg, strFlnbsg, strDepart, intDatefl)
+								keyFlnbls := fmt.Sprintf("%v%v%v", strFlnbsg, strDepart, intDatefl)
+								if _, istsyc := sycFlnbls.Load(keyFlnbls); !istsyc {
+									if _, istslc := slices[keyFlnbls]; !istslc && strings.Contains(strDepart+"-"+strArrivl, "JED") {
+										sycFlnbls.Store(keyFlnbls, true)
+										nowPrmkey := fmt.Sprintf("%v%v", strAirlsg, keyFlnbls)
 										mgoFlnbls = append(mgoFlnbls, mongo.NewUpdateOneModel().
 											SetFilter(bson.M{"prmkey": nowPrmkey}).
 											SetUpdate(bson.M{"$set": mdlJeddah.MdlJeddahFlnblsDtbase{
@@ -221,17 +231,45 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 									}
 								}
 							}
-							pnrObject.Clssbk = strings.Join(slcClssbk, "|")
+							pnrObject.Clsssg = strings.Join(slcClsssg, "|")
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Clsssg != pnrObject.Clsssg {
+									pnrObject.Clsspv = pnrObject.Clsssg
+								}
+							}
 							pnrObject.Flnbsg = strings.Join(slcFlnbsg, "|")
-							pnrObject.Timefl = slcTimefl[0]
-							pnrObject.Timerv = slcTimefl[len(slcTimefl)-1]
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Flnbsg != pnrObject.Flnbsg {
+									pnrObject.Flnbpv = pnrObject.Flnbsg
+								}
+							}
+							pnrObject.Timesg = strings.Join(slcTimest, "|")
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Timesg != pnrObject.Timesg {
+									pnrObject.Timepv = pnrObject.Timesg
+								}
+							}
 							pnrObject.Routsg = strings.Join(slcRoutsg, "|")
-						}
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Routsg != pnrObject.Routsg {
+									pnrObject.Routpv = pnrObject.Routsg
+								}
+							}
+							pnrObject.Timefs = slcTimefl[0]
+							pnrObject.Timels = slcTimefl[len(slcTimefl)-1]
+							if pnrObject.Totcxl == 0 {
+								sycPnrcde.Store(pnrcde, true)
+							}
 
-						// If cancel data
-						if pnrObject.Totcxl > 0 {
-							slcClssbk, slcFlnbsg, slcRoutsg, slcTimefl := []string{}, []string{}, []string{}, []int64{}
+						} else if pnrObject.Totcxl > 0 {
+							sycPnrcde.Store(pnrcde, true)
+							// If cancel data
+							slcClsssg, slcFlnbsg, slcRoutsg, slcTimefl, slcTimest, slcPrmkey :=
+								[]string{}, []string{}, []string{}, []int64{}, []string{}, []string{}
 							for _, hstory := range getRsvpnr.History {
+								fmtDatecx, _ := time.Parse("2006-01-02T15:04:05", hstory.Signature.HistoryTimestamp)
+								intTimecx, _ := strconv.Atoi(fmtDatecx.Format("0601021504"))
+								pnrObject.Totcxl = int32(intTimecx)
 								for _, itnrxs := range hstory.ItineraryHistory {
 									strAirlsg := itnrxs.MarketingAirlineCode
 									strDepart := itnrxs.DepartureAirport
@@ -243,21 +281,44 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 									fmtTimefl, _ := time.Parse("2006-01-02T15:04:05", rawTimefl)
 									intTimefl, _ := strconv.Atoi(fmtTimefl.Format("0601021504"))
 									slcTimefl = append(slcTimefl, int64(intTimefl))
+									slcTimest = append(slcTimest, strconv.Itoa(intTimefl))
 									slcFlnbsg = append(slcFlnbsg, strAirlsg+"-"+strFlnbsg)
-									slcClssbk = append(slcClssbk, itnrxs.ClassOfService)
+									slcClsssg = append(slcClsssg, itnrxs.ClassOfService)
 									slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
+									slcPrmkey = append(slcPrmkey, strconv.Itoa(intTimefl)+
+										strAirlsg+"-"+strFlnbsg+itnrxs.ClassOfService+strDepart+"-"+strArrivl)
 								}
 								if len(slcTimefl) > 0 {
 									break
 								}
 							}
-							pnrObject.Clssbk = strings.Join(slcClssbk, "|")
+							pnrObject.Clsssg = strings.Join(slcClsssg, "|")
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Clsssg != pnrObject.Clsssg {
+									pnrObject.Clsspv = pnrObject.Clsssg
+								}
+							}
 							pnrObject.Flnbsg = strings.Join(slcFlnbsg, "|")
-							pnrObject.Timefl = slcTimefl[0]
-							pnrObject.Timerv = slcTimefl[len(slcTimefl)-1]
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Flnbsg != pnrObject.Flnbsg {
+									pnrObject.Flnbpv = pnrObject.Flnbsg
+								}
+							}
+							pnrObject.Timesg = strings.Join(slcTimest, "|")
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Timesg != pnrObject.Timesg {
+									pnrObject.Timepv = pnrObject.Timesg
+								}
+							}
 							pnrObject.Routsg = strings.Join(slcRoutsg, "|")
+							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
+								if valprv.Routsg != pnrObject.Routsg {
+									pnrObject.Routpv = pnrObject.Routsg
+								}
+							}
+							pnrObject.Timefs = slcTimefl[0]
+							pnrObject.Timels = slcTimefl[len(slcTimefl)-1]
 						}
-
 					}
 
 					mgoPnrtrc = append(mgoPnrtrc, mongo.NewUpdateOneModel().

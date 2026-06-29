@@ -209,6 +209,22 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 				slctmp = append(slctmp, slcDtaset)
 			}
 			slcobj = slctmp
+		case "FMWCHR":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlFmwchr{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlFmwchr{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
+		case "FMTINF":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlFmtinf{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlFmtinf{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
 		case "FMTHAI":
 			var slctmp = []mdlPsglst.MdlPsglstPsgdtlFmthai{}
 			for rawDtaset.Next(contxt) {
@@ -473,6 +489,59 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Aptxvc",
 				"Rwtxvc",
 			})
+		case "FMWCHR":
+			writer.Write([]string{
+				"Airline Flown",
+				"Flight number flown",
+				"Date flown",
+				"Departure",
+				"Arrival",
+				"Name first passenger",
+				"Name last passenger",
+				"Group code",
+				"Total pax",
+				"Seat number passenger",
+				"Ticket number flown",
+				"Coupon number VCR",
+				"Class RBD VCR",
+				"PNR code",
+				"PNR interline",
+				"Comment",
+				"EMD number acnillary",
+				"Group code acnillary",
+				"Description acnillary",
+				"Route acnillary",
+				"Currency acnillary",
+				"Fare acnillary",
+				"Is it transit?",
+				"Code list from passenger list",
+				"STATUS",
+			})
+		case "FMTINF":
+			writer.Write([]string{
+				"Airline Flown",
+				"Flight number flown",
+				"Date flown",
+				"Departure",
+				"Arrival",
+				"Ticket infant",
+				"Coupon infant",
+				"Date infant",
+				"Class infant",
+				"Route infant",
+				"Status infant",
+				"Name first passenger",
+				"Name last passenger",
+				"Is it transit?",
+				"CPN",
+				"CLS",
+				"RUTE",
+				"STATUS",
+				"KETERANGAN",
+				"Passenger infant",
+				"PNR code",
+				"Code list from passenger list",
+			})
 		case "EBTFMT":
 			writer.Write([]string{
 				"CEK GROUP",
@@ -633,6 +702,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Agentdie create PNR",
 				"Code list from passenger list",
 				"Is it flown?",
+				"Is it infant?",
+				"Is it WCHR?",
 				"Is it transit?",
 				"Is it iregularity?",
 				"Is it charter?",
@@ -736,6 +807,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			strDatefl := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datefl))
 			strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
 			strDaterv := fncApndix.FncApndixFormatDateot(int(slcDtaset.Daterv))
+			strDateif := fncApndix.FncApndixFormatDateot(int(slcDtaset.Dateif))
 
 			// Write to CSV
 			switch inputx.Format_psgdtl {
@@ -790,6 +862,59 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					fmt.Sprintf("%v", slcDtaset.Yqtxvc),
 					fmt.Sprintf("%v", slcDtaset.Yrtxvc),
 					fmt.Sprintf("%v", slcDtaset.Qsrcvc),
+				})
+			case "FMTINF":
+				writer.Write([]string{
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					strDatefl,
+					slcDtaset.Depart,
+					slcDtaset.Arrivl,
+					slcDtaset.Tktnif,
+					fmt.Sprintf("%v", slcDtaset.Cpnbif),
+					strDateif,
+					slcDtaset.Clssif,
+					slcDtaset.Routif,
+					slcDtaset.Statif,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					slcDtaset.Isittx,
+					fmt.Sprintf("%v", slcDtaset.Cpnbvc),
+					slcDtaset.Clssvc,
+					slcDtaset.Routvc,
+					slcDtaset.Statvc,
+					"",
+					slcDtaset.Paxsif,
+					slcDtaset.Pnrcde,
+					slcDtaset.Codels,
+				})
+			case "FMWCHR":
+				writer.Write([]string{
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					fmt.Sprintf("%v", slcDtaset.Datefl),
+					slcDtaset.Depart,
+					slcDtaset.Arrivl,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					slcDtaset.Groupc,
+					fmt.Sprintf("%v", slcDtaset.Totpax),
+					slcDtaset.Seatpx,
+					slcDtaset.Tktnfl,
+					fmt.Sprintf("%v", slcDtaset.Cpnbvc),
+					slcDtaset.Clssvc,
+					slcDtaset.Pnrcde,
+					slcDtaset.Pnritl,
+					slcDtaset.Coment,
+					slcDtaset.Emdnae,
+					slcDtaset.Gpcdae,
+					slcDtaset.Descae,
+					slcDtaset.Routae,
+					slcDtaset.Currae,
+					fmt.Sprintf("%v", slcDtaset.Fareae),
+					slcDtaset.Isittx,
+					slcDtaset.Codels,
+					"",
 				})
 			case "FMTHAI":
 				writer.Write([]string{
@@ -984,6 +1109,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Agtdcr,
 					slcDtaset.Codels,
 					slcDtaset.Isitfl,
+					slcDtaset.Isitif,
+					slcDtaset.Isitwc,
 					slcDtaset.Isittx,
 					slcDtaset.Isitir,
 					slcDtaset.Isitct,
