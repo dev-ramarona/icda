@@ -477,6 +477,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			})
 		case "FMTHAI":
 			writer.Write([]string{
+				"Primary key",
 				"Noterr",
 				"Prmkey",
 				"Pnrcde",
@@ -511,6 +512,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			})
 		case "FMWCHR":
 			writer.Write([]string{
+				"Primary key",
 				"Airline Flown",
 				"Flight number flown",
 				"Date flown",
@@ -885,6 +887,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				})
 			case "FMTINF":
 				writer.Write([]string{
+					slcDtaset.Prmkey,
 					slcDtaset.Airlfl,
 					slcDtaset.Flnbfl,
 					strDatefl,
@@ -910,6 +913,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				})
 			case "FMWCHR":
 				writer.Write([]string{
+					slcDtaset.Prmkey,
 					slcDtaset.Airlfl,
 					slcDtaset.Flnbfl,
 					fmt.Sprintf("%v", slcDtaset.Datefl),
