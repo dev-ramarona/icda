@@ -7,12 +7,13 @@ import UixJeddahPrcessManual from "./ui/prcess/process";
 import { MdlAllusrStatusPrcess } from "../allusr/model/params";
 import UixJeddahPnrsmrMainpg from "./ui/pnrsmr/main";
 import { FncJeddahPnrsmrSrcprm } from "./function/params";
+import { ApiAllusrStatusPrcess } from "../allusr/api/status";
 
 export default async function Page(props: { searchParams: Promise<MdlJeddahGlobalSrcprm> }) {
   const cookie = await ApiAllusrCookieGetdta();
   const qryprm = await props.searchParams;
   const prmPnrsmr = FncJeddahPnrsmrSrcprm(qryprm);
-  const status: MdlAllusrStatusPrcess = { action: "", sbrapi: 0 };
+  const status = await ApiAllusrStatusPrcess();
 
   return (
     <div className="afull flex flex-wrap items-start justify-start p-1.5 md:p-6">
