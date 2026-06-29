@@ -541,6 +541,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			})
 		case "FMTINF":
 			writer.Write([]string{
+				"Primary key",
 				"Airline Flown",
 				"Flight number flown",
 				"Date flown",
