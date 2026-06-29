@@ -496,17 +496,17 @@ type MdlPsglstPsgdtlFmtinf struct {
 	Depart string `json:"depart" bson:"depart"`
 	Arrivl string `json:"arrivl" bson:"arrivl"`
 	Tktnif string `json:"tktnif" bson:"tktnif"`
-	Cpnbif string `json:"cpnbif" bson:"cpnbif"`
-	Dateif string `json:"dateif" bson:"dateif"`
+	Cpnbif int32  `json:"cpnbif" bson:"cpnbif"`
+	Dateif int32  `json:"dateif" bson:"dateif"`
 	Clssif string `json:"clssif" bson:"clssif"`
-	Routif int32  `json:"routif" bson:"routif"`
-	Statif int64  `json:"statif" bson:"statif"`
-	Nmefst int64  `json:"nmefst" bson:"nmefst"`
+	Routif string `json:"routif" bson:"routif"`
+	Statif string `json:"statif" bson:"statif"`
+	Nmefst string `json:"nmefst" bson:"nmefst"`
 	Nmelst string `json:"nmelst" bson:"nmelst"`
 	Isittx string `json:"isittx" bson:"isittx"`
 	Isitif string `json:"isitif" bson:"isitif"`
 	Isitwc string `json:"isitwc" bson:"isitwc"`
-	Cpnbvc string `json:"cpnbvc" bson:"cpnbvc"`
+	Cpnbvc int32  `json:"cpnbvc" bson:"cpnbvc"`
 	Clssvc string `json:"clssvc" bson:"clssvc"`
 	Routvc string `json:"routvc" bson:"routvc"`
 	Statvc string `json:"statvc" bson:"statvc"`
@@ -559,7 +559,6 @@ type MdlPsglstPsgdtlEbtfmt struct {
 }
 
 type MdlPsglstPsgdtlTktfmt struct {
-	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Nmefst string `json:"nmefst" bson:"nmefst"`
 	Nmelst string `json:"nmelst" bson:"nmelst"`
 	Airlfl string `json:"airlfl" bson:"airlfl"`
@@ -582,4 +581,5 @@ type MdlPsglstPsgdtlTktfmt struct {
 	Gender string `json:"gender" bson:"gender"`
 	Routfl string `json:"routfl" bson:"routfl"`
 	Isitir string `json:"isitir" bson:"isitir"`
+	Prmkey string `json:"prmkey" bson:"prmkey"`
 }
