@@ -547,7 +547,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Date flown",
 				"Departure",
 				"Arrival",
-				"Ticket infant",
+				"VCR infant",
 				"Coupon infant",
 				"Date infant",
 				"Class infant",
@@ -831,6 +831,15 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
 			strDaterv := fncApndix.FncApndixFormatDateot(int(slcDtaset.Daterv))
 			strDateif := fncApndix.FncApndixFormatDateot(int(slcDtaset.Dateif))
+			slcPaxsif := strings.Split(slcDtaset.Paxsif, ",")
+			infNmefst := ""
+			infNmelst := ""
+			infDbirth := ""
+			if len(slcPaxsif) == 3 {
+				infNmefst = slcPaxsif[0]
+				infNmelst = slcPaxsif[1]
+				infDbirth = slcPaxsif[2]
+			}
 
 			// Write to CSV
 			switch inputx.Format_psgdtl {
@@ -903,12 +912,14 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Nmefst,
 					slcDtaset.Nmelst,
 					slcDtaset.Isittx,
-					fmt.Sprintf("%v", slcDtaset.Cpnbvc),
-					slcDtaset.Clssvc,
-					slcDtaset.Routvc,
-					slcDtaset.Statvc,
 					"",
-					slcDtaset.Paxsif,
+					"",
+					"",
+					"",
+					"",
+					infNmefst,
+					infNmelst,
+					infDbirth,
 					slcDtaset.Pnrcde,
 					slcDtaset.Codels,
 				})
