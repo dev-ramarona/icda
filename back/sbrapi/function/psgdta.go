@@ -224,7 +224,7 @@ func FncSbrapiPsgdtaTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsgdtaRsppdr,
 				psgdta.Clssif = partsl[3]
 				psgdta.Routif = partsl[4]
 				psgdta.Statif = partsl[5]
-			} else {
+			} else if psgdta.Paxsif == "" {
 				psgdta.Paxsif = freetx.TextLine
 			}
 

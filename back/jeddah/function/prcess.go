@@ -48,11 +48,11 @@ func FncJeddahPrcessMainpg(c *gin.Context) {
 			if len(slcRspssn) >= i+1 {
 				if slcRspssn[i].Bsttkn != "" {
 					sycWgroup.Add(1)
-					fmt.Println("Success Token-", i)
+					fmt.Println("Success Token-", i, airlfl)
 					go FncPnrtrcPrcessWorker(&sycWgroup, jobPnrtrc, sycPnrcde, sycFlnbls, slcRspssn[i], prvPnrobj, slices)
 					continue
 				}
-				fmt.Println("Failed Token-", i)
+				fmt.Println("Failed Token-", i, airlfl)
 			}
 		}
 
