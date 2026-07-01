@@ -561,7 +561,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"RUTE",
 				"STATUS",
 				"KETERANGAN",
-				"Passenger infant",
+				"Name first infant",
+				"Name last infant",
+				"Date of birth infant",
 				"PNR code",
 				"Code list from passenger list",
 			})
@@ -835,10 +837,12 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			infNmefst := ""
 			infNmelst := ""
 			infDbirth := ""
-			if len(slcPaxsif) == 3 {
+			if len(slcPaxsif) >= 3 {
 				infNmefst = slcPaxsif[0]
-				infNmelst = slcPaxsif[1]
-				infDbirth = slcPaxsif[2]
+				infDbirth = slcPaxsif[len(slcPaxsif)-1]
+				if len(slcPaxsif) == 3 {
+					infNmelst = slcPaxsif[1]
+				}
 			}
 
 			// Write to CSV

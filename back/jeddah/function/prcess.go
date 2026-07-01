@@ -64,6 +64,7 @@ func FncJeddahPrcessMainpg(c *gin.Context) {
 
 		close(jobPnrtrc)
 		sycWgroup.Wait()
+		fncSbrapi.FncSbrapiClsssnMultpl(slcRspssn)
 	}
 
 	// Done
