@@ -837,7 +837,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			infNmefst := ""
 			infNmelst := ""
 			infDbirth := ""
-			if len(slcPaxsif) >= 3 {
+			if len(slcPaxsif) >= 2 {
 				infNmefst = slcPaxsif[0]
 				infDbirth = slcPaxsif[len(slcPaxsif)-1]
 				if len(slcPaxsif) == 3 {
