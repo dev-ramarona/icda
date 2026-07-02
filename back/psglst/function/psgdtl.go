@@ -635,6 +635,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Gender passenger",
 				"Route flown",
 				"Is it iregularity?",
+				"Is it offload?",
+				"Primary key",
 			})
 		default:
 			writer.Write([]string{
@@ -734,6 +736,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it charter?",
 				"Is it non revenue?",
 				"Is it invol?",
+				"Is it offload?",
 				"Source Fare",
 				"Source YQ tax",
 				"Note update",
@@ -1057,7 +1060,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Rmkusr,
 					slcDtaset.Gender,
 					slcDtaset.Routfl,
-					slcDtaset.Isitir})
+					slcDtaset.Isitir,
+					slcDtaset.Isitof})
 			default:
 				writer.Write([]string{
 					slcDtaset.Mnfest,
@@ -1156,6 +1160,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Isitct,
 					slcDtaset.Isitnr,
 					slcDtaset.Isitiv,
+					slcDtaset.Isitof,
 					slcDtaset.Srcfrb,
 					slcDtaset.Srcyqf,
 					slcDtaset.Noteup,

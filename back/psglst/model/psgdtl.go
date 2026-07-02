@@ -581,5 +581,6 @@ type MdlPsglstPsgdtlTktfmt struct {
 	Gender string `json:"gender" bson:"gender"`
 	Routfl string `json:"routfl" bson:"routfl"`
 	Isitir string `json:"isitir" bson:"isitir"`
+	Isitof string `json:"isitof" bson:"isitof"`
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 }
