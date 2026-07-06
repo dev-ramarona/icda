@@ -477,7 +477,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			})
 		case "FMTHAI":
 			writer.Write([]string{
-				"Primary key",
 				"Noterr",
 				"Prmkey",
 				"Pnrcde",

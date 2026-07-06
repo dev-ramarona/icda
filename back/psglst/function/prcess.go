@@ -110,7 +110,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 		FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 			Erpart: "sssion", Ersrce: "sbrapi", Erdvsn: "MNFEST",
 			Dateup: int32(intDatenw), Timeup: int64(intTimenw),
-			Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 5,
+			Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 1,
 		}, lgcRspssn, sycErrlog, &errErignr, &errPrmkey)
 		if lgcRspssn {
 			continue
@@ -149,7 +149,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 			FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
 				Erpart: "fllstl", Ersrce: "sbrapi", Erdvsn: "MNFEST",
 				Dateup: int32(intDatenw), Timeup: int64(intTimenw),
-				Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 5,
+				Datefl: int32(intDatefl), Airlfl: airlfl, Worker: 1,
 				Depart: depart,
 			}, err != nil, sycErrlog, &errErignr, &errPrmkey)
 			if err != nil {

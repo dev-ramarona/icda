@@ -362,7 +362,6 @@ func FncApndixFrtaxsDownld(c *gin.Context) {
 			fmt.Sprintf("%v", slcDtaset.Datend),
 			slcDtaset.Hstory,
 			slcDtaset.Updtby,
-			fmt.Sprintf("%v", slcDtaset.Ftppnx),
 		})
 
 		// Flush every 1000row
