@@ -27,6 +27,7 @@ export default async function UixPsglstDetailMainpg({
   const arrdta: MdlPsglstPsgdtlFrntnd[] = psgdtl.arrdta;
   const totdta: number = psgdtl.totdta;
   const acpedt: MdlApndixAcpedtDtbase[] = await ApiApndixAcpedtDtbase("mnfest");
+
   return (
     <>
       <UixPsglstDetailSearch

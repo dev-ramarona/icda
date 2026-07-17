@@ -190,8 +190,9 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 
 						// Get segment
 						if len(slcSegmnt) > 0 {
-							slcClsssg, slcFlnbsg, slcRoutsg, slcTimefl, slcTimest, slcPrmkey :=
-								[]string{}, []string{}, []string{}, []int64{}, []string{}, []string{}
+							slcClsssg, slcFlnbsg, slcRoutsg, slcTimest, slcPrmkey :=
+								[]string{}, []string{}, []string{}, []string{}, []string{}
+							slcTimefl, slcTimejd := []int64{}, []string{}
 							for _, segmnt := range getRsvpnr.PassengerReservation.Segments.Segment {
 								strAirlsg := segmnt.Air.MarketingAirlineCode
 								rawFlnbsg := segmnt.Air.MarketingFlightNumber
@@ -201,15 +202,19 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 								strArrivl := segmnt.Air.ArrivalAirport
 								rawTimefl := segmnt.Air.DepartureDateTime
 								fmtTimefl, _ := time.Parse("2006-01-02T15:04:05", rawTimefl)
-								intTimefl, _ := strconv.Atoi(fmtTimefl.Format("0601021504"))
+								strTimefl := fmtTimefl.Format("0601021504")
+								intTimefl, _ := strconv.Atoi(strTimefl)
 								intDatefl, _ := strconv.Atoi(fmtTimefl.Format("060102"))
 								slcTimefl = append(slcTimefl, int64(intTimefl))
-								slcTimest = append(slcTimest, strconv.Itoa(intTimefl))
+								slcTimest = append(slcTimest, strTimefl)
 								slcFlnbsg = append(slcFlnbsg, strAirlsg+"-"+strFlnbsg)
 								slcClsssg = append(slcClsssg, segmnt.Air.MarketingClassOfService)
 								slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
-								slcPrmkey = append(slcPrmkey, strconv.Itoa(intTimefl)+
+								slcPrmkey = append(slcPrmkey, strTimefl+
 									strAirlsg+"-"+strFlnbsg+strAirlsg+strDepart+"-"+strArrivl)
+								if strings.Contains(strDepart+strArrivl, "JED") {
+									slcTimejd = append(slcTimejd, strTimefl)
+								}
 
 								// Get for database flight number list
 								keyFlnbls := fmt.Sprintf("%v%v%v", strFlnbsg, strDepart, intDatefl)
@@ -244,12 +249,14 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 									pnrObject.Flnbpv = pnrObject.Flnbsg
 								}
 							}
+							pnrObject.Timejd = strings.Join(slcTimejd, "|")
 							pnrObject.Timesg = strings.Join(slcTimest, "|")
 							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
 								if valprv.Timesg != pnrObject.Timesg {
 									pnrObject.Timepv = pnrObject.Timesg
 								}
 							}
+
 							pnrObject.Routsg = strings.Join(slcRoutsg, "|")
 							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
 								if valprv.Routsg != pnrObject.Routsg {
@@ -277,13 +284,14 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 									strFlnbsg := strconv.Itoa(intFlnbsg)
 									rawTimefl := itnrxs.DepartureDateTime
 									fmtTimefl, _ := time.Parse("2006-01-02T15:04:05", rawTimefl)
-									intTimefl, _ := strconv.Atoi(fmtTimefl.Format("0601021504"))
+									strTimefl := fmtTimefl.Format("0601021504")
+									intTimefl, _ := strconv.Atoi(strTimefl)
 									slcTimefl = append(slcTimefl, int64(intTimefl))
-									slcTimest = append(slcTimest, strconv.Itoa(intTimefl))
+									slcTimest = append(slcTimest, strTimefl)
 									slcFlnbsg = append(slcFlnbsg, strAirlsg+"-"+strFlnbsg)
 									slcClsssg = append(slcClsssg, itnrxs.ClassOfService)
 									slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
-									slcPrmkey = append(slcPrmkey, strconv.Itoa(intTimefl)+
+									slcPrmkey = append(slcPrmkey, strTimefl+
 										strAirlsg+"-"+strFlnbsg+itnrxs.ClassOfService+strDepart+"-"+strArrivl)
 								}
 								if len(slcTimefl) > 0 {

@@ -31,6 +31,7 @@ type MdlJeddahPnrsmrDtbase struct {
 	Clsssg string `json:"clsssg" bson:"clsssg,omitempty"`
 	Clsspv string `json:"clsspv" bson:"clsspv,omitempty"`
 	Timesg string `json:"timesg" bson:"timesg,omitempty"`
+	Timejd string `json:"timejd" bson:"timejd,omitempty"`
 	Timepv string `json:"timepv" bson:"timepv,omitempty"`
 	Timefs int64  `json:"timefs" bson:"timefs,omitempty"`
 	Timels int64  `json:"timels" bson:"timels,omitempty"`
