@@ -317,9 +317,16 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 				}
 			}
 		}
-		if psglst.Frbcde == "CHARTER" ||
-			psglst.Frbcde == "HB" ||
+		if psglst.Frbcde == "HB" ||
+			psglst.Tourcd == "ITHB" ||
+			psglst.Tourcd == "ITHBLOCK" ||
+			psglst.Tourcd == "ITITHBLOCK" ||
 			psglst.Frbcde == "HRBLOCK" {
+			psglst.Isitct = "HB"
+		}
+		if psglst.Frbcde == "CHARTER" ||
+			psglst.Tourcd == "ITCHARTER" ||
+			psglst.Tourcd == "ITITCHARTER" {
 			psglst.Isitct = "CT"
 		}
 		if psglst.Frbcde == "LOA" {

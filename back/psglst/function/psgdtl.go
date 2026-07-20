@@ -508,6 +508,15 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Qsrcvc_target",
 				"Aptxvc",
 				"Rwtxvc",
+				"City",
+				"Agentdie ticket VCR",
+				"Farebase code",
+				"Tour code",
+				"Description acnillary",
+				"Subcode acnillary",
+				"Baggage allowance",
+				"Qunatity total baggage",
+				"Weight total baggage",
 			})
 		case "FMWCHR":
 			writer.Write([]string{
@@ -991,6 +1000,15 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					fmt.Sprintf("%v", slcDtaset.Qsrcvc),
 					fmt.Sprintf("%v", slcDtaset.Aptxvc),
 					slcDtaset.Rwtxvc,
+					slcDtaset.Staloc,
+					slcDtaset.Hmeloc + slcDtaset.Agtdie,
+					slcDtaset.Frbcde,
+					slcDtaset.Tourcd,
+					slcDtaset.Descae,
+					slcDtaset.Sbcdae,
+					fmt.Sprintf("%v", slcDtaset.Fbavbt),
+					fmt.Sprintf("%v", slcDtaset.Qtotbt),
+					fmt.Sprintf("%v", slcDtaset.Wtotbt),
 				})
 			case "EBTFMT":
 				writer.Write([]string{
