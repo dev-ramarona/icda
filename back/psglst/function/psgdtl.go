@@ -1009,8 +1009,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Descae,
 					slcDtaset.Sbcdae,
 					fmt.Sprintf("%v", slcDtaset.Fbavbt),
-					fmt.Sprintf("%v", slcDtaset.Qtotbt),
-					fmt.Sprintf("%v", slcDtaset.Wtotbt),
+					fmt.Sprintf("%v", slcDtaset.Qtbgae),
+					fmt.Sprintf("%v", slcDtaset.Wgbgae),
 				})
 			case "EBTFMT":
 				writer.Write([]string{

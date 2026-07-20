@@ -465,8 +465,8 @@ type MdlPsglstPsgdtlFmthai struct {
 	Descae string  `json:"descae" bson:"descae"`
 	Sbcdae string  `json:"sbcdae" bson:"sbcdae"`
 	Fbavbt int32   `json:"fbavbt" bson:"fbavbt"`
-	Qtotbt int32   `json:"qtotbt" bson:"qtotbt"`
-	Wtotbt int32   `json:"wtotbt" bson:"wtotbt"`
+	Qtbgae int32   `json:"qtbgae" bson:"qtbgae"`
+	Wgbgae int32   `json:"wgbgae" bson:"wgbgae"`
 }
 
 type MdlPsglstPsgdtlFmwchr struct {
