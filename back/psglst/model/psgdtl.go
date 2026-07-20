@@ -457,6 +457,16 @@ type MdlPsglstPsgdtlFmthai struct {
 	Qsrcvc float64 `json:"qsrcvc" bson:"qsrcvc"`
 	Aptxvc float64 `json:"aptxvc" bson:"aptxvc"`
 	Rwtxvc string  `json:"rwtxvc" bson:"rwtxvc"`
+	Staloc string  `json:"staloc" bson:"staloc"`
+	Hmeloc string  `json:"hmeloc" bson:"hmeloc"`
+	Agtdie string  `json:"agtdie" bson:"agtdie"`
+	Frbcde string  `json:"frbcde" bson:"frbcde"`
+	Tourcd string  `json:"tourcd" bson:"tourcd"`
+	Descae string  `json:"descae" bson:"descae"`
+	Sbcdae string  `json:"sbcdae" bson:"sbcdae"`
+	Fbavbt int32   `json:"fbavbt" bson:"fbavbt"`
+	Qtotbt int32   `json:"qtotbt" bson:"qtotbt"`
+	Wtotbt int32   `json:"wtotbt" bson:"wtotbt"`
 }
 
 type MdlPsglstPsgdtlFmwchr struct {
