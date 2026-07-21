@@ -272,8 +272,9 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 						} else if pnrObject.Totcxl > 0 {
 							sycPnrcde.Store(pnrcde, true)
 							// If cancel data
-							slcClsssg, slcFlnbsg, slcRoutsg, slcTimefl, slcTimest, slcPrmkey :=
-								[]string{}, []string{}, []string{}, []int64{}, []string{}, []string{}
+							slcClsssg, slcFlnbsg, slcRoutsg, slcTimest, slcPrmkey :=
+								[]string{}, []string{}, []string{}, []string{}, []string{}
+							slcTimefl, slcTimejd := []int64{}, []string{}
 							for _, hstory := range getRsvpnr.History {
 								for _, itnrxs := range hstory.ItineraryHistory {
 									strAirlsg := itnrxs.MarketingAirlineCode
@@ -293,6 +294,9 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 									slcRoutsg = append(slcRoutsg, strDepart+"-"+strArrivl)
 									slcPrmkey = append(slcPrmkey, strTimefl+
 										strAirlsg+"-"+strFlnbsg+itnrxs.ClassOfService+strDepart+"-"+strArrivl)
+									if strings.Contains(strDepart+strArrivl, "JED") {
+										slcTimejd = append(slcTimejd, strTimefl)
+									}
 								}
 								if len(slcTimefl) > 0 {
 									break
@@ -313,6 +317,7 @@ func FncPnrtrcPrcessWorker(sycWgroup *sync.WaitGroup,
 									pnrObject.Flnbpv = pnrObject.Flnbsg
 								}
 							}
+							pnrObject.Timejd = strings.Join(slcTimejd, "|")
 							pnrObject.Timesg = strings.Join(slcTimest, "|")
 							if valprv, istprv := prvPnrobj[pnrcde]; istprv {
 								if valprv.Timesg != pnrObject.Timesg {
