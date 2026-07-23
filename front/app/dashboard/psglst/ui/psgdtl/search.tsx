@@ -248,7 +248,7 @@ export default function UixPsglstDetailSearch({
           length={["TKT"]}
           queryx={"isitpt_psgdtl"}
           params={params.isitpt_psgdtl}
-          plchdr="Wheelchair Only"
+          plchdr="Paper TKT Only"
           repprm={repprm}
           labelx=""
         />
