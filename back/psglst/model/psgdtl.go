@@ -14,6 +14,7 @@ type MdlPsglstParamsInputx struct {
 	Isitir_psgdtl string `json:"isitir_psgdtl,omitempty" bson:"isitir_psgdtl,omitempty"`
 	Isitif_psgdtl string `json:"isitif_psgdtl,omitempty" bson:"isitif_psgdtl,omitempty"`
 	Isitwc_psgdtl string `json:"isitwc_psgdtl,omitempty" bson:"isitwc_psgdtl,omitempty"`
+	Isitpt_psgdtl string `json:"isitpt_psgdtl,omitempty" bson:"isitpt_psgdtl,omitempty"`
 	Nclear_psgdtl string `json:"nclear_psgdtl,omitempty" bson:"nclear_psgdtl,omitempty"`
 	Format_psgdtl string `json:"format_psgdtl,omitempty" bson:"format_psgdtl,omitempty"`
 	Keywrd_psgdtl string `json:"keywrd_psgdtl,omitempty" bson:"keywrd_psgdtl,omitempty"`
@@ -130,6 +131,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Isittx string  `json:"isittx" bson:"isittx,omitempty"`
 	Isitif string  `json:"isitif" bson:"isitif,omitempty"`
 	Isitwc string  `json:"isitwc" bson:"isitwc,omitempty"`
+	Isitpt string  `json:"isitpt" bson:"isitpt,omitempty"`
 	Isitir string  `json:"isitir" bson:"isitir,omitempty"`
 	Isitct string  `json:"isitct" bson:"isitct,omitempty"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`
@@ -298,6 +300,7 @@ type MdlPsglstPsgdtlDfault struct {
 	Isittx string  `json:"isittx" bson:"isittx"`
 	Isitif string  `json:"isitif" bson:"isitif"`
 	Isitwc string  `json:"isitwc" bson:"isitwc"`
+	Isitpt string  `json:"isitpt" bson:"isitpt"`
 	Isitir string  `json:"isitir" bson:"isitir"`
 	Isitct string  `json:"isitct" bson:"isitct"`
 	Isitnr string  `json:"isitnr" bson:"isitnr"`

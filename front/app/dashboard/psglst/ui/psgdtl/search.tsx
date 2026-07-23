@@ -36,6 +36,7 @@ export default function UixPsglstDetailSearch({
     isitir_psgdtl: prmPsgdtl.isitir_psgdtl || "",
     isitif_psgdtl: prmPsgdtl.isitif_psgdtl || "",
     isitwc_psgdtl: prmPsgdtl.isitwc_psgdtl || "",
+    isitpt_psgdtl: prmPsgdtl.isitpt_psgdtl || "",
     nclear_psgdtl: prmPsgdtl.nclear_psgdtl || "",
     format_psgdtl: prmPsgdtl.format_psgdtl || "",
     keywrd_psgdtl: prmPsgdtl.keywrd_psgdtl || "REG ALL",
@@ -62,6 +63,7 @@ export default function UixPsglstDetailSearch({
       isitir_psgdtl: prmPsgdtl.isitir_psgdtl || "",
       isitif_psgdtl: prmPsgdtl.isitif_psgdtl || "",
       isitwc_psgdtl: prmPsgdtl.isitwc_psgdtl || "",
+      isitpt_psgdtl: prmPsgdtl.isitpt_psgdtl || "",
       nclear_psgdtl: prmPsgdtl.nclear_psgdtl || "",
       format_psgdtl: prmPsgdtl.format_psgdtl || "",
       keywrd_psgdtl: prmPsgdtl.keywrd_psgdtl || "REG ALL",
@@ -235,6 +237,17 @@ export default function UixPsglstDetailSearch({
           length={["WCHR"]}
           queryx={"isitwc_psgdtl"}
           params={params.isitwc_psgdtl}
+          plchdr="Wheelchair Only"
+          repprm={repprm}
+          labelx=""
+        />
+      </div>
+      <div className="flexctr relative h-11 w-1/2 md:w-28">
+        <UixGlobalInputxFormdt
+          typipt={"select"}
+          length={["TKT"]}
+          queryx={"isitpt_psgdtl"}
+          params={params.isitpt_psgdtl}
           plchdr="Wheelchair Only"
           repprm={repprm}
           labelx=""

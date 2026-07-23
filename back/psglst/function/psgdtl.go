@@ -369,6 +369,11 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			mtchdt = append(mtchdt, bson.D{{Key: "isitwc",
 				Value: inputx.Isitwc_psgdtl}})
 		}
+		if inputx.Isitpt_psgdtl != "" {
+			csvFilenm = append(csvFilenm, inputx.Isitpt_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "isitpt",
+				Value: inputx.Isitpt_psgdtl}})
+		}
 		if inputx.Keywrd_psgdtl != "" {
 			var slcKeywrd []string
 			if err := json.Unmarshal([]byte(inputx.Keywrd_psgdtl), &slcKeywrd); err == nil {
