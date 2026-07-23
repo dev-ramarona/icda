@@ -594,3 +594,27 @@ type MdlPsglstPsgdtlTktfmt struct {
 	Isitof string `json:"isitof" bson:"isitof"`
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 }
+
+type MdlPsglstPsgdtlPprtkt struct {
+	Airlfl string `json:"airlfl" bson:"airlfl"`
+	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
+	Datefl int32  `json:"datefl" bson:"datefl"`
+	Depart string `json:"depart" bson:"depart"`
+	Arrivl string `json:"arrivl" bson:"arrivl"`
+	Nmefst string `json:"nmefst" bson:"nmefst"`
+	Nmelst string `json:"nmelst" bson:"nmelst"`
+	Seatpx string `json:"seatpx" bson:"seatpx"`
+	Groupc string `json:"groupc" bson:"groupc"`
+	Totpax int32  `json:"totpax" bson:"totpax"`
+	Clssvc string `json:"clssvc" bson:"clssvc"`
+	Pnrcde string `json:"pnrcde" bson:"pnrcde"`
+	Pnritl string `json:"pnritl" bson:"pnritl"`
+	Remark string `json:"remark" bson:"remark"`
+	Tktnvc string `json:"tktnvc" bson:"tktnvc"`
+	Statvc string `json:"statvc" bson:"statvc"`
+	Region string `json:"region" bson:"region"`
+	Codels string `json:"codels" bson:"codels"`
+	Coment string `json:"coment" bson:"coment"`
+	Isitfl string `json:"isitfl" bson:"isitfl"`
+	Isittx string `json:"isittx" bson:"isittx"`
+}

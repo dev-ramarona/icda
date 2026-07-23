@@ -647,6 +647,31 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it offload?",
 				"Primary key",
 			})
+		case "PPRTKT":
+			writer.Write([]string{
+				"Station",
+				"Airline Flown",
+				"Flight number flown",
+				"Date flown",
+				"Departure",
+				"Arrival",
+				"Name first passenger",
+				"Name last passenger",
+				"Seat number passenger",
+				"Group code",
+				"Total pax",
+				"Class RBD VCR",
+				"PNR code",
+				"PNR interline",
+				"Remarks",
+				"Ticket number VCR",
+				"Status",
+				"Region",
+				"Code list from passenger list",
+				"Comment",
+				"Is it flown?",
+				"Is it transit?",
+			})
 		default:
 			writer.Write([]string{
 				"Manifest errror indicator",
@@ -1081,6 +1106,30 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Routfl,
 					slcDtaset.Isitir,
 					slcDtaset.Isitof})
+			case "PPRTKT":
+				writer.Write([]string{
+					slcDtaset.Depart,
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					strDatefl,
+					slcDtaset.Depart,
+					slcDtaset.Arrivl,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					slcDtaset.Seatpx,
+					slcDtaset.Groupc,
+					fmt.Sprintf("%v", slcDtaset.Totpax),
+					slcDtaset.Clssvc,
+					slcDtaset.Pnrcde,
+					slcDtaset.Pnritl,
+					"",
+					slcDtaset.Tktnvc,
+					"",
+					"",
+					slcDtaset.Codels,
+					slcDtaset.Coment,
+					slcDtaset.Isitfl,
+					slcDtaset.Isittx})
 			default:
 				writer.Write([]string{
 					slcDtaset.Mnfest,
