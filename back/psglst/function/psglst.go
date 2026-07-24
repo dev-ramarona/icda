@@ -509,7 +509,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 
 			// Looping to get faretaxes vcr and flown
 			mapRoutax := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
-			if psglst.Yqtxvc == 0 && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
+			if psglst.Yqtxvc == 0 && psglst.Yrtxvc == 0 && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
 				taxRoutvc := psglst.Routvc
 				if psglst.Routvc == "" {
 					taxRoutvc = psglst.Depart + "-" + psglst.Arrivl
