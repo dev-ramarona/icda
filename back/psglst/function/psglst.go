@@ -34,7 +34,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 	for _, psglst := range rspPsglst {
 
 		// Get null data
-		if psglst.Tktnvc == "" || psglst.Pnrcde == "" {
+		if (psglst.Tktnvc == "" || psglst.Pnrcde == "") && psglst.Isitfl == "F" {
 			err := fncSbrapi.FncSbrapiPsgdtaMainob(nowObjtkn, mapClslvl, &psglst)
 			if err != nil || psglst.Tktnvc == "" || psglst.Pnrcde == "" {
 				fncApndix.FncApndixUpdateSlcstr(&psglst.Noterr, "PSGDATA NIL")
@@ -589,7 +589,9 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 						psglst.Yrtxfl = mtcFrtaxs.Ftaxyr
 					} else {
 						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
-						psglst.Yrtxvc = float64(mtcFrtaxs.Ftaxyr)
+						if psglst.Yrtxvc != 0 {
+							psglst.Yrtxvc = float64(mtcFrtaxs.Ftaxyr)
+						}
 						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
 						if mtcFrtaxs.Datend <= int32(intDatemc) {
 							continue
