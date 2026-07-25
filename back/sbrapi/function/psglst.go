@@ -217,7 +217,7 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 			objPsglst.Isitif = "INF"
 		}
 		if slices.Contains(psglst.EditCodeList, "TKT") {
-			objPsglst.Isitif = "TKT"
+			objPsglst.Isitpt = "TKT"
 		}
 		for _, wchrcd := range []string{"WCDB", "WCBD", "WCHC", "WCHR", "WCHS", "WCMP", "WCOB"} {
 			if slices.Contains(psglst.EditCodeList, wchrcd) {
