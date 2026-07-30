@@ -259,6 +259,14 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 				slctmp = append(slctmp, slcDtaset)
 			}
 			slcobj = slctmp
+		case "IRFRMT":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlIrfmrt{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlIrfmrt{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
 		default:
 			var slctmp = []mdlPsglst.MdlPsglstPsgdtlDfault{}
 			for rawDtaset.Next(contxt) {
@@ -677,6 +685,63 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it flown?",
 				"Is it transit?",
 			})
+		case "IRFRMT":
+			writer.Write([]string{
+				"Station",
+				"Airline Flown",
+				"Flight number flown",
+				"Date flown",
+				"Route Flown",
+				"Class RBD flown",
+				"Airline VCR",
+				"Flight number VCR",
+				"Date VCR",
+				"Route VCR",
+				"Class RBD VCR",
+				"Name first passenger",
+				"Name last passenger",
+				"Group code",
+				"Total pax",
+				"Seat number passenger",
+				"Code iregulerity",
+				"Ticket number VCR",
+				"Coupon number VCR",
+				"Status VCR",
+				"Issued by",
+				"PNR code",
+				"PNR interline",
+				"Remarks",
+				"Category",
+				"Explaining Case",
+				"Case",
+				"Initial Status",
+				"Final Status",
+				"CF + UG",
+				"Currency",
+				"Total Amount",
+				"Staff Paid",
+				"Differences",
+				"Staff Name",
+				"Follow up Station",
+				"Is it transit?",
+				"Group code acnillary",
+				"Sub code acnillary",
+				"Description acnillary",
+				"Route acnillary",
+				"Fare acnillary",
+				"Currency acnillary",
+				"EMD number acnillary",
+				"Airline outbound",
+				"Flight number outbound",
+				"Class outbound",
+				"Route outbound",
+				"Date outbound",
+				"Airline inbound",
+				"Flight number inbound",
+				"Class inbound",
+				"District inbound",
+				"Date inbound",
+			})
 		default:
 			writer.Write([]string{
 				"Manifest errror indicator",
@@ -875,6 +940,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 			strDatevc := fncApndix.FncApndixFormatDateot(int(slcDtaset.Datevc))
 			strDaterv := fncApndix.FncApndixFormatDateot(int(slcDtaset.Daterv))
 			strDateif := fncApndix.FncApndixFormatDateot(int(slcDtaset.Dateif))
+			strDateob := fncApndix.FncApndixFormatDateot(int(slcDtaset.Dateob))
+			strDateib := fncApndix.FncApndixFormatDateot(int(slcDtaset.Dateib))
 			slcPaxsif := strings.Split(slcDtaset.Paxsif, ",")
 			infNmefst := ""
 			infNmelst := ""
@@ -1135,6 +1202,62 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Coment,
 					slcDtaset.Isitfl,
 					slcDtaset.Isittx})
+			case "IRFRMT":
+				writer.Write([]string{
+					slcDtaset.Depart,
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					strDatefl,
+					slcDtaset.Routfl,
+					slcDtaset.Clssfl,
+					slcDtaset.Airlvc,
+					slcDtaset.Flnbvc,
+					strDatevc,
+					slcDtaset.Routvc,
+					slcDtaset.Clssvc,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					slcDtaset.Groupc,
+					fmt.Sprintf("%v", slcDtaset.Totpax),
+					slcDtaset.Seatpx,
+					slcDtaset.Codeir,
+					slcDtaset.Tktnvc,
+					fmt.Sprintf("%v", slcDtaset.Cpnbvc),
+					slcDtaset.Statvc,
+					slcDtaset.Hmeloc + slcDtaset.Agtdie,
+					slcDtaset.Pnrcde,
+					slcDtaset.Pnritl,
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					slcDtaset.Isittx,
+					slcDtaset.Gpcdae,
+					slcDtaset.Sbcdae,
+					slcDtaset.Descae,
+					slcDtaset.Routae,
+					fmt.Sprintf("%v", slcDtaset.Fareae),
+					slcDtaset.Currae,
+					slcDtaset.Emdnae,
+					slcDtaset.Airlob,
+					slcDtaset.Flnbob,
+					slcDtaset.Clssob,
+					slcDtaset.Routob,
+					strDateob,
+					slcDtaset.Airlib,
+					slcDtaset.Flnbib,
+					slcDtaset.Clssib,
+					slcDtaset.Dstrib,
+					strDateib})
 			default:
 				writer.Write([]string{
 					slcDtaset.Mnfest,

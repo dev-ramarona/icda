@@ -621,3 +621,47 @@ type MdlPsglstPsgdtlPprtkt struct {
 	Isitfl string `json:"isitfl" bson:"isitfl"`
 	Isittx string `json:"isittx" bson:"isittx"`
 }
+
+type MdlPsglstPsgdtlIrfmrt struct {
+	Airlfl string  `json:"airlfl" bson:"airlfl"`
+	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
+	Datefl int32   `json:"datefl" bson:"datefl"`
+	Routfl string  `json:"routfl" bson:"routfl"`
+	Clssfl string  `json:"clssfl" bson:"clssfl"`
+	Airlvc string  `json:"airlvc" bson:"airlvc"`
+	Flnbvc string  `json:"flnbvc" bson:"flnbvc"`
+	Datevc int32   `json:"datevc" bson:"datevc"`
+	Routvc string  `json:"routvc" bson:"routvc"`
+	Clssvc string  `json:"clssvc" bson:"clssvc"`
+	Nmefst string  `json:"nmefst" bson:"nmefst"`
+	Nmelst string  `json:"nmelst" bson:"nmelst"`
+	Groupc string  `json:"groupc" bson:"groupc"`
+	Totpax int32   `json:"totpax" bson:"totpax"`
+	Seatpx string  `json:"seatpx" bson:"seatpx"`
+	Codeir string  `json:"codeir" bson:"codeir"`
+	Tktnvc string  `json:"tktnvc" bson:"tktnvc"`
+	Cpnbvc int32   `json:"cpnbvc" bson:"cpnbvc"`
+	Statvc string  `json:"statvc" bson:"statvc"`
+	Hmeloc string  `json:"hmeloc" bson:"hmeloc"`
+	Agtdie string  `json:"agtdie" bson:"agtdie"`
+	Pnrcde string  `json:"pnrcde" bson:"pnrcde"`
+	Pnritl string  `json:"pnritl" bson:"pnritl"`
+	Isittx string  `json:"isittx" bson:"isittx"`
+	Gpcdae string  `json:"gpcdae" bson:"gpcdae"`
+	Sbcdae string  `json:"sbcdae" bson:"sbcdae"`
+	Descae string  `json:"descae" bson:"descae"`
+	Routae string  `json:"routae" bson:"routae"`
+	Fareae float64 `json:"fareae" bson:"fareae"`
+	Currae string  `json:"currae" bson:"currae"`
+	Emdnae string  `json:"emdnae" bson:"emdnae"`
+	Airlob string  `json:"airlob" bson:"airlob"`
+	Flnbob string  `json:"flnbob" bson:"flnbob"`
+	Clssob string  `json:"clssob" bson:"clssob"`
+	Routob string  `json:"routob" bson:"routob"`
+	Dateob int32   `json:"dateob" bson:"dateob"`
+	Airlib string  `json:"airlib" bson:"airlib"`
+	Flnbib string  `json:"flnbib" bson:"flnbib"`
+	Clssib string  `json:"clssib" bson:"clssib"`
+	Dstrib string  `json:"dstrib" bson:"dstrib"`
+	Dateib int32   `json:"dateib" bson:"dateib"`
+}
