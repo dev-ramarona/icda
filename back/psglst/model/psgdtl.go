@@ -626,7 +626,8 @@ type MdlPsglstPsgdtlIrfmrt struct {
 	Airlfl string  `json:"airlfl" bson:"airlfl"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
 	Datefl int32   `json:"datefl" bson:"datefl"`
-	Routfl string  `json:"routfl" bson:"routfl"`
+	Depart string  `json:"depart" bson:"depart"`
+	Arrivl string  `json:"arrivl" bson:"arrivl"`
 	Clssfl string  `json:"clssfl" bson:"clssfl"`
 	Airlvc string  `json:"airlvc" bson:"airlvc"`
 	Flnbvc string  `json:"flnbvc" bson:"flnbvc"`
