@@ -599,6 +599,7 @@ type MdlPsglstPsgdtlTktfmt struct {
 }
 
 type MdlPsglstPsgdtlPprtkt struct {
+	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Airlfl string `json:"airlfl" bson:"airlfl"`
 	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
 	Datefl int32  `json:"datefl" bson:"datefl"`
@@ -623,6 +624,7 @@ type MdlPsglstPsgdtlPprtkt struct {
 }
 
 type MdlPsglstPsgdtlIrfmrt struct {
+	Prmkey string  `json:"prmkey" bson:"prmkey"`
 	Airlfl string  `json:"airlfl" bson:"airlfl"`
 	Flnbfl string  `json:"flnbfl" bson:"flnbfl"`
 	Datefl int32   `json:"datefl" bson:"datefl"`
