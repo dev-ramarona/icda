@@ -602,7 +602,6 @@ type MdlPsglstPsgdtlPprtkt struct {
 	Prmkey string `json:"prmkey" bson:"prmkey"`
 	Airlfl string `json:"airlfl" bson:"airlfl"`
 	Flnbfl string `json:"flnbfl" bson:"flnbfl"`
-	Datefl int32  `json:"datefl" bson:"datefl"`
 	Depart string `json:"depart" bson:"depart"`
 	Arrivl string `json:"arrivl" bson:"arrivl"`
 	Nmefst string `json:"nmefst" bson:"nmefst"`
@@ -613,14 +612,12 @@ type MdlPsglstPsgdtlPprtkt struct {
 	Clssvc string `json:"clssvc" bson:"clssvc"`
 	Pnrcde string `json:"pnrcde" bson:"pnrcde"`
 	Pnritl string `json:"pnritl" bson:"pnritl"`
-	Remark string `json:"remark" bson:"remark"`
 	Tktnvc string `json:"tktnvc" bson:"tktnvc"`
-	Statvc string `json:"statvc" bson:"statvc"`
-	Region string `json:"region" bson:"region"`
 	Codels string `json:"codels" bson:"codels"`
 	Coment string `json:"coment" bson:"coment"`
 	Isitfl string `json:"isitfl" bson:"isitfl"`
 	Isittx string `json:"isittx" bson:"isittx"`
+	Isitpt string `json:"isitpt" bson:"isitpt"`
 }
 
 type MdlPsglstPsgdtlIrfmrt struct {

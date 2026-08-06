@@ -692,6 +692,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Comment",
 				"Is it flown?",
 				"Is it transit?",
+				"Is it paper ticket?",
 			})
 		case "IRFRMT":
 			writer.Write([]string{
@@ -1209,7 +1210,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Codels,
 					slcDtaset.Coment,
 					slcDtaset.Isitfl,
-					slcDtaset.Isittx})
+					slcDtaset.Isittx,
+					slcDtaset.Isitpt})
 			case "IRFRMT":
 				writer.Write([]string{
 					slcDtaset.Depart,
