@@ -509,7 +509,7 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 
 			// Looping to get faretaxes vcr and flown
 			mapRoutax := map[string]string{"routfl": psglst.Airlfl + psglst.Routfl}
-			if psglst.Yqtxvc == 0 && psglst.Yrtxvc == 0 && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
+			if (psglst.Yqtxvc == 0 || psglst.Yrtxvc == 0) && psglst.Isitnr == "" && psglst.Frbcde != "HB" {
 				taxRoutvc := psglst.Routvc
 				if psglst.Routvc == "" {
 					taxRoutvc = psglst.Depart + "-" + psglst.Arrivl
@@ -584,16 +584,25 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 				// Get farebase from sync
 				istFrtaxs, ist := sycFrtaxs.Load(nowKeytax)
 				if mtcFrtaxs, mtc := istFrtaxs.(mdlApndix.MdlApndixFrtaxsDtbase); ist && mtc {
+					tmpYqtxvc := 0.0
+					tmpYrtxvc := 0.0
 					if keyfst == "routfl" {
 						psglst.Yqtxfl = mtcFrtaxs.Ftfuel
 						psglst.Yrtxfl = mtcFrtaxs.Ftaxyr
 					} else {
-						psglst.Yqtxvc = float64(mtcFrtaxs.Ftfuel)
-						if psglst.Yrtxvc != 0 {
-							psglst.Yrtxvc = float64(mtcFrtaxs.Ftaxyr)
+						tmpYqtxvc = float64(mtcFrtaxs.Ftfuel)
+						tmpYrtxvc = float64(mtcFrtaxs.Ftaxyr)
+						if psglst.Pnrcde == "ASPJGO" {
+							fmt.Println(mtcFrtaxs.Ftaxyr)
 						}
 						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
 						if mtcFrtaxs.Datend <= int32(intDatemc) {
+							if psglst.Yqtxvc == 0 {
+								psglst.Yqtxvc = tmpYqtxvc
+							}
+							if psglst.Yrtxvc == 0 {
+								psglst.Yrtxvc = tmpYrtxvc
+							}
 							continue
 						} else if len(slcHstory) > 0 && mtcFrtaxs.Hstory != "" {
 							lenHstory := len(slcHstory) - 1
@@ -609,10 +618,10 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 											strTaxcde := slcValfrt[0]
 											intFrtaxs, _ := strconv.Atoi(slcValfrt[1])
 											if strTaxcde == "yq" && intFrtaxs != 0 {
-												psglst.Yqtxvc = float64(intFrtaxs)
+												tmpYqtxvc = float64(intFrtaxs)
 											}
 											if strTaxcde == "yr" && intFrtaxs != 0 {
-												psglst.Yrtxvc = float64(intFrtaxs)
+												tmpYrtxvc = float64(intFrtaxs)
 											}
 										}
 										break
@@ -621,6 +630,12 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 								idxtrd++
 							}
 						}
+					}
+					if psglst.Yqtxvc == 0 {
+						psglst.Yqtxvc = tmpYqtxvc
+					}
+					if psglst.Yrtxvc == 0 {
+						psglst.Yrtxvc = tmpYrtxvc
 					}
 				}
 			}

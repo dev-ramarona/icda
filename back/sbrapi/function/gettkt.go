@@ -191,11 +191,11 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 	for _, segtax := range getTktdoc.Ticket.Taxes.Tax {
 		rawTaxval, _ := strconv.ParseFloat(segtax.Amount.Value, 64)
 		strTaxcde := strings.TrimSpace(segtax.Code)
-		if strTaxcde == "YQ" || strTaxcde == "YR" {
-			if strTaxcde == "YQ" {
+		if strTaxcde == "YQ" || strTaxcde == "YR" || strTaxcde == "YQF" || strTaxcde == "YRI" {
+			if strTaxcde == "YQ" || strTaxcde == "YQF" {
 				getTaxyqf = rawTaxval
 			}
-			if strTaxcde == "YR" {
+			if strTaxcde == "YR" || strTaxcde == "YRI" {
 				getTaxyrf = rawTaxval
 			}
 			if segtax.Amount.CurrencyCode != "" {
