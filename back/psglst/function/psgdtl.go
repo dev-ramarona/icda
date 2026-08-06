@@ -267,6 +267,14 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 				slctmp = append(slctmp, slcDtaset)
 			}
 			slcobj = slctmp
+		case "PPRTKT":
+			var slctmp = []mdlPsglst.MdlPsglstPsgdtlPprtkt{}
+			for rawDtaset.Next(contxt) {
+				slcDtaset := mdlPsglst.MdlPsglstPsgdtlPprtkt{}
+				rawDtaset.Decode(&slcDtaset)
+				slctmp = append(slctmp, slcDtaset)
+			}
+			slcobj = slctmp
 		default:
 			var slctmp = []mdlPsglst.MdlPsglstPsgdtlDfault{}
 			for rawDtaset.Next(contxt) {
