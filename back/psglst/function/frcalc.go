@@ -470,7 +470,7 @@ brk:
 				"TYO": {"NRT", "HND", "TYO"},
 				"PAR": {"CDG", "ORY", "PAR"},
 				"NYC": {"JFK", "LGA", "EWR", "NYC"},
-				"OSA": {"KIX", "ITM", "UKB"},
+				"OSA": {"KIX", "ITM", "UKB", "OSA"},
 				"SHA": {"PVG", "SHA"},
 				"SIA": {"XIY", "SIA"},
 				"SPK": {"CTS", "OKD", "SPK"}}
