@@ -88,7 +88,7 @@ func main() {
 	r.GET("/psglst/actlog/getall", fncPsglst.FncPsglstActlogGetall)
 	r.POST("/psglst/psgdtl/upload", fncPsglst.FncPsglstPsgdtlUpload)
 	r.POST("/psglst/psgdtl/update/:dvsion", fncPsglst.FncPsglstPsgdtlUpdate)
-	r.GET("/psglst/psgdtl/manual_update_sl", fncPsglst.UpdateManualSL)
+	// r.GET("/psglst/psgdtl/manual_update_sl", fncPsglst.UpdateManualSL)
 
 	// Run server
 	r.Run("0.0.0.0:" + fncApndix.Ptgolg)
