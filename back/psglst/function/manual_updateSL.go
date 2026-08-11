@@ -39,7 +39,7 @@ func getsmr(datefl int32) *sync.Map {
 	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("psglst_psgsmr")
 	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
 	defer cancel()
-	cursor, err := tablex.Find(contxt, bson.M{"datefl": bson.M{"$gte": datefl}, "airlfl": "SL"})
+	cursor, err := tablex.Find(contxt, bson.M{"datefl": datefl, "airlfl": "SL"})
 	if err != nil {
 		fmt.Println("Err")
 	}
@@ -56,7 +56,7 @@ func getsmr(datefl int32) *sync.Map {
 
 func UpdateManualSL(c *gin.Context) {
 	mapCurrency := getcurr()
-	for _, v := range []int32{260801, 260802, 260803, 260804, 260805} {
+	for _, v := range []int32{260801, 260802, 260803, 260804, 260805, 260806, 260807, 260808, 260809} {
 		sycPsgsmr := getsmr(v)
 		tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("psglst_psgdtl")
 		contxt, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
@@ -192,5 +192,7 @@ func UpdateManualSL(c *gin.Context) {
 		fncApndix.FncApndixBulkdbBatchs(map[string]*[]mongo.WriteModel{
 			"psglst_psgsmr": &mgoUpdateSmr,
 		}, 0)
+
+		fmt.Println("done", v)
 	}
 }
