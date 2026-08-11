@@ -472,7 +472,8 @@ brk:
 				"NYC": {"JFK", "LGA", "EWR", "NYC"},
 				"OSA": {"KIX", "ITM", "UKB"},
 				"SHA": {"PVG", "SHA"},
-				"SIA": {"XIY", "SIA"}}
+				"SIA": {"XIY", "SIA"},
+				"SPK": {"CTS", "OKD", "SPK"}}
 			val.Depart = func() string {
 				if slcDepart, ist := mapDstrct[val.Depart]; ist {
 					for _, v := range slcDepart {
