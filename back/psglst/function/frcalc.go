@@ -520,8 +520,10 @@ brk:
 						}
 					}
 				}
-				if int(val.Cpnbfl) == int(psglst.Cpnbfl) || int(val.Cpnbfl) == int(psglst.Cpnbvc) {
-					mapRoutcn[keyFrcalc] += 1
+				if psglst.Isitiv == "" {
+					if int(val.Cpnbfl) == int(psglst.Cpnbfl) || int(val.Cpnbfl) == int(psglst.Cpnbvc) {
+						mapRoutcn[keyFrcalc] += 1
+					}
 				}
 			}
 
@@ -609,6 +611,27 @@ brk:
 			if allNonrev {
 				allNonrev = val.Frbase == "0" || val.Frbase == "0.00"
 			}
+		}
+	}
+
+	// Cek data not match
+	if len(mapRoutcn) > 1 {
+		idx := 0
+		prvval := 0
+		match := true
+		for _, val := range mapRoutcn {
+			if idx == 0 {
+				prvval = val
+			} else {
+				match = prvval == val
+				if !match {
+					break
+				}
+			}
+			idx++
+		}
+		if match {
+			return cekNonrev
 		}
 	}
 
