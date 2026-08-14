@@ -234,6 +234,8 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 		"Class segment",
 		"Class segment Prev",
 		"Time jeddah",
+		"Departure date",
+		"Arrival date",
 		"Time segment",
 		"Time segment Prev",
 		"Time first flown",
@@ -271,6 +273,16 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 		strTimefs := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timefs))
 		strTimels := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timels))
 		strTimecx := fncApndix.FncApndixFormatTimeot(int(slcDtaset.Timecx))
+		slcTimejd := strings.Split(slcDtaset.Timejd, "|")
+		rawDatedp := 0
+		rawDaterv := 0
+		if len(slcTimejd) == 2 {
+			rawDatedp, _ = strconv.Atoi(slcTimejd[0])
+			rawDaterv, _ = strconv.Atoi(slcTimejd[1])
+
+		}
+		strDatedp := fncApndix.FncApndixFormatTimeot(rawDatedp)
+		strDaterv := fncApndix.FncApndixFormatTimeot(rawDaterv)
 
 		// Write to CSV
 		writer.Write([]string{
@@ -285,6 +297,8 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 			slcDtaset.Clsssg,
 			slcDtaset.Clsspv,
 			slcDtaset.Timejd,
+			strDatedp,
+			strDaterv,
 			slcDtaset.Timesg,
 			slcDtaset.Timepv,
 			strTimefs,
