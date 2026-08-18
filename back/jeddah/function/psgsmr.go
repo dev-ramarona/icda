@@ -277,12 +277,16 @@ func FncJeddahPnrsmrDownld(c *gin.Context) {
 		rawDatedp := 0
 		rawDaterv := 0
 		if len(slcTimejd) == 2 {
-			rawDatedp, _ = strconv.Atoi(slcTimejd[0])
-			rawDaterv, _ = strconv.Atoi(slcTimejd[1])
+			if len(slcTimejd[0]) > 6 {
+				rawDatedp, _ = strconv.Atoi(slcTimejd[0][:6])
+			}
+			if len(slcTimejd[1]) > 6 {
+				rawDaterv, _ = strconv.Atoi(slcTimejd[1][:6])
+			}
 
 		}
-		strDatedp := fncApndix.FncApndixFormatTimeot(rawDatedp)
-		strDaterv := fncApndix.FncApndixFormatTimeot(rawDaterv)
+		strDatedp := fncApndix.FncApndixFormatDateot(rawDatedp)
+		strDaterv := fncApndix.FncApndixFormatDateot(rawDaterv)
 
 		// Write to CSV
 		writer.Write([]string{
