@@ -65,7 +65,7 @@ func FncSbrapiFlhourPrcess(rawxml []byte, sycFlhour *sync.Map,
 		nowTimerv := objFlhour.ArrivalTime
 
 		// Convert str 12.55 time to decimal
-		floFlhour, err := fncApndix.FncApndixConvrtFlhour(nowFlhour)
+		oriFlhour, floFlhour, err := fncApndix.FncApndixConvrtFlhour(nowFlhour)
 		strFmhour := fncApndix.FncApndixRevrseFlhour(floFlhour)
 		if err != nil {
 			return fnlFlhour, err
@@ -121,6 +121,7 @@ func FncSbrapiFlhourPrcess(rawxml []byte, sycFlhour *sync.Map,
 			Routfl: nowRoutef,
 			Flnbfl: apndix.Flnbfl,
 			Flhour: floFlhour,
+			Floath: oriFlhour,
 			Fmhour: strFmhour,
 			Timefl: int64(intTimefl),
 			Timerv: int64(intTimerv),

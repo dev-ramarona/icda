@@ -7,6 +7,7 @@ import (
 	fncSbrapi "back/sbrapi/function"
 	mdlSbrapi "back/sbrapi/model"
 	"fmt"
+	"math"
 	"slices"
 	"strconv"
 	"strings"
@@ -77,6 +78,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 	var slcHfbalv = fncApndix.FncApndixHfbalvMapobj()
 	var sycProvnc = fncApndix.FncApndixProvncSycmap()
 	var sycFlhour = fncApndix.FncApndixFlhourSycmap()
+	var mapBlockt = fncApndix.FncApndixBlocktMapobj()
 	var sycFlnbfl = fncApndix.FncApndixFlnbflSycmap()
 	var sycMilege = fncApndix.FncApndixMilegeSycmap()
 	var sycFrtaxs = fncApndix.FncApndixFrtaxsSycmap()
@@ -127,7 +129,7 @@ func FncPsglstPrcessMainpg(c *gin.Context) {
 					go FncPsglstPrcessWorker(slcRspssn[i],
 						&sycWgroup,
 						jobFllist,
-						mapClslvl, slcHfbalv, mapCostph,
+						mapClslvl, slcHfbalv, mapCostph, mapBlockt,
 						sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
 						sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
 						sycFljoin, sycAlltxs,
@@ -291,7 +293,7 @@ func FncPsglstPrcessWorker(
 	jobFllist <-chan mdlApndix.MdlApndixFllistDtbase,
 	mapClslvl map[string]mdlApndix.MdlApndixClsslvDtbase,
 	slcHfbalv []mdlApndix.MdlApndixHfbalvDtbase,
-	mapCostph map[string]int64,
+	mapCostph map[string]int64, mapBlockt map[string]int32,
 	sycDstrct, sycFlhour, sycFrbase, sycFrtaxs, sycErrlog, sycFlnbfl,
 	sycChrter, sycCurrcv, sycPnrcde, sycMilege, sycPrgrss, sycProvnc,
 	sycFljoin, sycAlltxs,
@@ -403,11 +405,12 @@ func FncPsglstPrcessWorker(
 						SetFilter(bson.M{"prmkey": flhour.Prmkey}).
 						SetUpdate(bson.M{"$set": flhour}).
 						SetUpsert(true))
-					nulFlhour = false
 
 					// Push data flight hour if isset
 					if flhour.Routfl[:3] == dbsDepart {
 						slcFllist.Flhour = flhour.Flhour
+						slcFllist.Floath = flhour.Floath
+						nulFlhour = false
 					}
 				}
 			}
@@ -419,6 +422,7 @@ func FncPsglstPrcessWorker(
 				istFlhour = false
 				if mtcFlhour, mtc := getFlhour.(mdlApndix.MdlApndixFlhourDtbase); mtc {
 					slcFllist.Flhour = mtcFlhour.Flhour
+					slcFllist.Floath = mtcFlhour.Floath
 					if mtcFlhour.Flhour != 0 {
 						nulFlhour = false
 					}
@@ -457,6 +461,35 @@ func FncPsglstPrcessWorker(
 				Datefl: int32(intDatefl), Airlfl: dbsAirlfl,
 				Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
 			}, nulFlhour, sycErrlog, errErignr, errPrmkey)
+
+			// If flight hour different from blocktime flight hour API
+			if !nulFlhour && dbsAirlfl != "OD" && dbsAirlfl != "SL" {
+				keyBlockt := dbsRoutfl + "-" + slcFllist.Plntyp
+				if getBlockt, istBlockt := mapBlockt[keyBlockt]; !istBlockt {
+					FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
+						Erpart: "blockt", Ersrce: "dtbase", Erdvsn: "SLSRPT",
+						Dateup: int32(intDatenw), Timeup: int64(intTimenw),
+						Datefl: int32(intDatefl), Plntyp: slcFllist.Plntyp,
+						Routfl: dbsRoutfl, Worker: 1,
+					}, true, sycErrlog, errErignr, errPrmkey)
+				} else {
+
+					// Check if different block time and flight hour
+					fltBlockt := (float64(getBlockt) / 60)
+					fltBlockt = math.Round(fltBlockt*1e9) / 1e9
+
+					fltFlhour := slcFllist.Floath
+					mtcFlhour := math.Round(fltBlockt*100) != math.Round(fltFlhour*100)
+					FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
+						Erpart: "blockc", Ersrce: "flhour", Erdvsn: "SLSRPT",
+						Dateup: int32(intDatenw), Timeup: int64(intTimenw),
+						Datefl: int32(intDatefl), Airlfl: dbsAirlfl, Blockt: fltBlockt,
+						Flhour: fltFlhour,
+						Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
+					}, mtcFlhour, sycErrlog, errErignr, errPrmkey)
+
+				}
+			}
 		}
 
 		// Get fare component

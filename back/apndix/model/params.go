@@ -106,6 +106,7 @@ type MdlApndixFlhourDtbase struct {
 	Routfl string  `json:"routfl,omitempty" bson:"routfl,omitempty"`
 	Flnbfl string  `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
 	Flhour float64 `json:"flhour,omitempty" bson:"flhour,omitempty"`
+	Floath float64 `json:"floath,omitempty" bson:"floath,omitempty"`
 	Fmhour string  `json:"fmhour,omitempty" bson:"fmhour,omitempty"`
 	Timefl int64   `json:"timefl,omitempty" bson:"timefl,omitempty"`
 	Timerv int64   `json:"timerv,omitempty" bson:"timerv,omitempty"`
@@ -116,6 +117,13 @@ type MdlApndixFlhourDtbase struct {
 	Airmls int32   `json:"airmls,omitempty" bson:"airmls,omitempty"`
 	Hstory string  `json:"hstory,omitempty" bson:"hstory,omitempty"`
 	Updtby string  `json:"updtby,omitempty" bson:"updtby,omitempty"`
+}
+type MdlApndixBlocktDtbase struct {
+	Prmkey string `json:"prmkey,omitempty" bson:"prmkey,omitempty"`
+	Routfl string `json:"routfl,omitempty" bson:"routfl,omitempty"`
+	Plntyp string `json:"plntyp,omitempty" bson:"plntyp,omitempty"`
+	Blockt int32  `json:"blockt,omitempty" bson:"blockt,omitempty"`
+	Source string `json:"source,omitempty" bson:"source,omitempty"`
 }
 type MdlApndixFlhourFrntnd struct {
 	Prmkey string  `json:"prmkey" bson:"prmkey"`
@@ -272,12 +280,14 @@ type MdlApndixFllistDtbase struct {
 	Flsarr string  `json:"flsarr,omitempty" bson:"flsarr,omitempty"`
 	Routmx string  `json:"routmx,omitempty" bson:"routmx,omitempty"`
 	Flhour float64 `json:"flhour,omitempty" bson:"flhour,omitempty"`
+	Floath float64 `json:"floath,omitempty" bson:"floath,omitempty"`
 	Flrpdc int32   `json:"flrpdc,omitempty" bson:"flrpdc,omitempty"`
 	Flgate string  `json:"flgate,omitempty" bson:"flgate,omitempty"`
 	Depart string  `json:"depart,omitempty" bson:"depart,omitempty"`
 	Arrivl string  `json:"arrivl,omitempty" bson:"arrivl,omitempty"`
 	Airtyp string  `json:"airtyp,omitempty" bson:"airtyp,omitempty"`
 	Aircnf string  `json:"aircnf,omitempty" bson:"aircnf,omitempty"`
+	Plntyp string  `json:"plntyp,omitempty" bson:"plntyp,omitempty"`
 	Seatcn string  `json:"seatcn,omitempty" bson:"seatcn,omitempty"`
 	Autrzc int32   `json:"autrzc,omitempty" bson:"autrzc,omitempty"`
 	Autrzy int32   `json:"autrzy,omitempty" bson:"autrzy,omitempty"`

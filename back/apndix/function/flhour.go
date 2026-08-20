@@ -45,6 +45,35 @@ func FncApndixFlhourSycmap() *sync.Map {
 	return fnldta
 }
 
+// Get flighthour blocktime map
+func FncApndixBlocktMapobj() map[string]int32 {
+
+	// Inisialisasi variabel
+	fnldta := map[string]int32{}
+
+	// Select database and collection
+	tablex := Client.Database(Dbases).Collection("apndix_blockt")
+	contxt, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Get route data
+	datarw, err := tablex.Find(contxt, bson.M{})
+	if err != nil {
+		panic(err)
+	}
+	defer datarw.Close(contxt)
+
+	// Append to slice
+	for datarw.Next(contxt) {
+		var object mdlApndix.MdlApndixBlocktDtbase
+		datarw.Decode(&object)
+		fnldta[object.Prmkey] = object.Blockt
+	}
+
+	// return data
+	return fnldta
+}
+
 // Get object slice
 func FncApndixFlhourGetall(c *gin.Context) {
 

@@ -38,6 +38,8 @@ export default function UixPsglstErrlogTablex({
     Paxdif: "",
     flstat: "",
     flhour: 0,
+    blockt: 0,
+    plntyp: "",
     routfl: "",
     updtby: "",
     worker: 0,

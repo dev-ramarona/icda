@@ -207,6 +207,8 @@ export interface MdlPsglstErrlogDtbase {
   Paxdif: string;
   flstat: string;
   flhour: number;
+  blockt: number;
+  plntyp: string;
   routfl: string;
   updtby: string;
   worker: number;

@@ -25,25 +25,26 @@ func FncApndixCreateCduuid() string {
 }
 
 // Convert time 12.30 to float 12.5
-func FncApndixConvrtFlhour(tmestr string) (float64, error) {
+func FncApndixConvrtFlhour(tmestr string) (float64, float64, error) {
 
 	// Pisahkan berdasarkan titik
 	flhour := strings.Split(strings.Trim(tmestr, " "), ".")
 	if len(flhour) != 2 {
-		return 0, fmt.Errorf("format waktu tidak valid")
+		return 0, 0, fmt.Errorf("format waktu tidak valid")
 	}
 
 	// Get hours and minutes
 	hournw, er1 := strconv.Atoi(flhour[0])
 	minute, er2 := strconv.Atoi(flhour[1])
 	if er1 != nil || er2 != nil {
-		return 0, fmt.Errorf("gagal mengonversi angka")
+		return 0, 0, fmt.Errorf("gagal mengonversi angka")
 	}
 
 	// Convert format to float
-	dcimal := float64(hournw) + float64(minute)/60
-	roundd := math.Round(dcimal*100) / 100
-	return roundd, nil
+	oriflt := float64(hournw) + float64(minute)/60
+	oriflt = math.Round(oriflt*1e9) / 1e9
+	roundd := math.Round(oriflt*100) / 100
+	return oriflt, roundd, nil
 }
 
 // Convert time 12.30 to float 12.5

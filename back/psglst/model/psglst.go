@@ -17,6 +17,8 @@ type MdlPsglstErrlogDtbase struct {
 	Paxdif string  `json:"paxdif" bson:"paxdif,omitempty"`
 	Flstat string  `json:"flstat" bson:"flstat,omitempty"`
 	Flhour float64 `json:"flhour" bson:"flhour,omitempty"`
+	Blockt float64 `json:"blockt" bson:"blockt,omitempty"`
+	Plntyp string  `json:"plntyp" bson:"plntyp,omitempty"`
 	Routfl string  `json:"routfl" bson:"routfl,omitempty"`
 	Updtby string  `json:"updtby" bson:"updtby,omitempty"`
 	Worker int32   `json:"worker" bson:"worker,omitempty"`

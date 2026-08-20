@@ -73,6 +73,29 @@ func FncSbrapiFldtilTrtmnt(rawxml mdlSbrapi.MdlSbrapiFldtilRspacs,
 	nowFlinfo := rawxml.ItineraryResponseList.ItineraryInfoResponse
 	fllist.Aircnf = nowFlinfo.AircraftConfigNumber
 	fllist.Seatcn = nowFlinfo.SeatConfig
+
+	// Get plane type body for flight hour
+	fllist.Plntyp = "NBJ"
+	if fllist.Seatcn != "" {
+		intSeatcn := 0
+		if strings.Contains(fllist.Seatcn, "/") {
+			slcSeatcn := strings.Split(fllist.Seatcn, "/")
+			bizSeatcn, _ := strconv.Atoi(slcSeatcn[0])
+			ecoSeatcn, _ := strconv.Atoi(slcSeatcn[1])
+			intSeatcn = bizSeatcn + ecoSeatcn
+		} else {
+			intSeatcn, _ = strconv.Atoi(fllist.Seatcn)
+		}
+		if intSeatcn == 72 {
+			fllist.Plntyp = "NBP"
+		} else if intSeatcn < 250 {
+			fllist.Plntyp = "NBJ"
+		} else {
+			fllist.Plntyp = "WBJ"
+		}
+	}
+
+	// Breakdown cancel PDC
 	for _, val := range nowFlinfo.FreeTextInfoList.FreeTextInfo {
 		nowTxtsck := val.TextLine.Text
 		if strings.Contains(nowTxtsck, "SECOK") {
