@@ -420,7 +420,17 @@ func FncPsglstPrcessWorker(
 		if nulFlhour {
 			if getFlhour, ist := sycFlhour.Load(keyFlhour); ist {
 				istFlhour = false
-				if mtcFlhour, mtc := getFlhour.(mdlApndix.MdlApndixFlhourDtbase); mtc {
+
+				// Get from SK first
+				keyBlockt := dbsRoutfl + "-" + slcFllist.Plntyp
+				if getBlockt, istBlockt := mapBlockt[keyBlockt]; istBlockt {
+					fltBlockt := (float64(getBlockt) / 60)
+					fltFlhour := math.Round(fltBlockt*100) / 100
+					fltFloath := math.Round(fltBlockt*1e9) / 1e9
+					slcFllist.Flhour = fltFlhour
+					slcFllist.Floath = fltFloath
+					nulFlhour = false
+				} else if mtcFlhour, mtc := getFlhour.(mdlApndix.MdlApndixFlhourDtbase); mtc {
 					slcFllist.Flhour = mtcFlhour.Flhour
 					slcFllist.Floath = mtcFlhour.Floath
 					if mtcFlhour.Flhour != 0 {
