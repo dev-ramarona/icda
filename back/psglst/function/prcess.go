@@ -498,6 +498,14 @@ func FncPsglstPrcessWorker(
 						Flnbfl: dbsFlnbfl, Routfl: dbsRoutfl, Worker: 1,
 					}, mtcFlhour, sycErrlog, errErignr, errPrmkey)
 
+					// Update clear
+					FncPsglstErrlogManage(mdlPsglst.MdlPsglstErrlogDtbase{
+						Erpart: "blockt", Ersrce: "dtbase", Erdvsn: "SLSRPT",
+						Dateup: int32(intDatenw), Timeup: int64(intTimenw),
+						Datefl: int32(intDatefl), Plntyp: slcFllist.Plntyp,
+						Routfl: dbsRoutfl, Worker: 1,
+					}, false, sycErrlog, errErignr, errPrmkey)
+
 				}
 			}
 		}
