@@ -5,6 +5,7 @@ import (
 	mdlPsglst "back/psglst/model"
 	fncSbrapi "back/sbrapi/function"
 	mdlSbrapi "back/sbrapi/model"
+	"encoding/json"
 	"fmt"
 	"regexp"
 	"slices"
@@ -367,6 +368,7 @@ brk:
 							nowFrbase[idxCountd].Routfl = nowDstrct + "-" + val
 							nowFrbase[idxCountd].Cpnbfl = int32(idxCountd)
 							nowFrbase[idxCountd].Depart = nowDstrct
+							nowFrbase[idxCountd].Arrivl = val
 							idxCountd++
 							nowDstrct = val
 						} else {
@@ -449,6 +451,13 @@ brk:
 	prvPrrate := map[string]string{}
 	slcRoutfr := []string{}
 	allNonrev := true
+	if psglst.Psgrid == "88652609031D" {
+		x, _ := json.MarshalIndent(nowFrbase, " ", " ")
+		fmt.Println(string(x))
+		fmt.Println("Depart:", psglst.Depart)
+		fmt.Println("Arrivl:", psglst.Arrivl)
+		fmt.Println("Routvc:", psglst.Routvc)
+	}
 	for _, val := range nowFrbase {
 		if val.Routfl != "" {
 			maxRoutsg := psglst.Routvf
@@ -502,6 +511,11 @@ brk:
 				}
 				return val.Arrivl
 			}()
+
+			if psglst.Psgrid == "88652609031D" {
+				y, _ := json.MarshalIndent(val, " ", " ")
+				fmt.Println(string(y))
+			}
 
 			// Push count route calculation
 			mapRoutcn[keyFrcalc] += 1
@@ -614,6 +628,11 @@ brk:
 		}
 	}
 
+	if psglst.Psgrid == "88652609031D" {
+		c, _ := json.MarshalIndent(mapRoutcn, " ", " ")
+		fmt.Println(string(c))
+	}
+
 	// Cek data not match
 	if len(mapRoutcn) > 1 {
 		idx := 0
@@ -651,6 +670,11 @@ brk:
 			hghest.val = valint
 			hghest.cpn = slckey[0]
 		}
+	}
+
+	if psglst.Psgrid == "88652609031D" {
+		c, _ := json.MarshalIndent(mapRoutcn, " ", " ")
+		fmt.Println(string(c))
 	}
 	if getFlsgmn, ist := mapFrcacl[hghest.key]; ist {
 		if len(getFlsgmn.Routfl) == 7 {
