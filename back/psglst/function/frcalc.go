@@ -75,6 +75,9 @@ brk:
 				idxCountd++
 			}
 			nowDstrct = rsl[0]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regDstrc1", slc)
+			// }
 
 		// Logic match dstrct (upnormal)
 		case len(regDstrc2.FindStringSubmatch(slc)) >= 1:
@@ -90,6 +93,9 @@ brk:
 				idxCountd++
 			}
 			nowDstrct = rsl[2]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regDstrc2", slc)
+			// }
 
 		// Logic match dstrct (/IT)
 		case len(regDstrc3.FindStringSubmatch(slc)) >= 1:
@@ -101,6 +107,9 @@ brk:
 				nowFrbase[idxCountd].Arrivl = rsl[1]
 			}
 			nowDstrct = rsl[1]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regDstrc3", slc)
+			// }
 
 		// Logic match dstrct (/I-DATE)
 		case len(regDstrc4.FindStringSubmatch(slc)) >= 1:
@@ -112,6 +121,9 @@ brk:
 				nowFrbase[idxCountd].Arrivl = rsl[2]
 			}
 			nowDstrct = rsl[2]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regDstrc4", slc)
+			// }
 
 		// Logic match dstrct (DATE DSTRCT)
 		case len(regDstrc5.FindStringSubmatch(slc)) >= 1:
@@ -123,6 +135,9 @@ brk:
 				nowFrbase[idxCountd].Arrivl = rsl[2]
 			}
 			nowDstrct = rsl[2]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regDstrc5", slc)
+			// }
 
 		// Logic match ROE
 		case len(regCrrat1.FindStringSubmatch(slc)) >= 1:
@@ -135,6 +150,9 @@ brk:
 				}
 			}
 			prvCrrate = true
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regCrrat1", slc)
+			// }
 
 		// Logic match ROE
 		case prvRateof, prvCrrate:
@@ -230,6 +248,9 @@ brk:
 				idxCountd++
 				nowDstrct = rsl[1]
 			}
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse1", slc)
+			// }
 
 		// Logic match dstrct - frbase - frcode (upnormal)
 		case len(regFrbse2.FindStringSubmatch(slc)) > 1:
@@ -239,8 +260,18 @@ brk:
 			nowFrbase[idxCountd].Depart = nowDstrct
 			nowFrbase[idxCountd].Arrivl = rsl[1][:3]
 			nowFrbase[idxCountd].Frbase = rsl[2]
-			idxCountd++
 			nowDstrct = rsl[1][:3]
+			idxCountd++
+
+			// Get other segment
+			if len(rsl[3]) == 5 {
+				nowFrbase[idxCountd].Routfl = nowDstrct + "-" + rsl[3][2:5]
+				nowFrbase[idxCountd].Airlfl = rsl[3][:2]
+				nowFrbase[idxCountd].Cpnbfl = int32(idxCountd)
+				nowFrbase[idxCountd].Depart = nowDstrct
+				nowFrbase[idxCountd].Arrivl = rsl[3][2:5]
+				idxCountd++
+			}
 
 			// Push all currency
 			if len(rsl[3]) == 3 && rsl[3] == "NUC" {
@@ -250,6 +281,9 @@ brk:
 					}
 				}
 			}
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse2", slc)
+			// }
 
 		// Logic match dstrct - frbase - void - dstrct
 		case len(regFrbse3.FindStringSubmatch(slc)) > 1:
@@ -269,6 +303,9 @@ brk:
 			nowFrbase[idxCountd].Arrivl = rsl[4]
 			idxCountd++
 			nowDstrct = rsl[4]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse3", slc)
+			// }
 
 		// Logic match frbase - void - dstrct
 		case len(regFrbse4.FindStringSubmatch(slc)) > 1:
@@ -282,6 +319,9 @@ brk:
 			nowFrbase[idxCountd].Arrivl = rsl[3]
 			idxCountd++
 			nowDstrct = rsl[3]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse4", slc)
+			// }
 
 		// Logic match void - dstrct
 		case len(regFrbse5.FindStringSubmatch(slc)) > 1:
@@ -294,21 +334,33 @@ brk:
 			nowFrbase[idxCountd].Arrivl = rsl[2]
 			idxCountd++
 			nowDstrct = rsl[2]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse5", slc)
+			// }
 
 		// Logic match frbase - airlfl
 		case len(regFrbse6.FindStringSubmatch(slc)) >= 1:
 			rsl := regFrbse6.FindStringSubmatch(slc)
 			nowFrbase[idxCountd-1].Frbase = rsl[1]
 			nowFrbase[idxCountd].Airlfl = rsl[2]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse6", slc)
+			// }
 
 		// Logic match frbase
 		case len(regFrbse7.FindAllString(slc, -1)) >= 1:
 			rsl := regFrbse7.FindAllString(slc, -1)
 			nowFrbase[idxCountd-1].Frbase = rsl[0]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse7", slc)
+			// }
 
 		// Logic match frbase
 		case len(regFrbse8.FindAllString(slc, -1)) >= 1:
 			regFrbse8.FindAllString(slc, -1)
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse8", slc)
+			// }
 
 		// Logic match frbase
 		case len(regFrbse9.FindStringSubmatch(slc)) >= 1:
@@ -323,16 +375,25 @@ brk:
 				nowDstrct = rsl[3]
 				idxCountd++
 			}
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse9", slc)
+			// }
 
 		// Logic match frbase
 		case len(regFrbs10.FindStringSubmatch(slc)) >= 1:
 			rsl := regFrbs10.FindStringSubmatch(slc)
 			nowFrbase[idxCountd-1].Frbase = rsl[1]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse10", slc)
+			// }
 
 		// Logic match frbase zero
 		case len(regFrbs11.FindStringSubmatch(slc)) >= 1:
 			rsl := regFrbs11.FindStringSubmatch(slc)
 			nowFrbase[idxCountd-1].Frbase = rsl[1]
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regFrbse11", slc)
+			// }
 
 		// Logic match routefl - qsrchg
 		case len(regQschg1.FindStringSubmatch(slc)) >= 1:
@@ -342,6 +403,9 @@ brk:
 			} else {
 				nowFrbase[idxCountd-1].Qsrcrw += "|" + rsl[1] + "Q" + rsl[2]
 			}
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regQschg1", slc)
+			// }
 
 		// Logic match routefl - qsrchg
 		case len(regQschg2.FindStringSubmatch(slc)) >= 1 && prvQsrchg:
@@ -351,6 +415,9 @@ brk:
 				nowFrbase[idxCountd-1].Qsrcrw = rsl[1] + "Q" + rsl[2]
 			} else {
 				nowFrbase[idxCountd-1].Qsrcrw += "|" + rsl[1] + "Q" + rsl[2]
+			}
+			if psglst.Psgrid == "C29D48B2050F" {
+				fmt.Println("regQschg2", slc)
 			}
 
 		// Logic match qsrchg
@@ -405,10 +472,17 @@ brk:
 				}
 			}
 
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regQschg3", slc)
+			// }
+
 		// Logic match qsrchg
 		case len(regQschg4.FindAllString(slc, -1)) >= 1:
 			regQschg4.FindAllString(slc, -1)
 			prvQsrchg = true
+			// if psglst.Psgrid == "C29D48B2050F" {
+			// 	fmt.Println("regQschg4", slc)
+			// }
 
 		// Logic match routefl - qsrchg - nuc - tot - end - roe - crrate
 		case len(regQsrate.FindStringSubmatch(slc)) >= 1:
@@ -451,7 +525,7 @@ brk:
 	prvPrrate := map[string]string{}
 	slcRoutfr := []string{}
 	allNonrev := true
-	if psglst.Psgrid == "88652609031D" {
+	if psglst.Psgrid == "C29D48B2050F" {
 		x, _ := json.MarshalIndent(nowFrbase, " ", " ")
 		fmt.Println(string(x))
 		fmt.Println("Depart:", psglst.Depart)
@@ -512,7 +586,7 @@ brk:
 				return val.Arrivl
 			}()
 
-			if psglst.Psgrid == "88652609031D" {
+			if psglst.Psgrid == "C29D48B2050F" {
 				y, _ := json.MarshalIndent(val, " ", " ")
 				fmt.Println(string(y))
 			}
@@ -628,30 +702,32 @@ brk:
 		}
 	}
 
-	if psglst.Psgrid == "88652609031D" {
-		c, _ := json.MarshalIndent(mapRoutcn, " ", " ")
-		fmt.Println(string(c))
-	}
+	// if psglst.Psgrid == "C29D48B2050F" {
+	// 	c, _ := json.MarshalIndent(mapRoutcn, " ", " ")
+	// 	fmt.Println(string(c))
+	// }
 
 	// Cek data not match
 	if len(mapRoutcn) > 1 {
-		idx := 0
-		prvval := 0
-		match := true
-		for _, val := range mapRoutcn {
-			if idx == 0 {
-				prvval = val
-			} else {
-				match = prvval == val
-				if !match {
-					break
-				}
+		max := 0
+		// Cari value terbesar
+		for _, v := range mapRoutcn {
+			if v > max {
+				max = v
 			}
-			idx++
 		}
-		if match {
+
+		// Hitung berapa key yang punya value terbesar
+		count := 0
+		for _, v := range mapRoutcn {
+			if v == max {
+				count++
+			}
+		}
+		if count > 1 {
 			return cekNonrev
 		}
+
 	}
 
 	// Get data vcr
@@ -672,10 +748,10 @@ brk:
 		}
 	}
 
-	if psglst.Psgrid == "88652609031D" {
-		c, _ := json.MarshalIndent(mapRoutcn, " ", " ")
-		fmt.Println(string(c))
-	}
+	// if psglst.Psgrid == "C29D48B2050F" {
+	// 	c, _ := json.MarshalIndent(mapRoutcn, " ", " ")
+	// 	fmt.Println(string(c))
+	// }
 	if getFlsgmn, ist := mapFrcacl[hghest.key]; ist {
 		if len(getFlsgmn.Routfl) == 7 {
 			psglst.Ntacrt = getFlsgmn.Ntacrt
