@@ -719,6 +719,16 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			if strProvnc != "" {
 				cekProvnc = false
 			}
+			switch psglst.Airlfl {
+			case "SL":
+				psglst.Provnc = "REG Tha Lion"
+				totSmmary.Provnc = "REG Tha Lion"
+				cekProvnc = true
+			case "OD":
+				psglst.Provnc = "REG Malindo"
+				totSmmary.Provnc = "REG Malindo"
+				cekProvnc = true
+			}
 		}
 
 		// Get flight join
