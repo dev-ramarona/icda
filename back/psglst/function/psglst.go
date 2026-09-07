@@ -721,8 +721,8 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			}
 			switch psglst.Airlfl {
 			case "SL":
-				psglst.Provnc = "REG Tha Lion"
-				totSmmary.Provnc = "REG Tha Lion"
+				psglst.Provnc = "REG Thai Lion"
+				totSmmary.Provnc = "REG Thai Lion"
 				cekProvnc = true
 			case "OD":
 				psglst.Provnc = "REG Malindo"
