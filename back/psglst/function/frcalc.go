@@ -635,8 +635,12 @@ brk:
 			}
 			val.Frbcnv = nucNtafvc
 			val.Qsrcnv = nucQsrcvc
-			if psglst.Ntacrr != "IDR" {
-				if vlx, ist := mapCurrcv[psglst.Ntacrr]; ist &&
+			getCurr := val.Ntacrr
+			if getCurr == "" || getCurr == "NUC" {
+				getCurr = psglst.Ntacrr
+			}
+			if getCurr != "IDR" {
+				if vlx, ist := mapCurrcv[getCurr]; ist &&
 					(nucNtafvc/vlx.Crrate) < 99000000 &&
 					(nucQsrcvc/vlx.Crrate) < 99000000 {
 					val.Ntacrt = vlx.Crrate

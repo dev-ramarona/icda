@@ -592,9 +592,6 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 					} else {
 						tmpYqtxvc = float64(mtcFrtaxs.Ftfuel)
 						tmpYrtxvc = float64(mtcFrtaxs.Ftaxyr)
-						if psglst.Pnrcde == "ASPJGO" {
-							fmt.Println(mtcFrtaxs.Ftaxyr)
-						}
 						slcHstory := strings.Split(mtcFrtaxs.Hstory, "|")
 						if mtcFrtaxs.Datend <= int32(intDatemc) {
 							if psglst.Yqtxvc == 0 {

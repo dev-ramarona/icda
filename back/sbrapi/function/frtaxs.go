@@ -184,13 +184,13 @@ func FncSbrapiFrtaxsTrtmnt(rawxml mdlSbrapi.MdlSbrapiFrtaxsRsptxi,
 		if prv, mtc := val.(mdlApndix.MdlApndixFrtaxsDtbase); mtc {
 
 			// Special treatment for taxes
-			if (float64(now.Ftfuel)-float64(prv.Ftfuel))/float64(now.Ftfuel) < 0.01 {
+			if math.Abs((float64(now.Ftfuel)-float64(prv.Ftfuel))/float64(now.Ftfuel)) < 0.01 {
 				now.Ftfuel = prv.Ftfuel
 				fnlFrtaxs.Ftfuel = now.Ftfuel
 			}
 
 			// Special treatment for taxes
-			if (float64(now.Ftaxyr)-float64(prv.Ftaxyr))/float64(now.Ftaxyr) < 0.01 {
+			if math.Abs((float64(now.Ftaxyr)-float64(prv.Ftaxyr))/float64(now.Ftaxyr)) < 0.01 {
 				now.Ftaxyr = prv.Ftaxyr
 				fnlFrtaxs.Ftaxyr = now.Ftaxyr
 			}
