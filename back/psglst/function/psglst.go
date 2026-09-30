@@ -716,15 +716,22 @@ func FncPsglstPsglstPrcess(rspPsglst []mdlPsglst.MdlPsglstPsgdtlDtbase, fllist m
 			if strProvnc != "" {
 				cekProvnc = false
 			}
-			switch psglst.Airlfl {
-			case "SL":
+		}
+
+		// Province base on airline
+		if strings.Contains(psglst.Routfl, "JED") || strings.Contains(psglst.Routfl, "MED") {
+			psglst.Provnc = "REG Umroh"
+			totSmmary.Provnc = "REG Umroh"
+			cekProvnc = false
+		} else if psglst.Airlfl == "SL" || psglst.Airlfl == "OD" {
+			cekProvnc = false
+			if psglst.Airlfl == "SL" {
 				psglst.Provnc = "REG Thai Lion"
 				totSmmary.Provnc = "REG Thai Lion"
-				cekProvnc = true
-			case "OD":
+			}
+			if psglst.Airlfl == "OD" {
 				psglst.Provnc = "REG Malindo"
 				totSmmary.Provnc = "REG Malindo"
-				cekProvnc = true
 			}
 		}
 
