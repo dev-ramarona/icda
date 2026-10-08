@@ -44,7 +44,7 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 	var totidx = 0
 	var slcobj any
 	tablex := fncApndix.Client.Database(fncApndix.Dbases).Collection("psglst_psgdtl")
-	contxt, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+	contxt, cancel := context.WithTimeout(context.Background(), 120*time.Second)
 	defer cancel()
 
 	// Pipeline get the data logic match

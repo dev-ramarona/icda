@@ -338,9 +338,11 @@ func FncSbrapiPsglstTrtmnt(rawxml mdlSbrapi.MdlSbrapiPsglstRspgpl,
 					partwo := strings.Split(partsl[1], "/")
 					objPsglst.Airlir = partwo[0][:2]
 					objPsglst.Flnbir = partwo[0][2:]
-					strIrdate := fncApndix.FncApndixAddfmtYearnw(partwo[1])
-					intIrdate, _ := strconv.Atoi(strIrdate)
-					objPsglst.Dateir = int32(intIrdate)
+					if len(partwo) > 1 {
+						strIrdate := fncApndix.FncApndixAddfmtYearnw(partwo[1])
+						intIrdate, _ := strconv.Atoi(strIrdate)
+						objPsglst.Dateir = int32(intIrdate)
+					}
 				}
 
 			// Infant electronic ticket

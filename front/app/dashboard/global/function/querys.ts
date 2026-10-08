@@ -7,7 +7,6 @@ export function FncGlobalQuerysEdlink() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
   return function (qry: string | string[], prm: string | string[]) {
     const fltprm = new URLSearchParams(searchParams);
     if (Array.isArray(qry) && Array.isArray(prm)) {
