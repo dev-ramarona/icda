@@ -568,6 +568,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it transit?",
 				"Code list from passenger list",
 				"STATUS",
+				"Is it offload?",
 			})
 		case "FMTINF":
 			writer.Write([]string{
@@ -596,6 +597,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Date of birth infant",
 				"PNR code",
 				"Code list from passenger list",
+				"Is it offload?",
 			})
 		case "EBTFMT":
 			writer.Write([]string{
@@ -638,6 +640,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"categr",
 				"Is it flown?",
 				"Is it transit?",
+				"Is it offload?",
 			})
 		case "TKTFMT":
 			writer.Write([]string{
@@ -693,6 +696,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it flown?",
 				"Is it transit?",
 				"Is it paper ticket?",
+				"Is it offload?",
 			})
 		case "IRFRMT":
 			writer.Write([]string{
@@ -750,6 +754,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Class inbound",
 				"District inbound",
 				"Date inbound",
+				"Is it offload?",
 			})
 		default:
 			writer.Write([]string{
@@ -1044,7 +1049,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					infDbirth,
 					slcDtaset.Pnrcde,
 					slcDtaset.Codels,
-				})
+					slcDtaset.Isitof})
 			case "FMWCHR":
 				writer.Write([]string{
 					slcDtaset.Prmkey,
@@ -1073,7 +1078,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Isittx,
 					slcDtaset.Codels,
 					"",
-				})
+					slcDtaset.Isitof})
 			case "FMTHAI":
 				writer.Write([]string{
 					slcDtaset.Noterr,
@@ -1159,7 +1164,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					"",
 					slcDtaset.Isitfl,
 					slcDtaset.Isittx,
-				})
+					slcDtaset.Isitof})
 			case "TKTFMT":
 				writer.Write([]string{
 					slcDtaset.Nmefst,
@@ -1211,7 +1216,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Coment,
 					slcDtaset.Isitfl,
 					slcDtaset.Isittx,
-					slcDtaset.Isitpt})
+					slcDtaset.Isitpt,
+					slcDtaset.Isitof})
 			case "IRFRMT":
 				writer.Write([]string{
 					slcDtaset.Depart,
@@ -1267,7 +1273,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Flnbib,
 					slcDtaset.Clssib,
 					slcDtaset.Dstrib,
-					strDateib})
+					strDateib,
+					slcDtaset.Isitof})
 			default:
 				writer.Write([]string{
 					slcDtaset.Mnfest,
