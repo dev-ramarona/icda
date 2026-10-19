@@ -54,7 +54,7 @@ export default function UixJeddahPrcessManual({
   const [confrm, confrmSet] = useState<boolean>(false);
   const [confdt, confdtSet] = useState<MdlGlobalConfrmAction[]>([]);
   const prcess = async (datefl: number) => {
-    if (cookie.keywrd && cookie.keywrd.includes("psglst")) {
+    if (cookie.keywrd && cookie.keywrd.includes("jeddah")) {
       let nowWorker = 1;
       if (status.sbrapi == 0 && params.flnbfl_jeddah == "") {
         nowWorker = 3;
