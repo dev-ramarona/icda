@@ -444,6 +444,25 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		// Streaming file CSV ke client
 		switch inputx.Format_psgdtl {
 
+		case "HENDRIK":
+			writer.Write([]string{
+				"Prmkey",
+				"Ticket number",
+				"Ticket Exchange",
+				"First Name",
+				"Last name",
+				"Airline flown",
+				"Airline VCR",
+				"Flight number flown",
+				"Flight number VCR",
+				"Date of travel",
+				"Route Flown",
+				"Route VCR",
+				"PNR Code",
+				"PNR Interline",
+				"Status ticket",
+			})
+
 		case "MNFERR":
 			writer.Write([]string{
 				"Noterr",
@@ -970,6 +989,24 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 
 			// Write to CSV
 			switch inputx.Format_psgdtl {
+			case "HENDRIK":
+				writer.Write([]string{
+					slcDtaset.Prmkey,
+					slcDtaset.Tktnfl,
+					slcDtaset.Tktnxc,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					slcDtaset.Airlfl,
+					slcDtaset.Airlvc,
+					slcDtaset.Flnbfl,
+					slcDtaset.Flnbvc,
+					fmt.Sprintf("%v", slcDtaset.Datefl),
+					slcDtaset.Routfl,
+					slcDtaset.Routvc,
+					slcDtaset.Pnrcde,
+					slcDtaset.Pnritl,
+					slcDtaset.Statvc,
+				})
 			case "MNFERR":
 				writer.Write([]string{
 					slcDtaset.Noterr,

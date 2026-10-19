@@ -179,7 +179,17 @@ export default function UixPsglstDetailSearch({
       <div className="flexctr relative h-11 w-1/2 md:w-28">
         <UixGlobalInputxFormdt
           typipt={"select"}
-          length={["MNFERR", "EBTFMT", "TKTFMT", "FMTINF", "FMWCHR", "PPRTKT", "IRFRMT", "ALL"]}
+          length={[
+            "MNFERR",
+            "EBTFMT",
+            "TKTFMT",
+            "FMTINF",
+            "FMWCHR",
+            "PPRTKT",
+            "IRFRMT",
+            "HENDRIK",
+            "ALL",
+          ]}
           queryx={"format_psgdtl"}
           params={params.format_psgdtl}
           plchdr="Format data"
