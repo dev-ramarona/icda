@@ -86,7 +86,7 @@ export default function UixJeddahPrcessManual({
     rplprm(["update_global"], String(Math.random()));
     statfnSet("Wait");
     const nowprm = { ...params };
-    if ((cookie.keywrd && cookie.keywrd.includes("psglst")) || nowprm.worker_jeddah == 1)
+    if ((cookie.keywrd && cookie.keywrd.includes("jeddah")) || nowprm.worker_jeddah == 1)
       if (status.sbrapi == 0) {
         const rsp = ApiJeddahPrcessManual(nowprm);
         setTimeout(() => {
