@@ -54,6 +54,11 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
+	if inputx.Format_psgdtl == "HENDRIK" {
+		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
+		mtchdt = append(mtchdt, bson.D{{Key: "isitnr",
+			Value: bson.M{"$in": []string{"STAFF", "NONREV"}}}})
+	}
 	if inputx.Datefl_psgdtl != "" {
 		csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
 		mtchdt = append(mtchdt, bson.D{{Key: "datefl",
@@ -461,6 +466,11 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"PNR Code",
 				"PNR Interline",
 				"Status ticket",
+				"Coment",
+				"Is It flown?",
+				"Is It offload?",
+				"Is It non rev?",
+				"Agentdie",
 			})
 
 		case "MNFERR":
@@ -1006,6 +1016,11 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Pnrcde,
 					slcDtaset.Pnritl,
 					slcDtaset.Statvc,
+					slcDtaset.Coment,
+					slcDtaset.Isitfl,
+					slcDtaset.Isitof,
+					slcDtaset.Isitnr,
+					slcDtaset.Agtdie,
 				})
 			case "MNFERR":
 				writer.Write([]string{
