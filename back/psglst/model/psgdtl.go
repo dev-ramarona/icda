@@ -549,6 +549,7 @@ type MdlPsglstPsgdtlEbtfmt struct {
 	Clssvc string `json:"clssvc" bson:"clssvc"`
 	Qtotbt int32  `json:"qtotbt" bson:"qtotbt"`
 	Wtotbt int32  `json:"wtotbt" bson:"wtotbt"`
+	Srchge string `json:"srchge" bson:"srchge"`
 	Ftotbt int32  `json:"ftotbt" bson:"ftotbt"`
 	Ptotbt int32  `json:"ptotbt" bson:"ptotbt"`
 	// Shopay int32  `json:"shopay" bson:"shopay"`

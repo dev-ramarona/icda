@@ -51,6 +51,10 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 	var mtchdt = bson.A{}
 	var keywrd = fncApndix.FncApndixKeywrdMapobj("provnc")
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
+	if inputx.Format_psgdtl == "EBTFMT" {
+		sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "tktnfl", Value: 1}}}}
+	}
+
 	var wg sync.WaitGroup
 
 	// Check if data Route all is isset
@@ -325,6 +329,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		var mtchdt = bson.A{}
 		var keywrd = fncApndix.FncApndixKeywrdMapobj("provnc")
 		var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
+		if inputx.Format_psgdtl == "EBTFMT" {
+			sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "tktnfl", Value: 1}}}}
+		}
 
 		// Check if data Route all is isset
 		if inputx.Datefl_psgdtl != "" {
@@ -648,6 +655,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Class RBD VCR",
 				"Qunatity total baggage",
 				"Weight total baggage",
+				"Surcharge bag",
 				"Highest FBA total baggage",
 				"Totexc",
 				"Paid total baggage",
@@ -971,6 +979,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		// Store to slice from raw bson
 		mxflus := 1000
 		countr := 0
+		ebtUnique := map[string]bool{}
 		for rawDtaset.Next(contxt) {
 			var slcDtaset mdlPsglst.MdlPsglstPsgdtlDtbase
 			rawDtaset.Decode(&slcDtaset)
@@ -995,6 +1004,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				if len(slcPaxsif) == 3 {
 					infNmelst = slcPaxsif[1]
 				}
+			}
+			bagSrchge := ""
+			if slcDtaset.Wtotbt > (slcDtaset.Qtotbt * 32) {
+				bagSrchge = "Suspect"
 			}
 
 			// Write to CSV
@@ -1176,47 +1189,55 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					fmt.Sprintf("%v", slcDtaset.Wgbgae),
 				})
 			case "EBTFMT":
-				writer.Write([]string{
-					"",
-					slcDtaset.Prmkey,
-					strMnthfl,
-					slcDtaset.Airlfl,
-					slcDtaset.Flnbfl,
-					strDatefl,
-					slcDtaset.Depart,
-					slcDtaset.Arrivl,
-					slcDtaset.Nmelst,
-					slcDtaset.Nmefst,
-					slcDtaset.Groupc,
-					fmt.Sprintf("%v", slcDtaset.Totpax),
-					slcDtaset.Seatpx,
-					slcDtaset.Tktnvc,
-					fmt.Sprintf("C0%v", slcDtaset.Cpnbvc),
-					slcDtaset.Clssvc,
-					fmt.Sprintf("%v", slcDtaset.Qtotbt),
-					fmt.Sprintf("%v", slcDtaset.Wtotbt),
-					fmt.Sprintf("%v", slcDtaset.Ftotbt),
-					fmt.Sprintf("%v", slcDtaset.Ftotbt-slcDtaset.Wtotbt),
-					fmt.Sprintf("%v", slcDtaset.Ptotbt),
-					fmt.Sprintf("%v", slcDtaset.Ptotbt+(slcDtaset.Ftotbt-slcDtaset.Wtotbt)),
-					slcDtaset.Coment,
-					"",
-					"",
-					slcDtaset.Descae,
-					slcDtaset.Currae,
-					"",
-					"",
-					strTimeis,
-					slcDtaset.Pnrcde,
-					slcDtaset.Pnritl,
-					slcDtaset.Hmeloc + slcDtaset.Agtdie,
-					slcDtaset.Isitct,
-					slcDtaset.Airtyp,
-					"",
-					"",
-					slcDtaset.Isitfl,
-					slcDtaset.Isittx,
-					slcDtaset.Isitof})
+				ebtkey := slcDtaset.Airlfl + slcDtaset.Flnbfl + strDatefl + slcDtaset.Depart + slcDtaset.Groupc
+				if slcDtaset.Totpax == 1 {
+					ebtkey = slcDtaset.Airlfl + slcDtaset.Flnbfl + strDatefl + slcDtaset.Depart + slcDtaset.Seatpx
+				}
+				if _, ist := ebtUnique[ebtkey]; !ist {
+					writer.Write([]string{
+						"",
+						slcDtaset.Prmkey,
+						strMnthfl,
+						slcDtaset.Airlfl,
+						slcDtaset.Flnbfl,
+						strDatefl,
+						slcDtaset.Depart,
+						slcDtaset.Arrivl,
+						slcDtaset.Nmelst,
+						slcDtaset.Nmefst,
+						slcDtaset.Groupc,
+						fmt.Sprintf("%v", slcDtaset.Totpax),
+						slcDtaset.Seatpx,
+						slcDtaset.Tktnvc,
+						fmt.Sprintf("C0%v", slcDtaset.Cpnbvc),
+						slcDtaset.Clssvc,
+						fmt.Sprintf("%v", slcDtaset.Qtotbt),
+						fmt.Sprintf("%v", slcDtaset.Wtotbt),
+						bagSrchge,
+						fmt.Sprintf("%v", slcDtaset.Ftotbt),
+						fmt.Sprintf("%v", slcDtaset.Ftotbt-slcDtaset.Wtotbt),
+						fmt.Sprintf("%v", slcDtaset.Ptotbt),
+						fmt.Sprintf("%v", slcDtaset.Ptotbt+(slcDtaset.Ftotbt-slcDtaset.Wtotbt)),
+						slcDtaset.Coment,
+						"",
+						"",
+						slcDtaset.Descae,
+						slcDtaset.Currae,
+						"",
+						"",
+						strTimeis,
+						slcDtaset.Pnrcde,
+						slcDtaset.Pnritl,
+						slcDtaset.Hmeloc + slcDtaset.Agtdie,
+						slcDtaset.Isitct,
+						slcDtaset.Airtyp,
+						"",
+						"",
+						slcDtaset.Isitfl,
+						slcDtaset.Isittx,
+						slcDtaset.Isitof})
+					ebtUnique[slcDtaset.Airlfl+slcDtaset.Flnbfl+strDatefl+slcDtaset.Depart+slcDtaset.Groupc] = true
+				}
 			case "TKTFMT":
 				writer.Write([]string{
 					slcDtaset.Nmefst,
