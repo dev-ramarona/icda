@@ -1049,7 +1049,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				}
 			}
 			bagSrchge := ""
-			if slcDtaset.Wtotbt > (slcDtaset.Qtotbt * 32) {
+			if slcDtaset.Wghtbt > (slcDtaset.Qntybt * 32) {
 				bagSrchge = "Suspect"
 			}
 
@@ -1299,7 +1299,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					fmt.Sprintf("C0%v", slcDtaset.Cpnbvc),
 					slcDtaset.Clssvc,
 					fmt.Sprintf("%v", slcDtaset.Qtotbt),
-					fmt.Sprintf("%v", slcDtaset.Wtotbt),
+					fmt.Sprintf("%v", slcDtaset.Wghtbt),
 					bagSrchge,
 					fmt.Sprintf("%v", slcDtaset.Ftotbt),
 					fmt.Sprintf("%v", slcDtaset.Ftotbt-slcDtaset.Wtotbt),
