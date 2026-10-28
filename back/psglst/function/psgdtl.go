@@ -52,7 +52,7 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 	var keywrd = fncApndix.FncApndixKeywrdMapobj("provnc")
 	var sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "prmkey", Value: 1}}}}
 	if inputx.Format_psgdtl == "EBTFMT" {
-		sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "tktnfl", Value: 1}}}}
+		sortdt = bson.D{{Key: "$sort", Value: bson.D{{Key: "tktnfl", Value: -1}}}}
 	}
 
 	var wg sync.WaitGroup
@@ -655,6 +655,49 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Class RBD VCR",
 				"Qunatity total baggage",
 				"Weight total baggage",
+				"Highest FBA total baggage",
+				"Totexc",
+				"Paid total baggage",
+				"Shopay",
+				"Comment",
+				"Cmnstf",
+				"Agentdie create PNR",
+				"Description acnillary",
+				"Currency acnillary",
+				"Total",
+				"domint",
+				"Time issued",
+				"PNR code",
+				"PNR interline",
+				"Agentdie ticket VCR",
+				"Is it charter?",
+				"Aircraft type",
+				"folllow",
+				"categr",
+				"Is it flown?",
+				"Is it transit?",
+				"Is it offload?",
+			})
+		case "SRCHGE":
+			writer.Write([]string{
+				"CEK GROUP",
+				"Primary key",
+				"Month flown",
+				"Airline Flown",
+				"Flight number flown",
+				"Date flown",
+				"Departure",
+				"Arrival",
+				"Name last passenger",
+				"Name first passenger",
+				"Group code",
+				"Total pax",
+				"Seat number passenger",
+				"Ticket number VCR",
+				"Coupon number VCR",
+				"Class RBD VCR",
+				"Qunatity total baggage",
+				"Weight total baggage",
 				"Surcharge bag",
 				"Highest FBA total baggage",
 				"Totexc",
@@ -1213,7 +1256,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 						slcDtaset.Clssvc,
 						fmt.Sprintf("%v", slcDtaset.Qtotbt),
 						fmt.Sprintf("%v", slcDtaset.Wtotbt),
-						bagSrchge,
 						fmt.Sprintf("%v", slcDtaset.Ftotbt),
 						fmt.Sprintf("%v", slcDtaset.Ftotbt-slcDtaset.Wtotbt),
 						fmt.Sprintf("%v", slcDtaset.Ptotbt),
@@ -1238,6 +1280,49 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 						slcDtaset.Isitof})
 					ebtUnique[slcDtaset.Airlfl+slcDtaset.Flnbfl+strDatefl+slcDtaset.Depart+slcDtaset.Groupc] = true
 				}
+			case "SRCHGE":
+				writer.Write([]string{
+					"",
+					slcDtaset.Prmkey,
+					strMnthfl,
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					strDatefl,
+					slcDtaset.Depart,
+					slcDtaset.Arrivl,
+					slcDtaset.Nmelst,
+					slcDtaset.Nmefst,
+					slcDtaset.Groupc,
+					fmt.Sprintf("%v", slcDtaset.Totpax),
+					slcDtaset.Seatpx,
+					slcDtaset.Tktnvc,
+					fmt.Sprintf("C0%v", slcDtaset.Cpnbvc),
+					slcDtaset.Clssvc,
+					fmt.Sprintf("%v", slcDtaset.Qtotbt),
+					fmt.Sprintf("%v", slcDtaset.Wtotbt),
+					bagSrchge,
+					fmt.Sprintf("%v", slcDtaset.Ftotbt),
+					fmt.Sprintf("%v", slcDtaset.Ftotbt-slcDtaset.Wtotbt),
+					fmt.Sprintf("%v", slcDtaset.Ptotbt),
+					fmt.Sprintf("%v", slcDtaset.Ptotbt+(slcDtaset.Ftotbt-slcDtaset.Wtotbt)),
+					slcDtaset.Coment,
+					"",
+					"",
+					slcDtaset.Descae,
+					slcDtaset.Currae,
+					"",
+					"",
+					strTimeis,
+					slcDtaset.Pnrcde,
+					slcDtaset.Pnritl,
+					slcDtaset.Hmeloc + slcDtaset.Agtdie,
+					slcDtaset.Isitct,
+					slcDtaset.Airtyp,
+					"",
+					"",
+					slcDtaset.Isitfl,
+					slcDtaset.Isittx,
+					slcDtaset.Isitof})
 			case "TKTFMT":
 				writer.Write([]string{
 					slcDtaset.Nmefst,
