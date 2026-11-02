@@ -677,6 +677,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it flown?",
 				"Is it transit?",
 				"Is it offload?",
+				"Is it charter?",
+				"Remark endorse",
 			})
 		case "SRCHGE":
 			writer.Write([]string{
@@ -750,6 +752,8 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is it iregularity?",
 				"Is it offload?",
 				"Primary key",
+				"Is it charter?",
+				"Remark endorse",
 			})
 		case "PPRTKT":
 			writer.Write([]string{
@@ -1277,7 +1281,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 						"",
 						slcDtaset.Isitfl,
 						slcDtaset.Isittx,
-						slcDtaset.Isitof})
+						slcDtaset.Isitof,
+						slcDtaset.Isitct,
+						slcDtaset.Rmkend})
 					ebtUnique[slcDtaset.Airlfl+slcDtaset.Flnbfl+strDatefl+slcDtaset.Depart+slcDtaset.Groupc] = true
 				}
 			case "SRCHGE":
@@ -1349,7 +1355,9 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Gender,
 					slcDtaset.Routfl,
 					slcDtaset.Isitir,
-					slcDtaset.Isitof})
+					slcDtaset.Isitof,
+					slcDtaset.Isitct,
+					slcDtaset.Rmkend})
 			case "PPRTKT":
 				writer.Write([]string{
 					slcDtaset.Depart,

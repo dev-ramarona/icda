@@ -174,6 +174,7 @@ func FncSbrapiGettktMainob(unqhdr mdlSbrapi.MdlSbrapiMsghdrParams,
 
 	// Get remark and invol indicator
 	psglst.Rmkvcr = getTktdoc.Ticket.Remark.Manual
+	psglst.Rmkend = getTktdoc.Ticket.Remark.Endorsements
 	if getTktdoc.Ticket.Remark.Endorsements == "INVOL" {
 		psglst.Isitiv = "INVL"
 	} else if psglst.Tktnxc != "" {

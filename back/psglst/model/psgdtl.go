@@ -146,6 +146,7 @@ type MdlPsglstPsgdtlDtbase struct {
 	Prmkey    string  `json:"prmkey" bson:"prmkey,omitempty"`
 	Rmkusr    string  `json:"rmkusr" bson:"rmkusr,omitempty"`
 	Rmkvcr    string  `json:"Rmkvcr" bson:"Rmkvcr,omitempty"`
+	Rmkend    string  `json:"Rmkend" bson:"Rmkend,omitempty"`
 
 	// Ancillary
 	Gpcdae string  `json:"gpcdae" bson:"gpcdae,omitempty"`
