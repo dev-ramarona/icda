@@ -859,8 +859,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Tax currency rate",
 				"YQ flown",
 				"YQ VCR",
+				"Old YQ VCR",
 				"YR flown",
 				"YR VCR",
+				"Old YR VCR",
 				"Airport tax VCR",
 				"Raw all tax VCR",
 				"Fare rate proration",
@@ -931,9 +933,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Agentdie create PNR",
 				"Code list from passenger list",
 				"Is it flown?",
+				"Is it transit?",
 				"Is it infant?",
 				"Is it WCHR?",
-				"Is it transit?",
+				"Is it paper ticket?",
 				"Is it iregularity?",
 				"Is it charter?",
 				"Is it non revenue?",
@@ -946,7 +949,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Primary key",
 				"Remark user",
 				"Remark VCR",
-				// Ancillary
+				"Remark Endorse",
 				"Group code acnillary",
 				"Sub code acnillary",
 				"Description acnillary",
@@ -956,8 +959,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Fare acnillary",
 				"Currency acnillary",
 				"EMD number acnillary",
-
-				// Bagtag
 				"Number baggage",
 				"Quantity baggage",
 				"Weight baggage",
@@ -970,30 +971,22 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Highest FBA total baggage",
 				"Type weight baggage",
 				"Comment",
-
-				// Outbound
 				"Airline outbound",
 				"Flight number outbound",
 				"Class outbound",
 				"Route outbound",
 				"Date outbound",
 				"Time outbound",
-
-				// Inbound
 				"Airline inbound",
 				"Flight number inbound",
 				"Class inbound",
 				"District inbound",
 				"Date inbound",
 				"Time inbound",
-
-				// Ireg
 				"Code iregulerity",
 				"Airline iregulerity",
 				"Flight number iregulerity",
 				"Date iregulerity",
-
-				// Infant
 				"Ticket infant",
 				"Coupon infant",
 				"Date infant",
@@ -1001,8 +994,6 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Route infant",
 				"Status infant",
 				"Passenger infant",
-
-				// Cancel bagtag
 				"Airline cancel bagtag",
 				"District cancel bagtag",
 				"Number cancel bagtag",
@@ -1356,6 +1347,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Routfl,
 					slcDtaset.Isitir,
 					slcDtaset.Isitof,
+					slcDtaset.Prmkey,
 					slcDtaset.Isitct,
 					slcDtaset.Rmkend})
 			case "PPRTKT":
@@ -1460,8 +1452,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					fmt.Sprintf("%v", slcDtaset.Taxcrt),
 					fmt.Sprintf("%v", slcDtaset.Yqtxfl),
 					fmt.Sprintf("%v", slcDtaset.Yqtxvc),
+					fmt.Sprintf("%v", slcDtaset.Oldyqtxvc),
 					fmt.Sprintf("%v", slcDtaset.Yrtxfl),
 					fmt.Sprintf("%v", slcDtaset.Yrtxvc),
+					fmt.Sprintf("%v", slcDtaset.Oldyrtxvc),
 					fmt.Sprintf("%v", slcDtaset.Aptxvc),
 					slcDtaset.Rwtxvc,
 					fmt.Sprintf("%v", slcDtaset.Frrate),
@@ -1532,9 +1526,10 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Agtdcr,
 					slcDtaset.Codels,
 					slcDtaset.Isitfl,
+					slcDtaset.Isittx,
 					slcDtaset.Isitif,
 					slcDtaset.Isitwc,
-					slcDtaset.Isittx,
+					slcDtaset.Isitpt,
 					slcDtaset.Isitir,
 					slcDtaset.Isitct,
 					slcDtaset.Isitnr,
@@ -1547,6 +1542,7 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Prmkey,
 					slcDtaset.Rmkusr,
 					slcDtaset.Rmkvcr,
+					slcDtaset.Rmkend,
 					slcDtaset.Gpcdae,
 					slcDtaset.Sbcdae,
 					slcDtaset.Descae,
