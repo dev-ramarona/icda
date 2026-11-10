@@ -102,10 +102,16 @@ func FncPsglstPsgdtlGetall(c *gin.Context) {
 			bson.D{{Key: "tktnfl", Value: inputx.Tktnfl_psgdtl}},
 			bson.D{{Key: "tktnvc", Value: inputx.Tktnfl_psgdtl}}}}})
 	}
-	if inputx.Isitfl_psgdtl != "" {
-		csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
-		mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
-			Value: inputx.Isitfl_psgdtl}})
+	if inputx.Isitfl_psgdtl != "" || slices.Contains([]string{"SABDAC", "SABDAU", "SABDAL"}, inputx.Format_psgdtl) {
+		if slices.Contains([]string{"SABDAC", "SABDAU", "SABDAL"}, inputx.Format_psgdtl) {
+			csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
+				Value: "F"}})
+		} else {
+			csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
+			mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
+				Value: inputx.Isitfl_psgdtl}})
+		}
 	}
 	if inputx.Isitir_psgdtl != "" {
 		csvFilenm = append(csvFilenm, inputx.Isitir_psgdtl)
@@ -378,10 +384,16 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				bson.D{{Key: "tktnfl", Value: inputx.Tktnfl_psgdtl}},
 				bson.D{{Key: "tktnvc", Value: inputx.Tktnfl_psgdtl}}}}})
 		}
-		if inputx.Isitfl_psgdtl != "" {
-			csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
-			mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
-				Value: inputx.Isitfl_psgdtl}})
+		if inputx.Isitfl_psgdtl != "" || slices.Contains([]string{"SABDAC", "SABDAU", "SABDAL"}, inputx.Format_psgdtl) {
+			if slices.Contains([]string{"SABDAC", "SABDAU", "SABDAL"}, inputx.Format_psgdtl) {
+				csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
+				mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
+					Value: "F"}})
+			} else {
+				csvFilenm = append(csvFilenm, inputx.Isitfl_psgdtl)
+				mtchdt = append(mtchdt, bson.D{{Key: "isitfl",
+					Value: inputx.Isitfl_psgdtl}})
+			}
 		}
 		if inputx.Isitir_psgdtl != "" {
 			csvFilenm = append(csvFilenm, inputx.Isitir_psgdtl)
