@@ -189,6 +189,9 @@ export default function UixPsglstDetailSearch({
             "IRFRMT",
             "HENDRIK",
             "SRCHGE",
+            "SABDAC",
+            "SABDAU",
+            "SABDAL",
             "ALL",
           ]}
           queryx={"format_psgdtl"}

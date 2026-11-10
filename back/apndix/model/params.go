@@ -246,6 +246,33 @@ type MdlApndixHfbalvDtbase struct {
 	Source string `json:"source,omitempty" bson:"source,omitempty"`
 }
 
+// Highest FBA level data
+type MdlApndixSeatsaDtbase struct {
+	Airlfl string `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
+	Seatpx string `json:"seatpx,omitempty" bson:"seatpx,omitempty"`
+	Seatcn string `json:"seatcn,omitempty" bson:"seatcn,omitempty"`
+}
+type MdlApndixSeatsaFrntnd struct {
+	Tktnfl string  `json:"tktnfl,omitempty" bson:"tktnfl,omitempty"`
+	Pnrcde string  `json:"pnrcde,omitempty" bson:"pnrcde,omitempty"`
+	Pnritl string  `json:"pnritl,omitempty" bson:"pnritl,omitempty"`
+	Nmefst string  `json:"nmefst,omitempty" bson:"nmefst,omitempty"`
+	Nmelst string  `json:"nmelst,omitempty" bson:"nmelst,omitempty"`
+	Datefl int32   `json:"datefl,omitempty" bson:"datefl,omitempty"`
+	Airlfl string  `json:"airlfl,omitempty" bson:"airlfl,omitempty"`
+	Flnbfl string  `json:"flnbfl,omitempty" bson:"flnbfl,omitempty"`
+	Depart string  `json:"depart,omitempty" bson:"depart,omitempty"`
+	Arrivl string  `json:"arrivl,omitempty" bson:"arrivl,omitempty"`
+	Ckinnb int32   `json:"ckinnb,omitempty" bson:"ckinnb,omitempty"`
+	Isitct string  `json:"isitct,omitempty" bson:"isitct,omitempty"`
+	Agtdcr string  `json:"agtdcr,omitempty" bson:"agtdcr,omitempty"`
+	Gpcdae string  `json:"gpcdae,omitempty" bson:"gpcdae,omitempty"`
+	Fareae float64 `json:"fareae,omitempty" bson:"fareae,omitempty"`
+	Emdnae string  `json:"emdnae,omitempty" bson:"emdnae,omitempty"`
+	Seatpx string  `json:"seatpx,omitempty" bson:"seatpx,omitempty"`
+	Seatcn string  `json:"seatcn,omitempty" bson:"seatcn,omitempty"`
+}
+
 // Currency database
 type MdlApndixCurrcvDtbase struct {
 	Crctry string  `json:"crctry,omitempty" bson:"crctry,omitempty"`

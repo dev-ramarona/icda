@@ -2,6 +2,7 @@ package fncPsglst
 
 import (
 	fncApndix "back/apndix/function"
+	mdlApndix "back/apndix/model"
 	mdlPsglst "back/psglst/model"
 	"io"
 	"math"
@@ -334,6 +335,11 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		}
 
 		// Check if data Route all is isset
+		if inputx.Format_psgdtl == "HENDRIK" {
+			csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
+			mtchdt = append(mtchdt, bson.D{{Key: "isitnr",
+				Value: bson.M{"$in": []string{"STAFF", "NONREV"}}}})
+		}
 		if inputx.Datefl_psgdtl != "" {
 			csvFilenm = append(csvFilenm, strconv.Itoa(intDatefl))
 			mtchdt = append(mtchdt, bson.D{{Key: "datefl",
@@ -479,7 +485,29 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 				"Is It non rev?",
 				"Agentdie",
 			})
-
+		case "SABDAC", "SABDAU", "SABDAL":
+			writer.Write([]string{
+				"Ticket number flown",
+				"PNR code",
+				"PNR interline",
+				"Name first passenger",
+				"Name last passenger",
+				"Date flown",
+				"Airline Flown",
+				"Flight number flown",
+				"Departure",
+				"Arrival",
+				"Checkin number sequence",
+				"Is it charter?",
+				"Agentdie create PNR",
+				"Group code acnillary",
+				"Fare acnillary",
+				"EMD number acnillary",
+				"Seat number passenger",
+				"Seat config",
+				"Status SA",
+				"Note SA",
+			})
 		case "MNFERR":
 			writer.Write([]string{
 				"Noterr",
@@ -1014,6 +1042,12 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 		}
 		defer rawDtaset.Close(contxt)
 
+		// Get SA SABDA
+		var slcSABDA = map[string]mdlApndix.MdlApndixSeatsaDtbase{}
+		if inputx.Format_psgdtl == "SABDAC" || inputx.Format_psgdtl == "SABDAU" || inputx.Format_psgdtl == "SABDAL" {
+			slcSABDA = fncApndix.FncApndixSeatsaMapobj()
+		}
+
 		// Store to slice from raw bson
 		mxflus := 1000
 		countr := 0
@@ -1072,6 +1106,59 @@ func FncPsglstPsgdtlDownld(c *gin.Context) {
 					slcDtaset.Isitof,
 					slcDtaset.Isitnr,
 					slcDtaset.Agtdie,
+				})
+			case "SABDAC", "SABDAU", "SABDAL":
+
+				// Note and status SA
+				statusSA := "CLEAR"
+				noteSA := ""
+				if slcDtaset.Isitct == "CT" {
+					noteSA = "CHARTER FLIGHT"
+				} else if _, ist := slcSABDA[slcDtaset.Airlfl+slcDtaset.Seatcn+slcDtaset.Seatpx]; ist {
+					noteSA = "SEAT FREE"
+				} else if slcDtaset.Seatcn == "436" || slcDtaset.Seatcn == "440" {
+					noteSA = "WIDE BODY"
+				} else if strings.Contains(slcDtaset.Nmefst, "STCR") || strings.Contains(slcDtaset.Nmelst, "STCR") {
+					noteSA = "STCR"
+				} else if strings.Contains(slcDtaset.Gpcdae, "SA") {
+					noteSA = "EMD PRE RESERVED SEAT ASSIGNMENT"
+				} else if strings.Contains(slcDtaset.Agtdcr, "OT1") {
+					statusSA = "UNCLEAR"
+					noteSA = "BOOKING BY BOOK CABIN"
+				} else {
+					statusSA = "UNCLEAR"
+					noteSA = "PRINT HISTORY CHECK-IN"
+				}
+
+				// Skip if status SA not match with format
+				if inputx.Format_psgdtl == "SABDAC" && statusSA == "UNCLEAR" {
+					continue
+				} else if inputx.Format_psgdtl == "SABDAU" && statusSA == "CLEAR" {
+					continue
+				}
+
+				// Push to CSV
+				writer.Write([]string{
+					slcDtaset.Tktnfl,
+					slcDtaset.Pnrcde,
+					slcDtaset.Pnritl,
+					slcDtaset.Nmefst,
+					slcDtaset.Nmelst,
+					strDatefl,
+					slcDtaset.Airlfl,
+					slcDtaset.Flnbfl,
+					slcDtaset.Depart,
+					slcDtaset.Arrivl,
+					fmt.Sprintf("%v", slcDtaset.Ckinnb),
+					slcDtaset.Isitct,
+					slcDtaset.Agtdcr,
+					slcDtaset.Gpcdae,
+					fmt.Sprintf("%v", slcDtaset.Fareae),
+					slcDtaset.Emdnae,
+					slcDtaset.Seatpx,
+					slcDtaset.Seatcn,
+					statusSA,
+					noteSA,
 				})
 			case "MNFERR":
 				writer.Write([]string{
